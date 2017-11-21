@@ -70,6 +70,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-batch')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+	compile group: 'commons-io', name: 'commons-io', version: '2.4'
 	compile group: 'com.oracle', name: 'ojdbc8', version: '12.2.0.1'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
