@@ -1,7 +1,7 @@
-package com.healthedge.codeloaders.service.file.sort;
+package com.healthedge.codeloaders.util;
 
 
-import com.healthedge.codeloaders.service.file.model.FileMetadata;
+import com.healthedge.codeloaders.dto.FileMetadata;
 
 import java.util.Comparator;
 

@@ -5,9 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -17,13 +15,14 @@ public class Service implements Serializable {
 
 	@Id
 	@NotNull
-	@GeneratedValue(generator = "InvSeq")
-	@SequenceGenerator(name = "InvSeq", sequenceName = "INV_SEQ", allocationSize = 5)
 	@Column(name = "SERV_CD")
 	private String serviceCode;
 
 	@Column(name = "SERV_SHORT_DSC")
 	private String serviceShortDesciption;
+
+	@Column(name = "SERV_TYPE_CD")
+	private String serviceTypeCD;
 
 	@Column(name = "SERV_LONG_DSC")
 	private String serviceLongDesciption;
@@ -44,16 +43,21 @@ public class Service implements Serializable {
 	private Date effectiveStartDate;
 
 	@Column(name = "LAST_TX_DT")
-	private String lastTransactionDate;
+	private Date lastTransactionDate;
 
 	@Column(name = "LAST_TX_USER_TXT")
 	private String lastTransactionUserText;
 
 	@Column(name = "TX_CNT")
-	private Long transactionCount;
+	private Long txCnt;
 
 	@Column(name = "CODE_PROCESSING_HISTORY_ID")
-	private Long codeProcessingHistoryId;
+	private Integer codeProcessingHistoryId;
+
+
+
+	@Column(name = "VERSION")
+	private String version;
 
 	@Column(name = "ACTION")
 	private String action;
@@ -64,6 +68,13 @@ public class Service implements Serializable {
 
 	public void setServiceCode(String serviceCode) {
 		this.serviceCode = serviceCode;
+	}
+
+	public String getServiceTypeCD() {
+		return serviceTypeCD;
+	}
+	public void setServiceTypeCD(String serviceTypeCD) {
+		this.serviceTypeCD = serviceTypeCD;
 	}
 
 	public String getServiceShortDesciption() {
@@ -122,11 +133,11 @@ public class Service implements Serializable {
 		this.effectiveStartDate = effectiveStartDate;
 	}
 
-	public String getLastTransactionDate() {
+	public Date getLastTransactionDate() {
 		return lastTransactionDate;
 	}
 
-	public void setLastTransactionDate(String lastTransactionUserDate) {
+	public void setLastTransactionDate(Date lastTransactionUserDate) {
 		this.lastTransactionDate = lastTransactionUserDate;
 	}
 
@@ -138,22 +149,6 @@ public class Service implements Serializable {
 		this.lastTransactionUserText = lastTransactionUserText;
 	}
 
-	public Long getTransactionCount() {
-		return transactionCount;
-	}
-
-	public void setTransactionCount(Long transactionCount) {
-		this.transactionCount = transactionCount;
-	}
-
-	public Long getCodeProcessingHistoryId() {
-		return codeProcessingHistoryId;
-	}
-
-	public void setCodeProcessingHistoryId(Long codeProcessingHistoryId) {
-		this.codeProcessingHistoryId = codeProcessingHistoryId;
-	}
-
 	public String getAction() {
 		return action;
 	}
@@ -161,6 +156,39 @@ public class Service implements Serializable {
 	public void setAction(String action) {
 		this.action = action;
 	}
+
+	public String getWorkFlowCode() {
+		return workFlowCode;
+	}
+
+	public void setWorkFlowCode(String workFlowCode) {
+		this.workFlowCode = workFlowCode;
+	}
+
+	public Long getTxCnt() {
+		return txCnt;
+	}
+
+	public void setTxCnt(Long txCnt) {
+		this.txCnt = txCnt;
+	}
+
+	public Integer getCodeProcessingHistoryId() {
+		return codeProcessingHistoryId;
+	}
+
+	public void setCodeProcessingHistoryId(Integer codeProcessingHistoryId) {
+		this.codeProcessingHistoryId = codeProcessingHistoryId;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -183,9 +211,5 @@ public class Service implements Serializable {
 		return result;
 	}
 
-	@Override
-	public String  toString(){
-		return ("Code: "+ serviceCode +" Long description: "+ serviceLongDesciption +" Short description: "+ serviceShortDesciption +" Full description: "+ serviceAlternateDesciption);
-	}
 
 }

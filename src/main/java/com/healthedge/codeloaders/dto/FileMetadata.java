@@ -1,4 +1,4 @@
-package com.healthedge.codeloaders.service.file.model;
+package com.healthedge.codeloaders.dto;
 
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
@@ -14,6 +14,8 @@ public class FileMetadata {
     private DateTime fileDate;
     private String fileNameWithExt;
     private String baseFileName;
+    private String year;
+    private String month;
 
     public FileMetadata (String fileName) {
         fileNameWithExt = fileName;
@@ -26,11 +28,19 @@ public class FileMetadata {
             provider = st.nextToken();
             fileType = st.nextToken();
 
-            String year = st.nextToken();
-            String month = st.nextToken();
+            year = st.nextToken();
+            month = st.nextToken();
 
             fileDate = prepareDateStartingFromFirstOfMonth (year, month);
         }
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public String getMonth() {
+        return month;
     }
 
     public String getFileNameWithExt() {

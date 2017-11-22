@@ -1,4 +1,4 @@
-package com.healthedge.codeloaders.service.file.diff;
+package com.healthedge.codeloaders.service;
 
 
 import com.healthedge.codeloaders.entity.Service;
@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@org.springframework.stereotype.Service
 public class DiffCreator {
 
     public static final String CREATE_ACTION = "CREATE";
@@ -30,6 +31,7 @@ public class DiffCreator {
             for(String key:current.keySet())
             {
                 Service service =current.get(key);
+                service.setAction(CREATE_ACTION);
                 create.add(service);
             }
             previous.putAll(current);
@@ -42,17 +44,20 @@ public class DiffCreator {
                     Service pojo2=current.get(key);
                     Service pojo1= previous.get(key);
                     if(!pojo1.equals(pojo2)){
+                        pojo2.setAction(APPEND_ACTION);
                         append.add(pojo2);
                     }
                     previous.remove(key);
                 }
                 else{
                     Service pojo=current.get(key);
+                    pojo.setAction(CREATE_ACTION);
                     create.add(pojo);
                 }
             }
             for(String key: previous.keySet()){
                 Service pojo= previous.get(key);
+                pojo.setAction(TERMINATE_ACTION);
                 terminate.add(pojo);
 
             }

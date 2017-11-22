@@ -1,0 +1,108 @@
+package com.healthedge.codeloaders.service;
+
+
+import com.healthedge.codeloaders.dto.FileMetadata;
+import com.healthedge.codeloaders.entity.Service;
+import com.healthedge.codeloaders.util.CodeLoaderPropertyUtil;
+
+import org.apache.commons.io.FilenameUtils;
+import org.joda.time.DateTime;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+@org.springframework.stereotype.Service
+public class FileParser {
+
+    private static final Properties properties = CodeLoaderPropertyUtil.getInstance().getProperties();
+    private static final String CODE=".CODE";
+    private static final String LONG_DESC=".LONG.DESC";
+    private static final String SHORT_DESC=".SHORT.DESC";
+    private static final String FULL_DESC=".FULL.DESC";
+    private static final String SERV_TYPE_CODE=".SERVTYPECODE";
+    private static final String DELEMITER=".DELIMITER";
+
+    public Map<String, Service> parse(String filePath) throws IOException {
+        Map<String, Service> result = new HashMap<String, Service>();
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String line = "";
+
+        String fileName = FilenameUtils.getName(filePath);
+
+        FileMetadata fileMetadata = new FileMetadata(fileName);
+        String fileType = fileMetadata.getFileType();
+        DateTime effectiveStartDate=fileMetadata.getFileDate();
+
+        String delimiter = properties.getProperty(fileType + DELEMITER);
+
+        String[] fileHeaders = br.readLine().split(String.valueOf(delimiter)); //to skip reading the first line(Header section) in the following steps
+
+
+        String[] fields;
+        while ((line = br.readLine()) != null) {
+            if (line.length() > 0) {
+                fields = line.split(String.valueOf(delimiter),-1);
+                Service pojo = getService(fileMetadata, fileType, effectiveStartDate, fields);
+
+                result.put(pojo.getServiceCode(), pojo);
+            }
+        }
+
+        return result;
+
+    }
+
+    private Service getService(FileMetadata fileMetadata, String fileType, DateTime effectiveStartDate, String[] fields) {
+        Service pojo = new Service();
+        DateTime current = new DateTime();
+
+        //standardized_serv_cd
+
+        //eff_start_dt
+        pojo.setEffectiveStartDate(effectiveStartDate.toDate());
+        //TX_CNT
+        pojo.setTxCnt(current.toDate().getTime());
+        //LAST_TX_DT
+        pojo.setLastTransactionDate(current.toDate());
+        //LAST_TX_USER_TXT
+        pojo.setLastTransactionUserText("hello");
+        //CODE_PROCESSING_HISTORY_ID
+        pojo.setCodeProcessingHistoryId(5);
+
+        pojo.setVersion(fileMetadata.getYear() + "_" + fileMetadata.getMonth());
+
+
+        //serv_cd
+        if (Integer.parseInt(properties.getProperty(fileType + CODE)) < fields.length){
+            pojo.setServiceCode(fields[Integer.parseInt(properties.getProperty(fileType + CODE))]);
+
+        }
+        //alt_dsc
+        if (Integer.parseInt(properties.getProperty(fileType + FULL_DESC)) < fields.length){
+            pojo.setServiceAlternateDesciption(fields[Integer.parseInt(properties.getProperty(fileType + FULL_DESC))]);
+        }
+
+
+        if (Integer.parseInt(properties.getProperty(fileType + LONG_DESC)) < fields.length){
+            pojo.setServiceLongDesciption(fields[Integer.parseInt(properties.getProperty(fileType + LONG_DESC))]);
+
+        }
+
+        if (Integer.parseInt(properties.getProperty(fileType + SHORT_DESC)) < fields.length){
+            pojo.setServiceShortDesciption(fields[Integer.parseInt(properties.getProperty(fileType + SHORT_DESC))]);
+
+        }
+        pojo.setServiceTypeCD(properties.getProperty(fileType + SERV_TYPE_CODE));
+        pojo.setStandardizedServiceCode(pojo.getServiceCode());
+        return pojo;
+    }
+
+}
+
+
+
+

@@ -1,4 +1,4 @@
-package com.healthedge.codeloaders.service.file.util;
+package com.healthedge.codeloaders.util;
 
 import java.io.FileInputStream;
 import java.util.Properties;
