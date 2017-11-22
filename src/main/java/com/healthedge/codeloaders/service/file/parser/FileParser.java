@@ -2,7 +2,7 @@ package com.healthedge.codeloaders.service.file.parser;
 
 
 import com.healthedge.codeloaders.service.file.model.FileMetadata;
-import com.healthedge.codeloaders.service.file.model.FilePojo;
+import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.service.file.util.CodeLoaderPropertyUtil;
 
 import org.apache.commons.io.FilenameUtils;
@@ -23,8 +23,8 @@ public class FileParser {
     private static final String FULL_DESC=".FULL.DESC";
     private static final String DELEMITER=".DELIMITER";
 
-    public Map<String, FilePojo> parse(String filePath) throws IOException {
-        Map<String, FilePojo> result = new HashMap<String, FilePojo>();
+    public Map<String, Service> parse(String filePath) throws IOException {
+        Map<String, Service> result = new HashMap<String, Service>();
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         String line = "";
 
@@ -43,21 +43,21 @@ public class FileParser {
         while ((line = br.readLine()) != null) {
             if (line.length() > 0) {
                 fields = line.split(String.valueOf(delimiter),-1);
-                FilePojo pojo = new FilePojo();
+                Service pojo = new Service();
 
                 if (Integer.parseInt(properties.getProperty(codeType + CODE)) < fields.length)
-                    pojo.setCode(fields[Integer.parseInt(properties.getProperty(codeType + CODE))]);
+                    pojo.setServiceCode(fields[Integer.parseInt(properties.getProperty(codeType + CODE))]);
 
                 if (Integer.parseInt(properties.getProperty(codeType + FULL_DESC)) < fields.length)
-                    pojo.setFull_desc(fields[Integer.parseInt(properties.getProperty(codeType + FULL_DESC))]);
+                    pojo.setServiceAlternateDesciption(fields[Integer.parseInt(properties.getProperty(codeType + FULL_DESC))]);
 
                 if (Integer.parseInt(properties.getProperty(codeType + LONG_DESC)) < fields.length)
-                    pojo.setLong_desc(fields[Integer.parseInt(properties.getProperty(codeType + LONG_DESC))]);
+                    pojo.setServiceLongDesciption(fields[Integer.parseInt(properties.getProperty(codeType + LONG_DESC))]);
 
                 if (Integer.parseInt(properties.getProperty(codeType + SHORT_DESC)) < fields.length)
-                    pojo.setShort_desc(fields[Integer.parseInt(properties.getProperty(codeType + SHORT_DESC))]);
+                    pojo.setServiceShortDesciption(fields[Integer.parseInt(properties.getProperty(codeType + SHORT_DESC))]);
 
-                result.put(pojo.getCode(), pojo);
+                result.put(pojo.getServiceCode(), pojo);
             }
 
         }

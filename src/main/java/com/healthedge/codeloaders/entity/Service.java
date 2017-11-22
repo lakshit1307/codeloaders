@@ -161,5 +161,31 @@ public class Service implements Serializable {
 	public void setAction(String action) {
 		this.action = action;
 	}
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Service service = (Service) o;
+
+		if (serviceCode != null ? !serviceCode.equals(service.serviceCode) : service.serviceCode != null) return false;
+		if (serviceLongDesciption != null ? !serviceLongDesciption.equals(service.serviceLongDesciption) : service.serviceLongDesciption != null) return false;
+		if (serviceShortDesciption != null ? !serviceShortDesciption.equals(service.serviceShortDesciption) : service.serviceShortDesciption != null) return false;
+		return serviceAlternateDesciption != null ? serviceAlternateDesciption.equals(service.serviceAlternateDesciption) : service.serviceAlternateDesciption == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = serviceCode != null ? serviceCode.hashCode() : 0;
+		result = 31 * result + (serviceLongDesciption != null ? serviceLongDesciption.hashCode() : 0);
+		result = 31 * result + (serviceShortDesciption != null ? serviceShortDesciption.hashCode() : 0);
+		result = 31 * result + (serviceAlternateDesciption != null ? serviceAlternateDesciption.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public String  toString(){
+		return ("Code: "+ serviceCode +" Long description: "+ serviceLongDesciption +" Short description: "+ serviceShortDesciption +" Full description: "+ serviceAlternateDesciption);
+	}
 
 }

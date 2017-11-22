@@ -1,7 +1,7 @@
 package com.healthedge.codeloaders.service.file.diff;
 
 
-import com.healthedge.codeloaders.service.file.model.FilePojo;
+import com.healthedge.codeloaders.entity.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,23 +14,23 @@ public class DiffCreator {
     public static final String APPEND_ACTION = "APPEND";
     public static final String TERMINATE_ACTION = "TERMINATE";
 
-    private HashMap<String, FilePojo> previous = new HashMap<String, FilePojo>();
+    private HashMap<String, Service> previous = new HashMap<String, Service>();
 
 
-    public Map<String, List<FilePojo>> diff(Map<String, FilePojo> current) {
+    public Map<String, List<Service>> diff(Map<String, Service> current) {
 
-        Map<String, List<FilePojo>> result = new HashMap<String, List<FilePojo>>();
-        List<FilePojo> create = new ArrayList<FilePojo>();
-        List<FilePojo> append = new ArrayList<FilePojo>();
-        List<FilePojo> terminate = new ArrayList<FilePojo>();
+        Map<String, List<Service>> result = new HashMap<String, List<Service>>();
+        List<Service> create = new ArrayList<Service>();
+        List<Service> append = new ArrayList<Service>();
+        List<Service> terminate = new ArrayList<Service>();
 
 
         Boolean flag = ifEmptyMemory(previous);
         if (flag) {
             for(String key:current.keySet())
             {
-                FilePojo filePojo=current.get(key);
-                create.add(filePojo);
+                Service service =current.get(key);
+                create.add(service);
             }
             previous.putAll(current);
             current.clear();
@@ -39,20 +39,20 @@ public class DiffCreator {
 
             for(String key: current.keySet()){
                 if(previous.containsKey(key)){
-                    FilePojo pojo2=current.get(key);
-                    FilePojo pojo1= previous.get(key);
+                    Service pojo2=current.get(key);
+                    Service pojo1= previous.get(key);
                     if(!pojo1.equals(pojo2)){
                         append.add(pojo2);
                     }
                     previous.remove(key);
                 }
                 else{
-                    FilePojo pojo=current.get(key);
+                    Service pojo=current.get(key);
                     create.add(pojo);
                 }
             }
             for(String key: previous.keySet()){
-                FilePojo pojo= previous.get(key);
+                Service pojo= previous.get(key);
                 terminate.add(pojo);
 
             }
@@ -71,7 +71,7 @@ public class DiffCreator {
 
     }
 
-    public Boolean ifEmptyMemory(HashMap<String, FilePojo> hp1) {
+    public Boolean ifEmptyMemory(HashMap<String, Service> hp1) {
         if (hp1.isEmpty()) {
 
             return true;
