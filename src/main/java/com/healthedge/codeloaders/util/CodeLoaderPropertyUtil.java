@@ -5,7 +5,7 @@ import java.util.Properties;
 
 public class CodeLoaderPropertyUtil {
 
-    private static final String CODE_LOADER_PROPERTY_FILE_PATH = "C:\\Code Loader\\codeloaders\\src\\main\\resources\\codeType.properties";
+    private static final String CODE_LOADER_PROPERTY_FILE_PATH = "C:\\Users\\laksh\\Documents\\Code\\code_1.1\\codeloaders\\codeloaders\\src\\main\\resources\\codeType.properties";
     private Properties properties = new Properties();
     private static CodeLoaderPropertyUtil ourInstance = new CodeLoaderPropertyUtil();
 

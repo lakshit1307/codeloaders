@@ -2,6 +2,7 @@ package com.healthedge.codeloaders.business;
 
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
+import com.healthedge.codeloaders.service.ClientService;
 import com.healthedge.codeloaders.service.DiffCreator;
 import com.healthedge.codeloaders.service.FileParser;
 import com.healthedge.codeloaders.service.FileSorter;
@@ -30,6 +31,9 @@ public class LoadPendingCodes {
 
     @Autowired
     private ServiceDao serviceDao;
+    
+    @Autowired
+    private ClientService clientService;
 
 
     //TODO: get data from db or config
@@ -85,7 +89,6 @@ public class LoadPendingCodes {
                         serviceDao.terminate(service);
                     }
 
-
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     //TODO: Log the error with file name
@@ -95,6 +98,7 @@ public class LoadPendingCodes {
 
 
         }
+        clientService.persistToClients();
     }
 
 

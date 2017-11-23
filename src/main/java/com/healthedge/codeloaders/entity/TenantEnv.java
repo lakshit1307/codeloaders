@@ -171,4 +171,14 @@ public class TenantEnv implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
+	@Override
+	public String toString() {
+		return "TenantEnv [tenantEnvId=" + tenantEnvId + ", name=" + name + ", description=" + description + ", dbUrl="
+				+ dbUrl + ", dbUserName=" + dbUserName + ", dbPassword=" + dbPassword + ", isAutoLoad=" + isAutoLoad
+				+ ", isActive=" + isActive + ", createdBy=" + createdBy + ", createdDate=" + createdDate
+				+ ", updatedBy=" + updatedBy + ", updatedDate=" + updatedDate + "]";
+	}
+	
+	
+
 }
