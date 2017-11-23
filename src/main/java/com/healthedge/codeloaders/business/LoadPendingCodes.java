@@ -49,18 +49,40 @@ public class LoadPendingCodes {
             List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
             for (String file : sortedFileNames) {
                 String filePath = directoryPath + File.separator + file;
+
                 try {
                     Map<String, Service> record = fileParser.parse(filePath);
-                    Map<String, List<Service>> diffRecords = diffCreator.diff(record);
+                    Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
                     //Persist Data
-                    List<Service> ls=new ArrayList<>();
+
+                    //CREATE entities
+                    List<Service> createList=new ArrayList<>();
                     if(diffRecords.containsKey(DiffCreator.CREATE_ACTION)){
-                        ls=diffRecords.get(DiffCreator.CREATE_ACTION);
+                        createList=diffRecords.get(DiffCreator.CREATE_ACTION);
                     }
 
-                    for (Service service : ls) {
-                        System.out.println("\n PERSISTING Object :\n"+service.toString());
+                    for (Service service : createList) {
                         serviceDao.save(service);
+                    }
+
+                    //UPDATE entities
+                    List<Service> updateList=new ArrayList<>();
+                    if(diffRecords.containsKey(DiffCreator.APPEND_ACTION)){
+                        updateList=diffRecords.get(DiffCreator.APPEND_ACTION);
+                    }
+                    	
+                    for (Service service : updateList) {
+                        serviceDao.update(service);
+                    }
+
+                    //TERMINATE entities
+                    List<Service> terminateList=new ArrayList<>();
+                    if(diffRecords.containsKey(DiffCreator.TERMINATE_ACTION)){
+                        terminateList=diffRecords.get(DiffCreator.TERMINATE_ACTION);
+                    }
+
+                    for (Service service : terminateList) {
+                        serviceDao.terminate(service);
                     }
 
 

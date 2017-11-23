@@ -62,8 +62,7 @@ public class FileParser {
 
         //standardized_serv_cd
 
-        //eff_start_dt
-        pojo.setEffectiveStartDate(effectiveStartDate.toDate());
+
         //TX_CNT
         pojo.setTxCnt(current.toDate().getTime());
         //LAST_TX_DT

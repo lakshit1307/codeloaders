@@ -1,7 +1,10 @@
 package com.healthedge.codeloaders.service;
 
 
+import com.healthedge.codeloaders.dto.FileMetadata;
 import com.healthedge.codeloaders.entity.Service;
+import org.apache.commons.io.FilenameUtils;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +21,11 @@ public class DiffCreator {
     private HashMap<String, Service> previous = new HashMap<String, Service>();
 
 
-    public Map<String, List<Service>> diff(Map<String, Service> current) {
+    public Map<String, List<Service>> diff(String filePath,Map<String, Service> current) {
+
+        String fileName = FilenameUtils.getName(filePath);
+        FileMetadata fileMetadata = new FileMetadata(fileName);
+        DateTime fileDate=fileMetadata.getFileDate();
 
         Map<String, List<Service>> result = new HashMap<String, List<Service>>();
         List<Service> create = new ArrayList<Service>();
@@ -32,6 +39,7 @@ public class DiffCreator {
             {
                 Service service =current.get(key);
                 service.setAction(CREATE_ACTION);
+                service.setEffectiveStartDate(fileDate.toDate());
                 create.add(service);
             }
             previous.putAll(current);
@@ -52,12 +60,14 @@ public class DiffCreator {
                 else{
                     Service pojo=current.get(key);
                     pojo.setAction(CREATE_ACTION);
+                    pojo.setEffectiveStartDate(fileDate.toDate());
                     create.add(pojo);
                 }
             }
             for(String key: previous.keySet()){
                 Service pojo= previous.get(key);
                 pojo.setAction(TERMINATE_ACTION);
+                pojo.setEffectiveEndDate(fileDate.toDate());
                 terminate.add(pojo);
 
             }

@@ -12,7 +12,21 @@ public class ServiceDao {
 
     public void save(Service service){
 
-        System.out.println("\n RECEIVED DAO: \n"+service.toString());
+        System.out.println("\n Received Entity to Create: \n"+service.toString());
         serviceRepository.save(service);
+    }
+
+    public void update(Service service){
+
+        System.out.println("\n Received Entity to Update: \n"+service.toString());
+        serviceRepository.update(service.getServiceShortDesciption(),
+                service.getServiceLongDesciption(),service.getServiceAlternateDesciption(),
+                service.getAction(),service.getVersion(),service.getServiceCode());
+    }
+
+    public void terminate(Service service){
+
+        System.out.println("\n Received Entity to Terminate: \n"+service.toString());
+        serviceRepository.terminate(service.getEffectiveEndDate(),service.getAction(),service.getServiceCode());
     }
 }
