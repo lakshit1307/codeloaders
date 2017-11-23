@@ -2,6 +2,9 @@ package com.healthedge.codeloaders.dao;
 
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.repository.ServiceRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @org.springframework.stereotype.Service
@@ -29,4 +32,8 @@ public class ServiceDao {
         System.out.println("\n Received Entity to Terminate: \n"+service.toString());
         serviceRepository.terminate(service.getEffectiveEndDate(),service.getAction(),service.getServiceCode());
     }
+    
+    public List<Service> getAll(){
+		return serviceRepository.getAll();
+	}
 }
