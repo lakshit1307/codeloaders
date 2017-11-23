@@ -18,6 +18,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'pmd'
 
 
 
@@ -25,6 +26,30 @@ group = 'com.healthedge'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+pmd {
+	ignoreFailures=true
+	pmdTest.enabled=false
+	ruleSets = [
+		'java-basic',
+		'java-braces',
+		'java-clone',
+		'java-codesize',
+		'java-comments',
+		'java-controversial',
+		'java-coupling',
+		'java-design',
+		'java-empty',
+		'java-finalizers',
+		'java-imports',
+		'java-optimizations',
+		'java-strictexception',
+		'java-strings',
+		'java-typeresolution',
+		'java-unnecessary',
+		'java-unusedcode'
+	]
+}
 
 jar {
 	baseName = 'codeloaders'
