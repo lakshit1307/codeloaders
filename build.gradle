@@ -28,16 +28,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 pmd {
-	ignoreFailures=true
+	ignoreFailures=false
 	pmdTest.enabled=false
 	ruleSets = [
 		'java-basic',
 		'java-braces',
 		'java-clone',
 		'java-codesize',
-		'java-comments',
-		'java-controversial',
-		'java-coupling',
 		'java-design',
 		'java-empty',
 		'java-finalizers',
@@ -98,6 +95,8 @@ dependencies {
 	compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'
 	compile group: 'com.oracle', name: 'ojdbc8', version: '12.2.0.1'
+	compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+	compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')

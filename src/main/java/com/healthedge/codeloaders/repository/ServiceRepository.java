@@ -20,5 +20,5 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
     void terminate(Date effectiveEndDate,String action, String serviceCode);
     
     @Query("SELECT s from Service s")
-	public List<Service> getAll();
+	List<Service> getAll();
 }

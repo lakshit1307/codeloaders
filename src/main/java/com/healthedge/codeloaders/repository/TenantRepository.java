@@ -12,6 +12,6 @@ import com.healthedge.codeloaders.entity.Tenant;
 public interface TenantRepository extends JpaRepository<Tenant, Integer> {
 	
 	@Query("SELECT t from Tenant t")
-	public List<Tenant> getAll();
+	List<Tenant> getAll();
 
 }

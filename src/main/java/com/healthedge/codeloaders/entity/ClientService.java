@@ -1,5 +1,8 @@
 package com.healthedge.codeloaders.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "SERVICES")
 public class ClientService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
 	@Id
 	@NotNull
@@ -53,11 +57,15 @@ public class ClientService {
 	@Column(name = "TX_CNT")
 	private Long transactionCount;
 
+	public ClientService () {
+		LOGGER.info("ClientService class initialized");
+	}
+
 	public String getServiceCode() {
 		return serviceCode;
 	}
 
-	public void setServiceCode(String serviceCode) {
+	public void setServiceCode(final String serviceCode) {
 		this.serviceCode = serviceCode;
 	}
 
@@ -65,7 +73,7 @@ public class ClientService {
 		return serviceTypeCode;
 	}
 
-	public void setServiceTypeCode(String serviceTypeCode) {
+	public void setServiceTypeCode(final String serviceTypeCode) {
 		this.serviceTypeCode = serviceTypeCode;
 	}
 
@@ -73,7 +81,7 @@ public class ClientService {
 		return serviceShortDesciption;
 	}
 
-	public void setServiceShortDesciption(String serviceShortDesciption) {
+	public void setServiceShortDesciption(final String serviceShortDesciption) {
 		this.serviceShortDesciption = serviceShortDesciption;
 	}
 
@@ -81,7 +89,7 @@ public class ClientService {
 		return serviceLongDesciption;
 	}
 
-	public void setServiceLongDesciption(String serviceLongDesciption) {
+	public void setServiceLongDesciption(final String serviceLongDesciption) {
 		this.serviceLongDesciption = serviceLongDesciption;
 	}
 
@@ -89,7 +97,7 @@ public class ClientService {
 		return serviceAlternateDesciption;
 	}
 
-	public void setServiceAlternateDesciption(String serviceAlternateDesciption) {
+	public void setServiceAlternateDesciption(final String serviceAlternateDesciption) {
 		this.serviceAlternateDesciption = serviceAlternateDesciption;
 	}
 
@@ -97,7 +105,7 @@ public class ClientService {
 		return standardizedServiceCode;
 	}
 
-	public void setStandardizedServiceCode(String standardizedServiceCode) {
+	public void setStandardizedServiceCode(final String standardizedServiceCode) {
 		this.standardizedServiceCode = standardizedServiceCode;
 	}
 
@@ -105,7 +113,7 @@ public class ClientService {
 		return workFlowCode;
 	}
 
-	public void setWorkFlowCode(String workFlowCode) {
+	public void setWorkFlowCode(final String workFlowCode) {
 		this.workFlowCode = workFlowCode;
 	}
 
@@ -113,7 +121,7 @@ public class ClientService {
 		return effectiveEndDate;
 	}
 
-	public void setEffectiveEndDate(Date effectiveEndDate) {
+	public void setEffectiveEndDate(final Date effectiveEndDate) {
 		this.effectiveEndDate = effectiveEndDate;
 	}
 
@@ -121,7 +129,7 @@ public class ClientService {
 		return effectiveStartDate;
 	}
 
-	public void setEffectiveStartDate(Date effectiveStartDate) {
+	public void setEffectiveStartDate(final Date effectiveStartDate) {
 		this.effectiveStartDate = effectiveStartDate;
 	}
 
@@ -129,7 +137,7 @@ public class ClientService {
 		return lastTransactionDate;
 	}
 
-	public void setLastTransactionDate(Date lastTransactionDate) {
+	public void setLastTransactionDate(final Date lastTransactionDate) {
 		this.lastTransactionDate = lastTransactionDate;
 	}
 
@@ -137,7 +145,7 @@ public class ClientService {
 		return lastTransactionUserText;
 	}
 
-	public void setLastTransactionUserText(String lastTransactionUserText) {
+	public void setLastTransactionUserText(final String lastTransactionUserText) {
 		this.lastTransactionUserText = lastTransactionUserText;
 	}
 
@@ -145,7 +153,7 @@ public class ClientService {
 		return transactionCount;
 	}
 
-	public void setTransactionCount(Long transactionCount) {
+	public void setTransactionCount(final Long transactionCount) {
 		this.transactionCount = transactionCount;
 	}
 

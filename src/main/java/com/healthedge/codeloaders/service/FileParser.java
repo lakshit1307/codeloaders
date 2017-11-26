@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+@SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @org.springframework.stereotype.Service
 public class FileParser {
 
@@ -35,18 +36,14 @@ public class FileParser {
 
         FileMetadata fileMetadata = new FileMetadata(fileName);
         String fileType = fileMetadata.getFileType();
-        DateTime effectiveStartDate=fileMetadata.getFileDate();
 
         String delimiter = properties.getProperty(fileType + DELEMITER);
-
-        String[] fileHeaders = br.readLine().split(String.valueOf(delimiter)); //to skip reading the first line(Header section) in the following steps
-
 
         String[] fields;
         while ((line = br.readLine()) != null) {
             if (line.length() > 0) {
                 fields = line.split(String.valueOf(delimiter),-1);
-                Service pojo = getService(fileMetadata, fileType, effectiveStartDate, fields);
+                Service pojo = getService(fileMetadata, fileType, fields);
 
                 result.put(pojo.getServiceCode(), pojo);
             }
@@ -56,7 +53,7 @@ public class FileParser {
 
     }
 
-    private Service getService(FileMetadata fileMetadata, String fileType, DateTime effectiveStartDate, String[] fields) {
+    private Service getService(FileMetadata fileMetadata, String fileType, String... fields) {
         Service pojo = new Service();
         DateTime current = new DateTime();
 

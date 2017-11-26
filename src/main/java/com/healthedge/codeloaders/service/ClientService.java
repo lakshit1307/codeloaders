@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.dao.TenantDao;
-import com.healthedge.codeloaders.dto.BaseResponse;
 import com.healthedge.codeloaders.entity.Tenant;
 import com.healthedge.codeloaders.entity.TenantEnv;
 
+@SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal","PMD.AvoidInstantiatingObjectsInLoops"})
 @Service
 public class ClientService {
 
@@ -68,7 +68,7 @@ public class ClientService {
 				clientConnectionService.saveToClient(clientService);
 			}
 			return "SUCCESS";
-		} catch (Exception e) {
+		} catch (Exception e) { //NOPMD
 			return "FAILURE";
 		}
 	}

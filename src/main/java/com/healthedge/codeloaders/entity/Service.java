@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_SERVICE")
 public class Service implements Serializable {
