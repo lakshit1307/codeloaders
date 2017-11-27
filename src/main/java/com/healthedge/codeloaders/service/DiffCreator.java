@@ -3,41 +3,49 @@ package com.healthedge.codeloaders.service;
 
 import com.healthedge.codeloaders.dto.FileMetadata;
 import com.healthedge.codeloaders.entity.Service;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @org.springframework.stereotype.Service
 public class DiffCreator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DiffCreator.class);
 
     public static final String CREATE_ACTION = "CREATE";
     public static final String APPEND_ACTION = "APPEND";
     public static final String TERMINATE_ACTION = "TERMINATE";
 
-    private HashMap<String, Service> previous = new HashMap<String, Service>();
+    private final Map<String, Service> previous = new ConcurrentHashMap<>();
+
+    public DiffCreator () {
+        LOGGER.info("DiffCreator class initialized");
+    }
 
 
-    public Map<String, List<Service>> diff(String filePath,Map<String, Service> current) {
+    public Map<String, List<Service>> diff(final String filePath, final Map<String, Service> current) {
 
-        String fileName = FilenameUtils.getName(filePath);
-        FileMetadata fileMetadata = new FileMetadata(fileName);
-        DateTime fileDate=fileMetadata.getFileDate();
+        final String fileName = FilenameUtils.getName(filePath);
+        final FileMetadata fileMetadata = new FileMetadata(fileName);
+        final DateTime fileDate=fileMetadata.getFileDate();
 
-        Map<String, List<Service>> result = new HashMap<String, List<Service>>();
-        List<Service> create = new ArrayList<Service>();
-        List<Service> append = new ArrayList<Service>();
-        List<Service> terminate = new ArrayList<Service>();
+        final Map<String, List<Service>> result = new ConcurrentHashMap<>();
+        final List<Service> create = new ArrayList<Service>();
+        final List<Service> append = new ArrayList<Service>();
+        final List<Service> terminate = new ArrayList<Service>();
 
 
-        Boolean flag = ifEmptyMemory(previous);
-        if (flag) {
-            for(String key:current.keySet())
+        if (MapUtils.isEmpty(previous)) {
+            for(final String key : current.keySet())
             {
-                Service service =current.get(key);
+                final Service service = current.get(key);
                 service.setAction(CREATE_ACTION);
                 service.setEffectiveStartDate(fileDate.toDate());
                 create.add(service);
@@ -46,11 +54,10 @@ public class DiffCreator {
             current.clear();
 
         } else {
-
-            for(String key: current.keySet()){
+            for(final String key: current.keySet()){
                 if(previous.containsKey(key)){
-                    Service pojo2=current.get(key);
-                    Service pojo1= previous.get(key);
+                    final Service pojo2 = current.get(key);
+                    final Service pojo1 = previous.get(key);
                     if(!pojo1.equals(pojo2)){
                         pojo2.setAction(APPEND_ACTION);
                         append.add(pojo2);
@@ -58,14 +65,14 @@ public class DiffCreator {
                     previous.remove(key);
                 }
                 else{
-                    Service pojo=current.get(key);
+                    final Service pojo = current.get(key);
                     pojo.setAction(CREATE_ACTION);
                     pojo.setEffectiveStartDate(fileDate.toDate());
                     create.add(pojo);
                 }
             }
-            for(String key: previous.keySet()){
-                Service pojo= previous.get(key);
+            for(final String key: previous.keySet()){
+                final Service pojo= previous.get(key);
                 pojo.setAction(TERMINATE_ACTION);
                 pojo.setEffectiveEndDate(fileDate.toDate());
                 terminate.add(pojo);
@@ -84,16 +91,6 @@ public class DiffCreator {
         return result;
 
 
-    }
-
-    public Boolean ifEmptyMemory(HashMap<String, Service> hp1) {
-        if (hp1.isEmpty()) {
-
-            return true;
-
-        }
-        else
-            return false;
     }
 
     public void flushPreviousData () {

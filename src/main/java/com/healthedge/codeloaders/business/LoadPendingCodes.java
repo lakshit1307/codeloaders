@@ -2,9 +2,12 @@ package com.healthedge.codeloaders.business;
 
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
+import com.healthedge.codeloaders.service.ClientService;
 import com.healthedge.codeloaders.service.DiffCreator;
 import com.healthedge.codeloaders.service.FileParser;
 import com.healthedge.codeloaders.service.FileSorter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +19,10 @@ import java.util.Map;
 @Component
 public class LoadPendingCodes {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoadPendingCodes.class);
+
     //TODO: make it configurable
-    private String basedata = "C:\\basedata";
+    private final static String BASE_DATA = "C:\\basedata";
 
     @Autowired
     private FileSorter fileSorter;
@@ -30,11 +35,18 @@ public class LoadPendingCodes {
 
     @Autowired
     private ServiceDao serviceDao;
+    
+    @Autowired
+    private ClientService clientService;
+
+    public LoadPendingCodes () {
+        LOGGER.info("LoadPendingCodes class initialized");
+    }
 
 
     //TODO: get data from db or config
     private List<String> getFileTypes () {
-        List<String> fileTypes = new ArrayList<String>();
+        final List<String> fileTypes = new ArrayList<String>();
         fileTypes.add("CPT");
         fileTypes.add("HCPCS");
 
@@ -43,63 +55,55 @@ public class LoadPendingCodes {
 
 
     public void startProcess() {
-        for (String fileType : getFileTypes()) {
+        for (final String fileType : getFileTypes()) {
             diffCreator.flushPreviousData();
-            String directoryPath = basedata + File.separator + fileType;
-            List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
-            for (String file : sortedFileNames) {
-                String filePath = directoryPath + File.separator + file;
+            final String directoryPath = BASE_DATA + File.separator + fileType;
+            final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
+            for (final String file : sortedFileNames) {
+                final String filePath = directoryPath + File.separator + file;
 
                 try {
-                    Map<String, Service> record = fileParser.parse(filePath);
-                    Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
+                    final Map<String, Service> record = fileParser.parse(filePath);
+                    final Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
                     //Persist Data
-
-                    //CREATE entities
-                    List<Service> createList=new ArrayList<>();
-                    if(diffRecords.containsKey(DiffCreator.CREATE_ACTION)){
-                        createList=diffRecords.get(DiffCreator.CREATE_ACTION);
-                    }
+                    persistData(diffRecords);
 
 
-                    for (Service service : createList) {
-                        serviceDao.save(service);
-                    }
-
-                    //UPDATE entities
-                    List<Service> updateList=new ArrayList<>();
-                    if(diffRecords.containsKey(DiffCreator.APPEND_ACTION)){
-                        updateList=diffRecords.get(DiffCreator.APPEND_ACTION);
-                    }
-
-
-                    for (Service service : updateList) {
-                        serviceDao.update(service);
-                    }
-
-                    //TERMINATE entities
-                    List<Service> terminateList=new ArrayList<>();
-                    if(diffRecords.containsKey(DiffCreator.TERMINATE_ACTION)){
-                        terminateList=diffRecords.get(DiffCreator.TERMINATE_ACTION);
-                    }
-
-
-                    for (Service service : terminateList) {
-                        serviceDao.terminate(service);
-                    }
-
-
-                } catch (Exception ex) {
+                } catch (Exception ex) { //NOPMD
                     System.out.println(ex.getMessage());
                     //TODO: Log the error with file name
                 }
 
             }
-
-
         }
+        clientService.persistToClients();
     }
 
+    private void persistData(final Map<String, List<Service>> diffRecords) {
+        //CREATE entities
+        if(diffRecords.containsKey(DiffCreator.CREATE_ACTION)){
+            final List<Service> createList = diffRecords.get(DiffCreator.CREATE_ACTION);
+            for (final Service service : createList) {
+                serviceDao.save(service);
+            }
+        }
 
 
+        //UPDATE entities
+        if(diffRecords.containsKey(DiffCreator.APPEND_ACTION)){
+            final List<Service> updateList=diffRecords.get(DiffCreator.APPEND_ACTION);
+            for (final Service service : updateList) {
+                serviceDao.update(service);
+            }
+        }
+
+
+        //TERMINATE entities
+        if(diffRecords.containsKey(DiffCreator.TERMINATE_ACTION)){
+            final List<Service> terminateList = diffRecords.get(DiffCreator.TERMINATE_ACTION);
+            for (final Service service : terminateList) {
+                serviceDao.terminate(service);
+            }
+        }
+    }
 }

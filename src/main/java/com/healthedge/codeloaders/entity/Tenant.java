@@ -8,11 +8,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,6 +18,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
+@SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @Entity
 @Table(name = "M_TENANT")
 public class Tenant /* extends BaseDate */ implements Serializable {
@@ -44,7 +43,7 @@ public class Tenant /* extends BaseDate */ implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	private int isActive;
 
-	@OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
 //	@JoinColumn(name = "TENANT_ID")
 	private List<TenantEnv> tenantEnv = new ArrayList<>();
 
@@ -143,5 +142,14 @@ public class Tenant /* extends BaseDate */ implements Serializable {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Tenant [tenantId=" + tenantId + ", name=" + name + ", description=" + description + ", isAutoLoad="
+				+ isAutoLoad + ", isActive=" + isActive + ", createdBy=" + createdBy + ", createdDate=" + createdDate
+				+ ", updatedBy=" + updatedBy + ", updatedDate=" + updatedDate + "]";
+	}
+	
+	
 
 }

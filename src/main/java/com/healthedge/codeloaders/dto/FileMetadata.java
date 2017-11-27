@@ -8,30 +8,31 @@ import java.util.StringTokenizer;
 public class FileMetadata {
 
     private static final String FILE_DELIMITER = "_";
+    private static final int NO_OF_TOKENS = 4;
 
     private String provider;
     private String fileType;
     private DateTime fileDate;
-    private String fileNameWithExt;
-    private String baseFileName;
+    private final String fileNameWithExt;
+    private final String baseFileName;
     private String year;
     private String month;
 
-    public FileMetadata (String fileName) {
+    public FileMetadata (final String fileName) {
         fileNameWithExt = fileName;
 
         baseFileName = FilenameUtils.getBaseName(fileName);
 
-        StringTokenizer st = new StringTokenizer(baseFileName, FILE_DELIMITER);
+        final StringTokenizer st = new StringTokenizer(baseFileName, FILE_DELIMITER);
 
-        if (st.countTokens() == 4) {
+        if (st.countTokens() == NO_OF_TOKENS) {
             provider = st.nextToken();
             fileType = st.nextToken();
 
             year = st.nextToken();
             month = st.nextToken();
 
-            fileDate = prepareDateStartingFromFirstOfMonth (year, month);
+            fileDate = prepareDateStartingFromFirstOfMonth ();
         }
     }
 
@@ -63,10 +64,8 @@ public class FileMetadata {
         return fileDate;
     }
 
-    private DateTime prepareDateStartingFromFirstOfMonth (String year, String month) {
-        DateTime retValue = new DateTime(Integer.parseInt(year), Integer.parseInt(month), 01,0,0);
-
-        return retValue;
+    private DateTime prepareDateStartingFromFirstOfMonth () {
+        return new DateTime(Integer.parseInt(year), Integer.parseInt(month), 01,0,0);
     }
 
 

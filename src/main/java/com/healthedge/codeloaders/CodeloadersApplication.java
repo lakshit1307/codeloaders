@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.healthedge.codeloaders.business.LoadPendingCodes;
 
 
+@SuppressWarnings({"PMD.UseUtilityClass","PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @ComponentScan(basePackages = "com.healthedge.*")
 @EntityScan( basePackages = "com.healthedge.codeloaders.entity" )
 @EnableJpaRepositories("com.healthedge.codeloaders.repository")

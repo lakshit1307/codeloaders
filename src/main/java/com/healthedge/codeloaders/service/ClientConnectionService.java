@@ -1,27 +1,16 @@
 package com.healthedge.codeloaders.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.sql.DataSource;
-
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.healthedge.codeloaders.entity.ClientService;
 
-import oracle.jdbc.pool.OracleDataSource;
-
+@SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @Service
 public class ClientConnectionService {
 

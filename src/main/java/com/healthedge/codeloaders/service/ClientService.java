@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.dao.TenantDao;
-import com.healthedge.codeloaders.dto.BaseResponse;
 import com.healthedge.codeloaders.entity.Tenant;
 import com.healthedge.codeloaders.entity.TenantEnv;
 
+@SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal","PMD.AvoidInstantiatingObjectsInLoops"})
 @Service
 public class ClientService {
 
@@ -50,7 +50,8 @@ public class ClientService {
 		try {
 			clientConnectionService.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(),
 					tenantEnv.getDbPassword());
-			for (com.healthedge.codeloaders.entity.Service service : serviceDao.getAll()) {
+			List<com.healthedge.codeloaders.entity.Service> services=serviceDao.getAll();
+			for (com.healthedge.codeloaders.entity.Service service : services) {
 				com.healthedge.codeloaders.entity.ClientService clientService = new com.healthedge.codeloaders.entity.ClientService();
 				clientService.setEffectiveEndDate(service.getEffectiveEndDate());
 				clientService.setEffectiveStartDate(service.getEffectiveStartDate());
@@ -67,7 +68,7 @@ public class ClientService {
 				clientConnectionService.saveToClient(clientService);
 			}
 			return "SUCCESS";
-		} catch (Exception e) {
+		} catch (Exception e) { //NOPMD
 			return "FAILURE";
 		}
 	}

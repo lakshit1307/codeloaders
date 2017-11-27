@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
+@SuppressWarnings("PMD")
 @Entity
 @Table(name = "M_TENANT_ENV")
 public class TenantEnv implements Serializable {
@@ -170,5 +171,15 @@ public class TenantEnv implements Serializable {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
+	@Override
+	public String toString() {
+		return "TenantEnv [tenantEnvId=" + tenantEnvId + ", name=" + name + ", description=" + description + ", dbUrl="
+				+ dbUrl + ", dbUserName=" + dbUserName + ", dbPassword=" + dbPassword + ", isAutoLoad=" + isAutoLoad
+				+ ", isActive=" + isActive + ", createdBy=" + createdBy + ", createdDate=" + createdDate
+				+ ", updatedBy=" + updatedBy + ", updatedDate=" + updatedDate + "]";
+	}
+	
+	
 
 }
