@@ -14,24 +14,27 @@ public class ServiceDao {
     @Autowired
     private ServiceRepository serviceRepository;
 
-    public void save(Service service){
+    public Boolean save(Service service){
 
         System.out.println("\n Received Entity to Create: \n"+service.toString());
         serviceRepository.save(service);
+        return true;
     }
     @Transactional
-    public void update(Service service){
+    public Boolean update(Service service){
 
         System.out.println("\n Received Entity to Update: \n"+service.toString());
         serviceRepository.update(service.getServiceShortDesciption(),
                 service.getServiceLongDesciption(),service.getServiceAlternateDesciption(),
                 service.getAction(),service.getVersion(),service.getServiceCode());
+        return true;
     }
     @Transactional
-    public void terminate(Service service){
+    public Boolean terminate(Service service){
 
         System.out.println("\n Received Entity to Terminate: \n"+service.toString());
         serviceRepository.terminate(service.getEffectiveEndDate(),service.getAction(),service.getServiceCode());
+        return true;
     }
     
     public List<Service> getAll(){

@@ -61,6 +61,7 @@ public class LoadPendingCodes {
                         createList=diffRecords.get(DiffCreator.CREATE_ACTION);
                     }
 
+
                     for (Service service : createList) {
                         serviceDao.save(service);
                     }
@@ -70,7 +71,8 @@ public class LoadPendingCodes {
                     if(diffRecords.containsKey(DiffCreator.APPEND_ACTION)){
                         updateList=diffRecords.get(DiffCreator.APPEND_ACTION);
                     }
-                    	
+
+
                     for (Service service : updateList) {
                         serviceDao.update(service);
                     }
@@ -80,6 +82,7 @@ public class LoadPendingCodes {
                     if(diffRecords.containsKey(DiffCreator.TERMINATE_ACTION)){
                         terminateList=diffRecords.get(DiffCreator.TERMINATE_ACTION);
                     }
+
 
                     for (Service service : terminateList) {
                         serviceDao.terminate(service);
