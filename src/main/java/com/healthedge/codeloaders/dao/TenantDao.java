@@ -24,7 +24,7 @@ public class TenantDao {
 	}
 
 	public List<Tenant> getAllTenant(){
-		return tenantRepository.getAll();
+		return tenantRepository.findAll();
 	}
 	
 	public void save(final List<Tenant> tenants) {

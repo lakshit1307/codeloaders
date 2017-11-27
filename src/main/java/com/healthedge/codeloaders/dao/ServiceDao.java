@@ -39,6 +39,6 @@ public class ServiceDao {
     }
     
     public List<Service> getAll(){
-		return serviceRepository.getAll();
+		return serviceRepository.findAll();
 	}
 }

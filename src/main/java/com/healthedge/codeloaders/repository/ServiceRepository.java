@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
-import java.util.List;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<Service,String> {
@@ -18,7 +17,5 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE T_SERVICE SET EFF_END_DT=?1,ACTION =?2 WHERE SERV_CD=?3", nativeQuery = true)
     void terminate(Date effectiveEndDate,String action, String serviceCode);
-    
-    @Query("SELECT s from Service s")
-	List<Service> getAll();
+ 
 }
