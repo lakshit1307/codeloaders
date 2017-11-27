@@ -22,20 +22,23 @@ public class ServiceDao {
         LOGGER.info("ServieDao initialized");
     }
 
-    public void save(final Service service){
+    public Boolean save(final Service service){
         serviceRepository.save(service);
+        return true;
     }
 
     @Transactional
-    public void update(final Service service){
+    public Boolean update(final Service service){
         serviceRepository.update(service.getServiceShortDesciption(),
                 service.getServiceLongDesciption(),service.getServiceAlternateDesciption(),
                 service.getAction(),service.getVersion(),service.getServiceCode());
+        return true;
     }
 
     @Transactional
-    public void terminate(final Service service){
+    public Boolean terminate(final Service service){
         serviceRepository.terminate(service.getEffectiveEndDate(),service.getAction(),service.getServiceCode());
+        return true;
     }
     
     public List<Service> getAll(){
