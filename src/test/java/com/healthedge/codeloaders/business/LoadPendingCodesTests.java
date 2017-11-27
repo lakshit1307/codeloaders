@@ -1,6 +1,5 @@
-package com.healthedge.codeloaders;
+package com.healthedge.codeloaders.business;
 
-import com.healthedge.codeloaders.business.LoadPendingCodes;
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.service.DiffCreator;
@@ -9,7 +8,6 @@ import com.healthedge.codeloaders.service.FileSorter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +39,26 @@ public class LoadPendingCodesTests {
 
     public enum Actions{
         CREATE,APPEND,TERMINATE
+    }
+
+    @Before
+    public void setUp() throws Exception{
+
+        when(fileSorter.sortFilesInDirectory(any(String.class))).thenReturn(returnDummyFilesSorted());
+        when(fileParser.parse(any(String.class))).thenReturn(new HashMap<>(returnFileRecordsParsed()));
+        when(diffCreator.diff(any(String.class), Mockito.anyMap())).thenReturn(new HashMap<>(returnDiffCreator()));
+        when(serviceDao.update(any(Service.class))).thenReturn(true);
+        when(serviceDao.save(any(Service.class))).thenReturn(true);
+        when(serviceDao.terminate(any(Service.class))).thenReturn(true);
+    }
+
+
+
+    @Test
+    public void testStartProcess() {
+
+        loadPendingCodes.startProcess();
+
     }
 
     public List<String> returnDummyFilesSorted(){
@@ -124,25 +142,7 @@ public class LoadPendingCodesTests {
 
     }
 
-    @Before
-    public void setUp() throws Exception{
 
-        when(fileSorter.sortFilesInDirectory(any(String.class))).thenReturn(returnDummyFilesSorted());
-        when(fileParser.parse(any(String.class))).thenReturn(new HashMap<>(returnFileRecordsParsed()));
-        when(diffCreator.diff(any(String.class), Mockito.anyMap())).thenReturn(new HashMap<>(returnDiffCreator()));
-        when(serviceDao.update(any(Service.class))).thenReturn(true);
-        when(serviceDao.save(any(Service.class))).thenReturn(true);
-        when(serviceDao.terminate(any(Service.class))).thenReturn(true);
-    }
-
-
-
-    @Test
-    public void testStartProcess() {
-
-        loadPendingCodes.startProcess();
-
-        }
     }
 
 

@@ -9,6 +9,7 @@ import com.healthedge.codeloaders.service.FileSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -21,8 +22,8 @@ public class LoadPendingCodes {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadPendingCodes.class);
 
-    //TODO: make it configurable
-    private final static String BASE_DATA = "C:\\basedata";
+    @Value("${basedata.path}")
+    private String baseData;
 
     @Autowired
     private FileSorter fileSorter;
@@ -38,6 +39,9 @@ public class LoadPendingCodes {
     
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+
 
     public LoadPendingCodes () {
         LOGGER.info("LoadPendingCodes class initialized");
@@ -57,7 +61,7 @@ public class LoadPendingCodes {
     public void startProcess() {
         for (final String fileType : getFileTypes()) {
             diffCreator.flushPreviousData();
-            final String directoryPath = BASE_DATA + File.separator + fileType;
+            final String directoryPath = baseData + File.separator + fileType;
             final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
             for (final String file : sortedFileNames) {
                 final String filePath = directoryPath + File.separator + file;

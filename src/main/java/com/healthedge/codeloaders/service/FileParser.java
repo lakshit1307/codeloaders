@@ -7,7 +7,11 @@ import com.healthedge.codeloaders.util.CodeLoaderPropertyUtil;
 
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,13 +23,27 @@ import java.util.Properties;
 @org.springframework.stereotype.Service
 public class FileParser {
 
-    private static final Properties properties = CodeLoaderPropertyUtil.getInstance().getProperties();
-    private static final String CODE=".CODE";
-    private static final String LONG_DESC=".LONG.DESC";
-    private static final String SHORT_DESC=".SHORT.DESC";
-    private static final String FULL_DESC=".FULL.DESC";
-    private static final String SERV_TYPE_CODE=".SERVTYPECODE";
-    private static final String DELEMITER=".DELIMITER";
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileParser.class);
+
+    @Autowired
+    private CodeLoaderPropertyUtil codeLoaderPropertyUtil;
+
+    private Properties properties;
+    private static final String CODE=".code";
+    private static final String LONG_DESC=".long.desc";
+    private static final String SHORT_DESC=".short.desc";
+    private static final String FULL_DESC=".full.desc";
+    private static final String SERV_TYPE_CODE=".servtypecode";
+    private static final String DELEMITER=".delimiter";
+
+    public FileParser () {
+        LOGGER.info("FileParser class initialized");
+    }
+
+    @PostConstruct
+    public void onInit () {
+        properties = codeLoaderPropertyUtil.getProperties();
+    }
 
     public Map<String, Service> parse(String filePath) throws IOException {
         Map<String, Service> result = new HashMap<String, Service>();
@@ -35,10 +53,10 @@ public class FileParser {
         String fileName = FilenameUtils.getName(filePath);
 
         FileMetadata fileMetadata = new FileMetadata(fileName);
-        String fileType = fileMetadata.getFileType();
+        String fileType = fileMetadata.getFileType().toLowerCase();
 
         String delimiter = properties.getProperty(fileType + DELEMITER);
-
+        br.readLine();//consuming the first line
         String[] fields;
         while ((line = br.readLine()) != null) {
             if (line.length() > 0) {

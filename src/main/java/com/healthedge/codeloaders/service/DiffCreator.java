@@ -23,6 +23,7 @@ public class DiffCreator {
     public static final String APPEND_ACTION = "APPEND";
     public static final String TERMINATE_ACTION = "TERMINATE";
 
+
     private final Map<String, Service> previous = new ConcurrentHashMap<>();
 
     public DiffCreator () {
