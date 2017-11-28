@@ -1,0 +1,8 @@
+CPT_CODE	PLACE_HOLDER	SHORT_DESCRIPTION	LONG_DESCRIPTION	FULL_DESCRIPTION	NF_TOTAL_RVU	FAC_TOTAL_RVU	STATUS
+
+0004M		SCOLIOSIS 53 SNP SALIVA SCOR	SCOLIOSIS 53 SNPS SALIVA PROGNOSTIC RISK SCORE	Scoliosis, DNA analysis of 53 single nucleotide polymorphisms (SNPs), using saliva, prognostic algorithm reported as a risk score	0.00	0.00			10120
+
+0005F		OSTEOARTHRITISSSSSSS COMPOSITE	OSTEOARTHRITIS COMPOSITE	Osteoarthritis assessed (OA) Includes assessment of all the following components: Osteoarthritis symptoms and functional status assessed (1006F) Use of anti-inflammatory or over-the-counter (OTC) analgesic medications assessed (1007F) Initial examination of the involved joint(s) (includes visual inspection, palpation, range of motion) (2004F)	0.00	0.00			9322
+
+0006M		ONC HEP GENE RISK CLASSIFIER	ONCOLOGY HEP MRNA 161 GENES RISK CLASSIFIER	Oncology (hepatic), mRNA expression levels of 161 genes, utilizing fresh hepatocellular carcinoma tumor tissue, with alpha-fetoprotein level, algorithm reported as a risk classifier	0.00	0.00			10121
+
