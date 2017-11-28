@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -53,7 +54,7 @@ public class FileParser {
         String fileName = FilenameUtils.getName(filePath);
 
         FileMetadata fileMetadata = new FileMetadata(fileName);
-        String fileType = fileMetadata.getFileType().toLowerCase();
+        String fileType = fileMetadata.getFileType().toLowerCase(Locale.getDefault());
 
         String delimiter = properties.getProperty(fileType + DELEMITER);
         br.readLine();//consuming the first line
