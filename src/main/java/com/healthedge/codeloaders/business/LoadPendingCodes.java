@@ -2,7 +2,7 @@ package com.healthedge.codeloaders.business;
 
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
-import com.healthedge.codeloaders.service.ClientService;
+import com.healthedge.codeloaders.service.ClientPersistenceService;
 import com.healthedge.codeloaders.service.DiffCreator;
 import com.healthedge.codeloaders.service.FileParser;
 import com.healthedge.codeloaders.service.FileSorter;
@@ -38,7 +38,7 @@ public class LoadPendingCodes {
     private ServiceDao serviceDao;
     
     @Autowired
-    private ClientService clientService;
+    private ClientPersistenceService clientService;
 
     @Autowired
 
