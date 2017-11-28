@@ -4,17 +4,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.dao.TenantDao;
+import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.entity.Tenant;
 import com.healthedge.codeloaders.entity.TenantEnv;
 
-@SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal","PMD.AvoidInstantiatingObjectsInLoops"})
+@SuppressWarnings({ "PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal",
+		"PMD.AvoidInstantiatingObjectsInLoops" })
 @Service
-public class ClientService {
+public class ClientPersistenceService {
 
 	@Autowired
 	private TenantDao tenantDao;
@@ -48,11 +52,11 @@ public class ClientService {
 
 	public String getandPersistRecords(TenantEnv tenantEnv) {
 		try {
-			clientConnectionService.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(),
-					tenantEnv.getDbPassword());
-			List<com.healthedge.codeloaders.entity.Service> services=serviceDao.getAll();
+			EntityManagerFactory entityManagerFactory = clientConnectionService
+					.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword());
+			List<com.healthedge.codeloaders.entity.Service> services = serviceDao.getAll();
 			for (com.healthedge.codeloaders.entity.Service service : services) {
-				com.healthedge.codeloaders.entity.ClientService clientService = new com.healthedge.codeloaders.entity.ClientService();
+				ClientService clientService = new ClientService();
 				clientService.setEffectiveEndDate(service.getEffectiveEndDate());
 				clientService.setEffectiveStartDate(service.getEffectiveStartDate());
 				clientService.setLastTransactionDate(service.getLastTransactionDate());
@@ -65,10 +69,10 @@ public class ClientService {
 				clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
 				clientService.setTransactionCount(service.getTxCnt());
 				clientService.setWorkFlowCode(service.getWorkFlowCode());
-				clientConnectionService.saveToClient(clientService);
+				clientConnectionService.saveToClient(clientService, entityManagerFactory);
 			}
 			return "SUCCESS";
-		} catch (Exception e) { //NOPMD
+		} catch (Exception e) { // NOPMD
 			return "FAILURE";
 		}
 	}
