@@ -108,3 +108,13 @@ dependencies {
 }
 
 mainClassName='com.healthedge.codeloaders.CodeloadersApplication'
+
+startScripts {
+	classpath += files('src/dist/config')
+	doLast {
+		def windowsScriptFile = file getWindowsScript()
+		def unixScriptFile = file getUnixScript()
+		windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\config', '%APP_HOME%\\config')
+		unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/config', '$APP_HOME/config')
+	}
+}
