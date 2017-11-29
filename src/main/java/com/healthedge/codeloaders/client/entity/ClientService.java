@@ -1,4 +1,4 @@
-package com.healthedge.codeloaders.entity;
+package com.healthedge.codeloaders.client.entity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

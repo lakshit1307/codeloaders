@@ -6,12 +6,14 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.healthedge.codeloaders.client.entity.ClientService;
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.dao.TenantDao;
-import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.entity.Tenant;
 import com.healthedge.codeloaders.entity.TenantEnv;
 
@@ -19,6 +21,8 @@ import com.healthedge.codeloaders.entity.TenantEnv;
 		"PMD.AvoidInstantiatingObjectsInLoops" })
 @Service
 public class ClientPersistenceService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientPersistenceService.class);
 
 	@Autowired
 	private TenantDao tenantDao;
@@ -33,6 +37,7 @@ public class ClientPersistenceService {
 		Map<Integer, Map<Integer, String>> response = new HashMap<Integer, Map<Integer, String>>();
 		List<Tenant> tenants = tenantDao.getAllTenant();
 		for (Tenant tenant : tenants) {
+			LOGGER.info("Persisting to clients: " + tenant.getTenantId());
 			if (validateTenant(tenant)) {
 				response.put(tenant.getTenantId(), persistToEnvironments(tenant));
 			}
@@ -43,6 +48,7 @@ public class ClientPersistenceService {
 	public Map<Integer, String> persistToEnvironments(Tenant tenant) {
 		Map<Integer, String> envStatusMap = new HashMap<Integer, String>();
 		for (TenantEnv tenantEnv : tenant.getTenantEnv()) {
+			LOGGER.info("Persisting to client-env: " + tenantEnv.getTenantEnvId());
 			if (validateTenantEnvironment(tenantEnv)) {
 				envStatusMap.put(tenantEnv.getTenantEnvId(), getandPersistRecords(tenantEnv));
 			}
@@ -71,8 +77,10 @@ public class ClientPersistenceService {
 				clientService.setWorkFlowCode(service.getWorkFlowCode());
 				clientConnectionService.saveToClient(clientService, entityManagerFactory);
 			}
+			LOGGER.info("Persisted to client-env:" + tenantEnv.getTenantEnvId());
 			return "SUCCESS";
 		} catch (Exception e) { // NOPMD
+			LOGGER.error("Error in persisting records to client db for env: "+ tenantEnv.getTenantEnvId(), e);
 			return "FAILURE";
 		}
 	}
