@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
 import java.util.*;
 
 @RunWith(SpringRunner.class)
@@ -16,21 +19,12 @@ public class FileParserTests {
     @Autowired
     private FileParser fileParser;
 
-    @MockBean
-    private FileSorter fileSorter;
-
-
-    private final String FILE_PATH="C:\\Code Loader\\codeloaders\\src\\test\\resources\\basedata\\CPT\\OPTUM_CPT_2016_01.txt";
-
-    /*@Before
-    public void setUp() throws Exception{
-
-        //code here
-    }*/
     @Test
     public void testFileParsing() throws Exception{
+        File file = new File("src/test/resources/basedata/CPT/OPTUM_CPT_2016_01.txt");
 
-        Map<String, Service> record=fileParser.parse(FILE_PATH);
+
+        Map<String, Service> record=fileParser.parse(file.getAbsolutePath());
         if(record.containsKey("0003M")&&record.containsKey("0004M")){
             System.out.println("File values are parsed");
             assert true;
