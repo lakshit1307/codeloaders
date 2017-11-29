@@ -118,3 +118,6 @@ startScripts {
 		unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/config', '$APP_HOME/config')
 	}
 }
+applicationDistribution.from( files('README.md')) {
+	into("")
+}
