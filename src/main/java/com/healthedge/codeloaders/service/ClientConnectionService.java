@@ -9,7 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.springframework.stereotype.Service;
 
-import com.healthedge.codeloaders.entity.ClientService;
+import com.healthedge.codeloaders.client.entity.ClientService;
 
 @SuppressWarnings({ "PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal" })
 @Service
