@@ -1,6 +1,5 @@
 package com.healthedge.codeloaders.batch;
 
-import com.healthedge.codeloaders.business.LoadPendingCodes;
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.service.DiffCreator;
@@ -13,9 +12,9 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MyTasklet implements Tasklet {
+public class StagingPersistenceTasklet implements Tasklet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyTasklet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StagingPersistenceTasklet.class);
 
     @Autowired
     private ServiceDao serviceDao;
@@ -25,8 +24,8 @@ public class MyTasklet implements Tasklet {
         ExecutionContext executionContext = chunkContext.getStepContext()
                 .getStepExecution().getExecutionContext();
 
-        String action = executionContext.getString(PersistentingStepPartitioner.ACTION);
-        Service service = (Service) executionContext.get(PersistentingStepPartitioner.ITEM);
+        String action = executionContext.getString(StagingPersistenceStepPartitioner.ACTION);
+        Service service = (Service) executionContext.get(StagingPersistenceStepPartitioner.ITEM);
 
         LOGGER.info("Thread [{}] processing action [{}] having code [{}]", Thread.currentThread().getName(), action,
                 service.getServiceCode());

@@ -7,7 +7,6 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -15,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CodeLoadProcess {
+public class StagingLoadProcess {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodeLoadProcess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StagingLoadProcess.class);
 
     @Value("${basedata.path}")
     private String baseData;
