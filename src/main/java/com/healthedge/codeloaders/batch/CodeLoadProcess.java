@@ -1,6 +1,5 @@
 package com.healthedge.codeloaders.batch;
 
-import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.service.FileSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class CodeLoadProcess {
@@ -27,13 +25,14 @@ public class CodeLoadProcess {
     @Autowired
     private FileSorter fileSorter;
 
-    public void startProcess () {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(SpringBatchPartitionConfig.class);
-        context.refresh();
+    @Autowired
+    private JobLauncher jobLauncher;
 
-        final JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-        final Job job = (Job) context.getBean("partitionerJob");
+    @Autowired
+    private Job job;
+
+
+    public void startProcess () {
 
         for (final String fileType : getFileTypes()) {
             final String directoryPath = baseData + File.separator + fileType;
@@ -42,7 +41,9 @@ public class CodeLoadProcess {
                 final String filePath = directoryPath + File.separator + file;
                 CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
 
-                JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath).toJobParameters();
+                JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath)
+                        .addLong("time",System.currentTimeMillis()).toJobParameters();
+
                 //Initiate jobs for each file
                 try {
                     System.out.println("Starting the batch job for file: " + filePath);
