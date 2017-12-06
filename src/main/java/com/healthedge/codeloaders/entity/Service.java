@@ -55,8 +55,6 @@ public class Service implements Serializable {
 	@Column(name = "CODE_PROCESSING_HISTORY_ID")
 	private Integer codeProcessingHistoryId;
 
-
-
 	@Column(name = "VERSION")
 	private Date version;
 

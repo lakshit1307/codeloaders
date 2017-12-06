@@ -1,57 +1,42 @@
 package com.healthedge.codeloaders.service;
 
-import com.healthedge.codeloaders.dao.ClientDao;
-import com.healthedge.codeloaders.dao.ServiceDao;
 
-import com.healthedge.codeloaders.entity.ClientService;
+import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.entity.TenantEnv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-
-import javax.persistence.EntityManager;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @org.springframework.stereotype.Service
-public class FindDelta {
+public class FindDelta extends ServiceEntityToClientEntity{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDao.class);
     private static Map<String,Date> latestCloaderCodeVersion=new HashMap<>();
     private static final String CREATE="CREATE";
     private static final String APPEND="APPEND";
     private static final String TERMINATE="TERMINATE";
+    private Map<String, List<Service>> result = new ConcurrentHashMap<>();
 
     @Autowired
     private ServiceDao serviceDao;
 
+
     public FindDelta() {
         LOGGER.info("PayorDelta initialized");
-        //updateCloaderCodeVesion();
     }
 
 
-    public  void getPayorDelta(TenantEnv tenantEnv, String codeType,Date toCodeVersion){
-
-        Boolean toCodeVersionflag=false;
-
-        updateCloaderCodeVesion();
-        EntityManagerService entityManagerService=new EntityManagerService();
-        EntityManager entityManager=entityManagerService.
-                createEntityManagerService(tenantEnv.getDbUrl(),tenantEnv.getDbUserName(),tenantEnv.getDbPassword());
-
-        ClientDao clientDao=new ClientDao();
+    public  Map<String,List<Service>> getPayorDelta(TenantEnv tenantEnv, String codeType,Date payorCodeVersion){
 
 
-        if(!toCodeVersionflag){
-
-            Date payorCodeVersion=clientDao.getPayorVersionOneCode(codeType,entityManager);
+            updateCloaderCodeVesion();
             Date cloaderCodeVersion=latestCloaderCodeVersion.get(codeType);
 
-
             if(cloaderCodeVersion.after(payorCodeVersion)){
+
                     LOGGER.info(codeType +" delta creation started");
                     List<Service> completeDelta=serviceDao.getDeltaCodes(payorCodeVersion,codeType);
                     List<Service> createList=new ArrayList<>();
@@ -71,73 +56,17 @@ public class FindDelta {
                         }
                     }
 
-
-
-
-                for(Service service:createList){
-                    ClientService clientService=new ClientService();
-                    clientService.setEffectiveStartDate(service.getEffectiveStartDate());
-                    clientService.setEffectiveEndDate(service.getEffectiveEndDate());
-                    clientService.setServiceCode(service.getServiceCode());
-                    clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
-                    clientService.setServiceLongDesciption(service.getServiceLongDesciption());
-                    clientService.setServiceShortDesciption(service.getServiceShortDesciption());
-                    clientService.setServiceTypeCode(service.getServiceTypeCD());
-                    clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
-                    clientService.setTransactionCount(service.getTxCnt());
-                    clientService.setLastTransactionDate(service.getLastTransactionDate());
-                    clientService.setLastTransactionUserText(service.getLastTransactionUserText());
-                    clientDao.save(entityManager,clientService);
-
-                }
-
-                for(Service service:appendList){
-                    ClientService clientService=new ClientService();
-                    clientService.setEffectiveStartDate(service.getEffectiveStartDate());
-                    clientService.setEffectiveEndDate(service.getEffectiveEndDate());
-                    clientService.setServiceCode(service.getServiceCode());
-                    clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
-                    clientService.setServiceLongDesciption(service.getServiceLongDesciption());
-                    clientService.setServiceShortDesciption(service.getServiceShortDesciption());
-                    clientService.setServiceTypeCode(service.getServiceTypeCD());
-                    clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
-                    clientService.setTransactionCount(service.getTxCnt());
-                    clientService.setLastTransactionDate(service.getLastTransactionDate());
-                    clientService.setLastTransactionUserText(service.getLastTransactionUserText());
-                    clientDao.update(entityManager,clientService);
-
-                }
-
-                for(Service service:terminateList){
-                    ClientService clientService=new ClientService();
-                    clientService.setEffectiveStartDate(service.getEffectiveStartDate());
-                    clientService.setEffectiveEndDate(service.getEffectiveEndDate());
-                    clientService.setServiceCode(service.getServiceCode());
-                    clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
-                    clientService.setServiceLongDesciption(service.getServiceLongDesciption());
-                    clientService.setServiceShortDesciption(service.getServiceShortDesciption());
-                    clientService.setServiceTypeCode(service.getServiceTypeCD());
-                    clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
-                    clientService.setTransactionCount(service.getTxCnt());
-                    clientService.setLastTransactionDate(service.getLastTransactionDate());
-                    clientService.setLastTransactionUserText(service.getLastTransactionUserText());
-                    clientDao.terminate(entityManager,clientService);
-
-                }
-
+                result.put(CREATE, createList);
+                result.put(APPEND, appendList);
+                result.put(TERMINATE, terminateList);
 
                 }
                 else{
                     LOGGER.info(codeType+" is upto date with CLOADER db");
                 }
-
+            return result;
         }
 
-        else{
-
-        }
-
-    }
     private void updateCloaderCodeVesion(){
 
         Date codeVersion;
@@ -147,8 +76,4 @@ public class FindDelta {
             latestCloaderCodeVersion.put(allCodeTypes.get(i),codeVersion);
         }
     }
-
-
-
-
 }

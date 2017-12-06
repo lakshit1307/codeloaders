@@ -5,8 +5,8 @@ import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.repository.ClientServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
@@ -26,7 +26,10 @@ public class ClientDao {
                     "WHERE SERV_TYPE_CD= ?1 ORDER BY EFF_START_DT DESC) WHERE ROWNUM=1");
             query.setParameter(1,codeType);
             List<Date> dates= query.getResultList();
-            return dates.get(0) ;
+            if(dates.isEmpty())
+                return null;
+            else
+                return dates.get(0) ;
         }
 
         @Override
