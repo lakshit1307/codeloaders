@@ -121,3 +121,15 @@ startScripts {
 applicationDistribution.from( files('README.md')) {
 	into("")
 }
+
+distributions {
+	main {
+		baseName = 'codeloaders'
+		contents {
+			from {
+				"$buildDir/distribution-files/application"
+			}
+			into '/'
+		}
+	}
+}
