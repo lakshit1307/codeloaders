@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,7 @@ import java.util.Map;
 @ComponentScan(basePackages = "com.healthedge.*")
 @EnableAutoConfiguration
 @SpringBootApplication
+@EnableBatchProcessing
 public class MyApp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MyApp.class);
