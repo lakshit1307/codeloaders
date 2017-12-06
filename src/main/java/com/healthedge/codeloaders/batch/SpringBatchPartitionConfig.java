@@ -31,38 +31,38 @@ public class SpringBatchPartitionConfig {
     @Autowired
     private StepBuilderFactory steps;
 
-    @Bean(name = "partitionerJob")
-    public Job partitionerJob() throws UnexpectedInputException, MalformedURLException, ParseException {
-        return jobs.get("partitionerJob")
-                .start(partitionStep())
+    @Bean(name = "stagingJob")
+    public Job stagingJob() throws UnexpectedInputException, MalformedURLException, ParseException {
+        return jobs.get("stagingJob")
+                .start(stagingStep())
                 .build();
     }
 
     @Bean
-    public Step partitionStep() throws UnexpectedInputException, MalformedURLException, ParseException {
-        return steps.get("partitionStep")
-                .partitioner("slaveStep", partitioner())
-                .step(slaveStep())
+    public Step stagingStep() throws UnexpectedInputException, MalformedURLException, ParseException {
+        return steps.get("stagingStep")
+                .partitioner("stagingSlaveStep", stagingPartitioner())
+                .step(stagingSlaveStep())
                 .gridSize(20)
                 .taskExecutor(taskExecutor())
                 .build();
     }
 
     @Bean
-    public StagingPersistenceStepPartitioner partitioner() {
+    public StagingPersistenceStepPartitioner stagingPartitioner() {
         StagingPersistenceStepPartitioner persistentingStepPartitioner = new StagingPersistenceStepPartitioner();
         return persistentingStepPartitioner;
     }
 
     @Bean
-    public Step slaveStep() throws UnexpectedInputException, MalformedURLException, ParseException {
-        return steps.get("slaveStep").tasklet(tasklet())
+    public Step stagingSlaveStep() throws UnexpectedInputException, MalformedURLException, ParseException {
+        return steps.get("stagingSlaveStep").tasklet(stagingTasklet())
                 .build();
     }
 
     @Bean
     @StepScope
-    public Tasklet tasklet () throws UnexpectedInputException, ParseException {
+    public Tasklet stagingTasklet() throws UnexpectedInputException, ParseException {
         Tasklet tasklet = new StagingPersistenceTasklet();
         return tasklet;
     }
@@ -80,12 +80,4 @@ public class SpringBatchPartitionConfig {
         taskExecutor.setConcurrencyLimit(10);
         return taskExecutor;
     }
-
-    @Bean
-    @StepScope
-    public FlatFileItemReader itemReader (@Value("#{stepExecutionContext[action]}") String action) throws UnexpectedInputException, ParseException {
-        FlatFileItemReader reader = new FlatFileItemReader<>();
-        return reader;
-    }
-
 }

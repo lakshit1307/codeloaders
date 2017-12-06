@@ -7,6 +7,7 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -27,12 +28,16 @@ public class StagingLoadProcess {
     @Autowired
     private JobLauncher jobLauncher;
 
+//    @Autowired
+//    private Job job;
+
     @Autowired
-    private Job job;
+    private ApplicationContext appContext;
 
 
     public void startProcess () {
 
+        final Job job = (Job) appContext.getBean("stagingJob");
         for (final String fileType : getFileTypes()) {
             final String directoryPath = baseData + File.separator + fileType;
             final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);

@@ -31,10 +31,13 @@ public class StagingPersistenceTasklet implements Tasklet {
                 service.getServiceCode());
 
         if (action == DiffCreator.CREATE_ACTION) {
+            LOGGER.info("Persistence action Create action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
             serviceDao.save(service);
         } else if (action == DiffCreator.APPEND_ACTION) {
+            LOGGER.info("Persistence action Append action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
             serviceDao.update(service);
         } else if (action == DiffCreator.TERMINATE_ACTION) {
+            LOGGER.info("Persistence action Terminate action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
             serviceDao.terminate(service);
         }
 
