@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @SuppressWarnings("PMD")

@@ -3,6 +3,7 @@ package com.healthedge.codeloaders.dao;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.repository.ServiceRepository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -37,10 +38,27 @@ public class ServiceDao {
 
     @Transactional
     public Boolean terminate(final Service service){
-        serviceRepository.terminate(service.getEffectiveEndDate(),service.getAction(),service.getServiceCode());
+        serviceRepository.terminate(service.getEffectiveEndDate(),service.getAction(),service.getVersion(),service.getServiceCode());
         return true;
     }
-    
+
+    @Transactional
+    public Date getCodeVersion(final String codeType){
+        Date version=serviceRepository.getCodeTypeLatestVersion(codeType);
+        return version;
+    }
+
+    @Transactional
+    public List<String> getDistinctCodeTypes(){
+        List<String> allCodeTypes=serviceRepository.getDistinctCodeTypes();
+        return allCodeTypes;
+    }
+
+    @Transactional
+    public List<Service> getDeltaCodes(Date version,String codeType){
+        List<Service> ls=serviceRepository.getDeltaCloaderCodes(version,codeType);
+        return ls;
+    }
     public List<Service> getAll(){
 		return serviceRepository.findAll();
 	}

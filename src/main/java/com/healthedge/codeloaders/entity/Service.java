@@ -58,7 +58,7 @@ public class Service implements Serializable {
 
 
 	@Column(name = "VERSION")
-	private String version;
+	private Date version;
 
 	@Column(name = "ACTION")
 	private String action;
@@ -182,11 +182,11 @@ public class Service implements Serializable {
 		this.codeProcessingHistoryId = codeProcessingHistoryId;
 	}
 
-	public String getVersion() {
+	public Date getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(Date version) {
 		this.version = version;
 	}
 

@@ -26,7 +26,11 @@ public class CodeLoaderPropertyUtilTests {
 
         Properties properties=codeLoaderPropertyUtil.getProperties();
         if(!properties.isEmpty()){
+            System.out.println("Property file is read correctly");
             assert true;
+        }
+        else{
+            assert false;
         }
 
     }

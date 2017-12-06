@@ -76,6 +76,7 @@ public class DiffCreator {
                 final Service pojo= previous.get(key);
                 pojo.setAction(TERMINATE_ACTION);
                 pojo.setEffectiveEndDate(fileDate.toDate());
+                pojo.setVersion(fileDate.toDate());
                 terminate.add(pojo);
 
             }

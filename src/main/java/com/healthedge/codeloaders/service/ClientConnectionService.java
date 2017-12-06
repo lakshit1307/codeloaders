@@ -1,19 +1,21 @@
 package com.healthedge.codeloaders.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 import org.springframework.stereotype.Service;
 
-import com.healthedge.codeloaders.client.entity.ClientService;
+import com.healthedge.codeloaders.entity.ClientService;
 
 @SuppressWarnings({ "PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal" })
 @Service
 public class ClientConnectionService {
+
+
 
 	public EntityManagerFactory configureEntityManager(String dbUrl, String userName, String password) {
 		Map properties = new HashMap();
@@ -24,7 +26,7 @@ public class ClientConnectionService {
 		properties.put("hibernate.connection.password", password);
 		properties.put("hibernate.show-sql", "true");
 		emf = Persistence.createEntityManagerFactory("jpablogPUnit", properties);
-//		emf.createEntityManager();
+		//emf.createEntityManager();
 		return emf;
 	}
 
@@ -36,12 +38,7 @@ public class ClientConnectionService {
 		return "SUCCESS";
 	}
 
-	public String saveToClient(List<ClientService> clientServices, EntityManagerFactory emf) {
-		EntityManager entityManager = (EntityManager) emf.createEntityManager();
-		entityManager.getTransaction().begin();
-		entityManager.persist(clientServices);
-		entityManager.getTransaction().commit();
-		return "SUCCESS";
-	}
+
+
 
 }

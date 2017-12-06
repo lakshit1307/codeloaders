@@ -40,8 +40,6 @@ public class LoadPendingCodes {
     @Autowired
     private ClientPersistenceService clientService;
 
-    @Autowired
-
 
     public LoadPendingCodes () {
         LOGGER.info("LoadPendingCodes class initialized");
@@ -80,7 +78,7 @@ public class LoadPendingCodes {
 
             }
         }
-        clientService.persistToClients();
+        //clientService.persistToClients();
     }
 
     private void persistData(final Map<String, List<Service>> diffRecords) {

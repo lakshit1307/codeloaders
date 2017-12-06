@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.healthedge.codeloaders.client.entity.ClientService;
+import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.dao.TenantDao;
 import com.healthedge.codeloaders.entity.Tenant;

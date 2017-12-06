@@ -15,10 +15,7 @@ import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 @SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @org.springframework.stereotype.Service
@@ -55,6 +52,7 @@ public class FileParser {
 
         FileMetadata fileMetadata = new FileMetadata(fileName);
         String fileType = fileMetadata.getFileType().toLowerCase(Locale.getDefault());
+        DateTime fileDate=fileMetadata.getFileDate();
 
         String delimiter = properties.getProperty(fileType + DELEMITER);
         br.readLine();//consuming the first line
@@ -76,9 +74,6 @@ public class FileParser {
         Service pojo = new Service();
         DateTime current = new DateTime();
 
-        //standardized_serv_cd
-
-
         //TX_CNT
         pojo.setTxCnt(current.toDate().getTime());
         //LAST_TX_DT
@@ -88,7 +83,7 @@ public class FileParser {
         //CODE_PROCESSING_HISTORY_ID
         pojo.setCodeProcessingHistoryId(5);
 
-        pojo.setVersion(fileMetadata.getYear() + "_" + fileMetadata.getMonth());
+        pojo.setVersion(fileMetadata.getFileDate().toDate());
 
 
         //serv_cd
