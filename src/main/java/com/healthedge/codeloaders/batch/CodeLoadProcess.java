@@ -4,9 +4,7 @@ import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.service.FileSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,10 +42,11 @@ public class CodeLoadProcess {
                 final String filePath = directoryPath + File.separator + file;
                 CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
 
+                JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath).toJobParameters();
                 //Initiate jobs for each file
                 try {
                     System.out.println("Starting the batch job for file: " + filePath);
-                    JobExecution execution = jobLauncher.run(job, new JobParameters());
+                    JobExecution execution = jobLauncher.run(job, jobParameters);
                     System.out.println("Job Status : " + execution.getStatus());
                     System.out.println("Job succeeded");
                 } catch (final Exception e) {
