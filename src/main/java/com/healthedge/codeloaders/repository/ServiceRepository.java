@@ -35,5 +35,8 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
 
     @Query(value = "SELECT * FROM T_SERVICE WHERE VERSION >?1 AND SERV_TYPE_CD=?2", nativeQuery = true)
     List<Service> getDeltaCloaderCodes(Date version,String codeType);
+    
+    @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1", nativeQuery = true)
+    List<Service> getServiceCodesByCodeType(String codeType);
  
 }

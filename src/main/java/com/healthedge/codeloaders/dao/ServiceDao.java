@@ -62,4 +62,9 @@ public class ServiceDao {
     public List<Service> getAll(){
 		return serviceRepository.findAll();
 	}
+    
+    public Service[] getServiceCodesByCodeType(String codeType){
+    	List<Service> services=serviceRepository.getServiceCodesByCodeType(codeType);
+    	return services.toArray(new Service[services.size()]);
+    }
 }
