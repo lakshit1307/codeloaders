@@ -1,6 +1,8 @@
 package com.healthedge.codeloaders.batch;
 
+import com.healthedge.codeloaders.service.DiffCreator;
 import com.healthedge.codeloaders.service.FileSorter;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
@@ -26,19 +28,19 @@ public class StagingLoadProcess {
     private FileSorter fileSorter;
 
     @Autowired
-    private JobLauncher jobLauncher;
+    private DiffCreator diffCreator;
 
-//    @Autowired
-//    private Job job;
+    @Autowired
+    private JobLauncher jobLauncher;
 
     @Autowired
     private ApplicationContext appContext;
 
 
     public void startProcess () {
-
         final Job job = (Job) appContext.getBean("stagingJob");
         for (final String fileType : getFileTypes()) {
+            diffCreator.flushPreviousData();
             final String directoryPath = baseData + File.separator + fileType;
             final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
             for (final String file : sortedFileNames) {
@@ -50,13 +52,11 @@ public class StagingLoadProcess {
 
                 //Initiate jobs for each file
                 try {
-                    System.out.println("Starting the batch job for file: " + filePath);
+                    LOGGER.info("Starting batch job for file [{}]", filePath);
                     JobExecution execution = jobLauncher.run(job, jobParameters);
-                    System.out.println("Job Status : " + execution.getStatus());
-                    System.out.println("Job succeeded");
+                    LOGGER.info("Batch Job succeeded for file [{}]", filePath);
                 } catch (final Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Job failed");
+                    LOGGER.error("Batch job failed for file [{}] with exception", filePath, ExceptionUtils.getStackTrace(e));
                 }
             }
         }

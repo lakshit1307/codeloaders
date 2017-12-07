@@ -3,6 +3,7 @@ package com.healthedge.codeloaders.batch;
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.service.DiffCreator;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
@@ -27,18 +28,23 @@ public class StagingPersistenceTasklet implements Tasklet {
         String action = executionContext.getString(StagingPersistenceStepPartitioner.ACTION);
         Service service = (Service) executionContext.get(StagingPersistenceStepPartitioner.ITEM);
 
-        LOGGER.info("Thread [{}] processing action [{}] having code [{}]", Thread.currentThread().getName(), action,
+        LOGGER.debug("Thread [{}] processing action [{}] having code [{}]", Thread.currentThread().getName(), action,
                 service.getServiceCode());
 
-        if (action == DiffCreator.CREATE_ACTION) {
-            LOGGER.info("Persistence action Create action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
-            serviceDao.save(service);
-        } else if (action == DiffCreator.APPEND_ACTION) {
-            LOGGER.info("Persistence action Append action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
-            serviceDao.update(service);
-        } else if (action == DiffCreator.TERMINATE_ACTION) {
-            LOGGER.info("Persistence action Terminate action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
-            serviceDao.terminate(service);
+        try {
+            if (action == DiffCreator.CREATE_ACTION) {
+                LOGGER.debug("Persistence action Create action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
+                serviceDao.save(service);
+            } else if (action == DiffCreator.APPEND_ACTION) {
+                LOGGER.debug("Persistence action Append action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
+                serviceDao.update(service);
+            } else if (action == DiffCreator.TERMINATE_ACTION) {
+                LOGGER.debug("Persistence action Terminate action on code [{}] with action [{}]", service.getServiceCode(), service.getAction());
+                serviceDao.terminate(service);
+            }
+        } catch (Exception ex) { //NOPMD
+            LOGGER.error("Error occurred processing code [{}] with action [{}] with exception [{}]",
+                    service.getServiceCode(), service.getAction(), ExceptionUtils.getStackTrace(ex));
         }
 
         // exit the step

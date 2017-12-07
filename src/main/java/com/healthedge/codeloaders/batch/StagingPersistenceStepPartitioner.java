@@ -30,11 +30,10 @@ public class StagingPersistenceStepPartitioner implements Partitioner {
 
 	@Override
 	public Map<String, ExecutionContext> partition(int gridSize) {
-		Map<String, ExecutionContext> map = new HashMap<>();
-
 		String filePath = CodeLoaderContext.getInstance().getCurrentFilePath();
 		LOGGER.info("Processing filePath [{}]", filePath);
 
+		Map<String, ExecutionContext> map = new HashMap<>();
 		try {
 			final Map<String, Service> record = fileParser.parse(filePath);
 			final Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
