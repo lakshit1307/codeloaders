@@ -32,9 +32,6 @@ public class ClientPersistBatchConfig {
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
 
-	@Autowired
-	private DataSource dataSource;
-
 	@Bean(name = "partitionerJob")
 	public Job partitionerJob() throws UnexpectedInputException, MalformedURLException, ParseException {
 		return jobBuilderFactory.get("partitioningJob").start(partitionStep()).build();
@@ -54,13 +51,13 @@ public class ClientPersistBatchConfig {
 
 	@Bean
 	public Step slaveStep() throws UnexpectedInputException, MalformedURLException, ParseException {
-		return stepBuilderFactory.get("slaveStep").<Service, ClientService>chunk(1).reader(readerForServiceCode())
-				.processor(serviceCodeProcessor()).writer(writerForServiceCode()).build();
+		return stepBuilderFactory.get("slaveStep").<Service, ClientService>chunk(1).reader(serviceCodeReader())
+				.processor(serviceCodeProcessor()).writer(serviceCodeWriter()).build();
 	}
 
 	@Bean
 	@StepScope
-	public ServiceCodeWriter writerForServiceCode() {
+	public ServiceCodeWriter serviceCodeWriter() {
 		return new ServiceCodeWriter();
 	}
 
@@ -72,7 +69,7 @@ public class ClientPersistBatchConfig {
 
 	@Bean
 	@StepScope
-	public ServiceCodeReader readerForServiceCode() {
+	public ServiceCodeReader serviceCodeReader() {
 		return new ServiceCodeReader();
 	}
 
