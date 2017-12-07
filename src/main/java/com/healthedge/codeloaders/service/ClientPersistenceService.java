@@ -84,6 +84,24 @@ public class ClientPersistenceService {
 			return "FAILURE";
 		}
 	}
+	
+	public ClientService mapServiceToClient(com.healthedge.codeloaders.entity.Service service) {
+		ClientService clientService = new ClientService();
+		clientService.setEffectiveEndDate(service.getEffectiveEndDate());
+		clientService.setEffectiveStartDate(service.getEffectiveStartDate());
+		clientService.setLastTransactionDate(service.getLastTransactionDate());
+		clientService.setLastTransactionUserText(service.getLastTransactionUserText());
+		clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
+		clientService.setServiceCode(service.getServiceCode());
+		clientService.setServiceLongDesciption(service.getServiceLongDesciption());
+		clientService.setServiceShortDesciption(service.getServiceShortDesciption());
+		clientService.setServiceTypeCode(service.getServiceTypeCD());
+		clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
+		clientService.setTransactionCount(service.getTxCnt());
+		clientService.setWorkFlowCode(service.getWorkFlowCode());
+		return clientService;
+		
+	}
 
 	public boolean validateTenant(Tenant tenant) {
 		return true;

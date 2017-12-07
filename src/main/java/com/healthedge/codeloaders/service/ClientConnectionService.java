@@ -1,7 +1,7 @@
 package com.healthedge.codeloaders.service;
 
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,8 +15,6 @@ import com.healthedge.codeloaders.entity.ClientService;
 @Service
 public class ClientConnectionService {
 
-
-
 	public EntityManagerFactory configureEntityManager(String dbUrl, String userName, String password) {
 		Map properties = new HashMap();
 		EntityManagerFactory emf;
@@ -26,7 +24,7 @@ public class ClientConnectionService {
 		properties.put("hibernate.connection.password", password);
 		properties.put("hibernate.show-sql", "true");
 		emf = Persistence.createEntityManagerFactory("jpablogPUnit", properties);
-		//emf.createEntityManager();
+		// emf.createEntityManager();
 		return emf;
 	}
 
@@ -37,8 +35,15 @@ public class ClientConnectionService {
 		entityManager.getTransaction().commit();
 		return "SUCCESS";
 	}
-
-
-
+	
+	public String saveToClient(List<? extends ClientService> clientServices, EntityManagerFactory emf) {
+		EntityManager entityManager = (EntityManager) emf.createEntityManager();
+		entityManager.getTransaction().begin();
+		for(ClientService clientService: clientServices) {
+			entityManager.persist(clientService);
+		}
+		entityManager.getTransaction().commit();
+		return "SUCCESS";
+	}
 
 }

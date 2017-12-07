@@ -1,0 +1,98 @@
+package com.healthedge.codeloaders.batch.client;
+
+import java.net.MalformedURLException;
+import javax.sql.DataSource;
+
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ParseException;
+import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+
+import com.healthedge.codeloaders.entity.ClientService;
+import com.healthedge.codeloaders.entity.Service;
+
+@Configuration
+@EnableBatchProcessing
+public class ClientPersistBatchConfig {
+
+	@Autowired
+	public JobBuilderFactory jobBuilderFactory;
+
+	@Autowired
+	public StepBuilderFactory stepBuilderFactory;
+
+	@Autowired
+	private DataSource dataSource;
+
+	@Bean(name = "partitionerJob")
+	public Job partitionerJob() throws UnexpectedInputException, MalformedURLException, ParseException {
+		return jobBuilderFactory.get("partitioningJob").start(partitionStep()).build();
+	}
+
+	@Bean
+	public Step partitionStep() throws UnexpectedInputException, MalformedURLException, ParseException {
+		return stepBuilderFactory.get("partitionStep").partitioner("slaveStep", partitioner()).step(slaveStep())
+				.taskExecutor(taskExecutor()).build();
+	}
+
+	@Bean
+	public ClientPersistenceStepPartioner partitioner() {
+		ClientPersistenceStepPartioner partitioner = new ClientPersistenceStepPartioner();
+		return partitioner;
+	}
+
+	@Bean
+	public Step slaveStep() throws UnexpectedInputException, MalformedURLException, ParseException {
+		return stepBuilderFactory.get("slaveStep").<Service, ClientService>chunk(1).reader(readerForServiceCode())
+				.processor(serviceCodeProcessor()).writer(writerForServiceCode()).build();
+	}
+
+	@Bean
+	@StepScope
+	public ServiceCodeWriter writerForServiceCode() {
+		return new ServiceCodeWriter();
+	}
+
+	@Bean
+	@StepScope
+	public ServiceCodeProcessor serviceCodeProcessor() {
+		return new ServiceCodeProcessor();
+	}
+
+	@Bean
+	@StepScope
+	public ServiceCodeReader readerForServiceCode() {
+		return new ServiceCodeReader();
+	}
+
+	@Bean
+	@StepScope
+	public TaskExecutor taskExecutor() {
+		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
+		taskExecutor.setConcurrencyLimit(10);
+		return taskExecutor;
+	}
+
+//	@Bean
+//	@StepScope
+//	public JdbcCursorItemReader<Service> readServiceCode(@Value("#{jobParameters['filePath']}") String fileName) {
+//		JdbcCursorItemReader<Service> jdbcPagingItemReader = new JdbcCursorItemReader<Service>();
+//		jdbcPagingItemReader.setDataSource(dataSource);
+//		String sql = "SELECT * from T_SERVICE where SERV_TYPE_CD='" + fileName + "'";
+//		jdbcPagingItemReader.setSql(sql);
+//		jdbcPagingItemReader.setRowMapper(new ServiceRowMapper());
+//		return jdbcPagingItemReader;
+//	}
+
+}
