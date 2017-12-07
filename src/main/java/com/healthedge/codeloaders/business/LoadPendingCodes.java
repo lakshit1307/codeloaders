@@ -1,11 +1,10 @@
 package com.healthedge.codeloaders.business;
 
+import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.dao.ServiceDao;
+import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.entity.Service;
-import com.healthedge.codeloaders.service.ClientPersistenceService;
-import com.healthedge.codeloaders.service.DiffCreator;
-import com.healthedge.codeloaders.service.FileParser;
-import com.healthedge.codeloaders.service.FileSorter;
+import com.healthedge.codeloaders.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,14 @@ public class LoadPendingCodes {
     @Autowired
     private ClientPersistenceService clientService;
 
+    @Autowired
+    private FileStatusDao fileStatusDao;
+
+    private FileStatus fileStatus=new FileStatus();
+
+    @Autowired
+    private InitLoadTracker initLoadTracker;
+
 
     public LoadPendingCodes () {
         LOGGER.info("LoadPendingCodes class initialized");
@@ -58,35 +65,34 @@ public class LoadPendingCodes {
 
     public void startProcess() {
         for (final String fileType : getFileTypes()) {
+
             diffCreator.flushPreviousData();
             final String directoryPath = baseData + File.separator + fileType;
-            final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
-            for (final String file : sortedFileNames) {
-                final String filePath = directoryPath + File.separator + file;
-
-                try {
-                    final Map<String, Service> record = fileParser.parse(filePath);
-                    final Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
-                    //Persist Data
-                    persistData(diffRecords);
-
-
-                } catch (Exception ex) { //NOPMD
-                    System.out.println(ex.getMessage());
-                    //TODO: Log the error with file name
+            String startFile= initLoadTracker.startFileProcessingOf(fileType);
+            if(!startFile.equals(initLoadTracker.EOF)){
+                final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
+                for (int i=sortedFileNames.indexOf(startFile);i<sortedFileNames.size();++i ) {
+                    final String filePath = directoryPath + File.separator + sortedFileNames.get(i);
+                    fileStatus.setCodeType(fileType);
+                    fileStatus.setFileName(sortedFileNames.get(i));
+                    processFile(filePath);
                 }
-
             }
+
         }
         //clientService.persistToClients();
+
     }
 
-    private void persistData(final Map<String, List<Service>> diffRecords) {
+    private Boolean persistData(final Map<String, List<Service>> diffRecords) {
+
+        Boolean flag=false;
         //CREATE entities
         if(diffRecords.containsKey(DiffCreator.CREATE_ACTION)){
             final List<Service> createList = diffRecords.get(DiffCreator.CREATE_ACTION);
             for (final Service service : createList) {
-                serviceDao.save(service);
+                Boolean tempFlag=serviceDao.save(service);
+                flag=flag||tempFlag;
             }
         }
 
@@ -95,7 +101,8 @@ public class LoadPendingCodes {
         if(diffRecords.containsKey(DiffCreator.APPEND_ACTION)){
             final List<Service> updateList=diffRecords.get(DiffCreator.APPEND_ACTION);
             for (final Service service : updateList) {
-                serviceDao.update(service);
+                Boolean tempFlag=serviceDao.update(service);
+                flag=flag||tempFlag;
             }
         }
 
@@ -104,8 +111,39 @@ public class LoadPendingCodes {
         if(diffRecords.containsKey(DiffCreator.TERMINATE_ACTION)){
             final List<Service> terminateList = diffRecords.get(DiffCreator.TERMINATE_ACTION);
             for (final Service service : terminateList) {
-                serviceDao.terminate(service);
+                Boolean tempFlag=serviceDao.terminate(service);
+                flag=flag||tempFlag;
             }
         }
+        return flag;
+    }
+    private void processFile(String filePath){
+
+        try {
+            fileStatus.setStatus(FileStatus.IN_PROGRESS);
+            fileStatusDao.save(fileStatus);
+
+            final Map<String, Service> record = fileParser.parse(filePath);
+            final Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
+
+            //Persisting data here
+
+            Boolean flag=persistData(diffRecords);
+            if(flag){
+                fileStatus.setStatus(FileStatus.PERSISTED);
+                fileStatusDao.updateStatus(fileStatus);
+
+            }
+            else {
+                fileStatus.setStatus(FileStatus.FAILURE);
+                fileStatusDao.updateStatus(fileStatus);
+            }
+
+
+        } catch (Exception ex) { //NOPMD
+            System.out.println(ex.getMessage());
+            //TODO: Log the error with file name
+        }
+
     }
 }

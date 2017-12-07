@@ -19,9 +19,6 @@ public class ClientService {
 
 	@Id
 	@NotNull
-	// @GeneratedValue(generator = "InvSeq")
-	// @SequenceGenerator(name = "InvSeq", sequenceName = "INV_SEQ", allocationSize
-	// = 5)
 	@Column(name = "SERV_CD")
 	private String serviceCode;
 

@@ -18,7 +18,7 @@ public class FindDelta extends ServiceEntityToClientEntity{
     private static final String CREATE="CREATE";
     private static final String APPEND="APPEND";
     private static final String TERMINATE="TERMINATE";
-    private Map<String, List<Service>> result = new ConcurrentHashMap<>();
+
 
     @Autowired
     private ServiceDao serviceDao;
@@ -42,6 +42,7 @@ public class FindDelta extends ServiceEntityToClientEntity{
                     List<Service> createList=new ArrayList<>();
                     List<Service> appendList=new ArrayList<>();
                     List<Service> terminateList=new ArrayList<>();
+                    Map<String, List<Service>> result = new ConcurrentHashMap<>();
 
                     for(Service service:completeDelta){
 
@@ -59,12 +60,13 @@ public class FindDelta extends ServiceEntityToClientEntity{
                 result.put(CREATE, createList);
                 result.put(APPEND, appendList);
                 result.put(TERMINATE, terminateList);
-
+                return result;
                 }
                 else{
                     LOGGER.info(codeType+" is upto date with CLOADER db");
+                    return null;
                 }
-            return result;
+
         }
 
     private void updateCloaderCodeVesion(){

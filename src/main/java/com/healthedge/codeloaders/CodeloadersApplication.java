@@ -28,10 +28,10 @@ public class CodeloadersApplication {
 		LOGGER.info("Starting Code Loader Application");
 		ConfigurableApplicationContext  context = SpringApplication.run(CodeloadersApplication.class, args);
 
-        /*LOGGER.info("Preparing any pending code updates");
+        LOGGER.info("Preparing any pending code updates");
 		context.getBean(LoadPendingCodes.class).startProcess();
-        LOGGER.info("Persisted all pending code updates");*/
-        context.getBean(LoadPayorDelta.class).startLoadProcess();
+        LOGGER.info("Persisted all pending code updates");
+        //context.getBean(LoadPayorDelta.class).startLoadProcess();
 	}
 
 

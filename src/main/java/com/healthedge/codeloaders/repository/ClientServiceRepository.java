@@ -9,16 +9,16 @@ import java.util.List;
 
 public interface ClientServiceRepository {
 
-    public Date getPayorCodeVersion(String codeType, EntityManager entityManager);
+     Date getPayorCodeVersion(String codeType, EntityManager entityManager);
 
 
-    public List<String> getDistinctPayorCodes(EntityManager entityManager);
+     List<String> getDistinctPayorCodes(EntityManager entityManager);
 
-    public void update(EntityManager entityManager, ClientService clientService);
+     void update(EntityManager entityManager, ClientService clientService);
 
-    public void terminate(EntityManager entityManager,ClientService clientService);
+     void terminate(EntityManager entityManager,ClientService clientService);
 
-    public void save(EntityManager entityManager,ClientService clientService);
+     void save(EntityManager entityManager,ClientService clientService);
 
 }
 

@@ -55,8 +55,10 @@ public class StagingLoadProcess {
                     LOGGER.info("Starting batch job for file [{}]", filePath);
                     JobExecution execution = jobLauncher.run(job, jobParameters);
                     LOGGER.info("Batch Job succeeded for file [{}]", filePath);
+                    //file status to be added here if success
                 } catch (final Exception e) {
                     LOGGER.error("Batch job failed for file [{}] with exception", filePath, ExceptionUtils.getStackTrace(e));
+                    //failure status update
                 }
             }
         }

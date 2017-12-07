@@ -99,5 +99,11 @@ public class DiffCreator {
         previous.clear();
     }
 
+    public void setPreviousData(Map<String,Service> records){
+
+        previous.clear();
+        previous.putAll(records);
+    }
+
 
 }
