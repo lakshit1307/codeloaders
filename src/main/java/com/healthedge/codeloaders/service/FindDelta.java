@@ -1,7 +1,9 @@
 package com.healthedge.codeloaders.service;
 
 
+import com.healthedge.codeloaders.dao.ClientDao;
 import com.healthedge.codeloaders.dao.ServiceDao;
+import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.entity.TenantEnv;
 import org.slf4j.Logger;
@@ -23,13 +25,16 @@ public class FindDelta extends ServiceEntityToClientEntity{
     @Autowired
     private ServiceDao serviceDao;
 
+    @Autowired
+    private ClientDao clientDao;
+
 
     public FindDelta() {
         LOGGER.info("PayorDelta initialized");
     }
 
 
-    public  Map<String,List<Service>> getPayorDelta(TenantEnv tenantEnv, String codeType,Date payorCodeVersion){
+    public  List<Service> getDeltaFromCloader(String codeType, Date payorCodeVersion){
 
 
             updateCloaderCodeVesion();
@@ -38,29 +43,9 @@ public class FindDelta extends ServiceEntityToClientEntity{
             if(cloaderCodeVersion.after(payorCodeVersion)){
 
                     LOGGER.info(codeType +" delta creation started");
-                    List<Service> completeDelta=serviceDao.getDeltaCodes(payorCodeVersion,codeType);
-                    List<Service> createList=new ArrayList<>();
-                    List<Service> appendList=new ArrayList<>();
-                    List<Service> terminateList=new ArrayList<>();
-                    Map<String, List<Service>> result = new ConcurrentHashMap<>();
+                    List<Service> completeCloaderDelta=serviceDao.getDeltaCodes(payorCodeVersion,codeType);
 
-                    for(Service service:completeDelta){
-
-                        if(service.getAction().equals(CREATE)){
-                            createList.add(service);
-                        }
-                        else if(service.getAction().equals(APPEND)){
-                            appendList.add(service);
-                        }
-                        else if(service.getAction().equals(TERMINATE)){
-                            terminateList.add(service);
-                        }
-                    }
-
-                result.put(CREATE, createList);
-                result.put(APPEND, appendList);
-                result.put(TERMINATE, terminateList);
-                return result;
+                return completeCloaderDelta;
                 }
                 else{
                     LOGGER.info(codeType+" is upto date with CLOADER db");
@@ -77,5 +62,44 @@ public class FindDelta extends ServiceEntityToClientEntity{
             codeVersion=serviceDao.getCodeVersion(allCodeTypes.get(i));
             latestCloaderCodeVersion.put(allCodeTypes.get(i),codeVersion);
         }
+    }
+
+    public Map<String,List<Service>> prepareDelta(List<Service> delta, List<String> payorCodes) {
+
+        Map<String,List<Service>> deltaLoad=new HashMap<>();
+        List<Service> createList=new ArrayList<>();
+        List<Service> appendList=new ArrayList<>();
+        List<Service> terminateList=new ArrayList<>();
+        List<Service> existingCodeList=new ArrayList<>();
+        List<Service> tempList=new ArrayList<>(delta);
+
+        for(String code:payorCodes){
+            for(Service service:delta){
+                if(service.getServiceCode().equals(code)){
+                    existingCodeList.add(service);
+                    tempList.remove(service);
+                }
+            }
+        }
+
+        for(Service service: existingCodeList){
+            if(service.getAction().equals(CREATE)){
+                createList.add(service);
+            }
+            else
+                if(service.getAction().equals(APPEND)){
+                appendList.add(service);
+                }
+            else
+                terminateList.add(service);
+            }
+         for(Service service:tempList){
+            createList.add(service);
+         }
+        deltaLoad.put(CREATE,createList);
+        deltaLoad.put(APPEND,appendList);
+        deltaLoad.put(TERMINATE,terminateList);
+
+        return deltaLoad;
     }
 }

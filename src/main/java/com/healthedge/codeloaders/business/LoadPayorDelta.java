@@ -55,7 +55,9 @@ public class LoadPayorDelta extends ServiceEntityToClientEntity{
                         createEntityManagerService(tenantEnv.getDbUrl(),tenantEnv.getDbUserName(),tenantEnv.getDbPassword());
                 //payorCodeVersion can be null if the db is empty. Note to take care of that
                 Date toCodeVersion=clientDao.getPayorVersionOneCode(codeType,entityManager);
-                Map<String,List<Service>> deltaRecords=findDelta.getPayorDelta(tenantEnv,codeType,toCodeVersion);
+                List<String> payorCodes=clientDao.getPayorCodes(entityManager,codeType);
+                List<Service> cloaderDelta=findDelta.getDeltaFromCloader(codeType,toCodeVersion);
+                Map<String,List<Service>> deltaRecords=findDelta.prepareDelta(cloaderDelta,payorCodes);
                 persistDeltaData(deltaRecords,entityManager);
             }
         }

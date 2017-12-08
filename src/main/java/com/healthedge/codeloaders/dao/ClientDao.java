@@ -74,6 +74,15 @@ public class ClientDao {
             entityManager.getTransaction().commit();
 
         }
+        @Override
+        public List<String> getDistinctPayorCodes(EntityManager entityManager,String codeType){
+
+            Query query=entityManager.createNativeQuery("SELECT SERV_CD FROM SERVICES WHERE SERV_TYPE_CD= ?1");
+            query.setParameter(1,codeType);
+            List<String> payorCodes=query.getResultList();
+
+        return payorCodes;
+        }
 
 
     };
@@ -116,6 +125,8 @@ public class ClientDao {
     }
 
 
-
-
+    public List<String> getPayorCodes(EntityManager entityManager,String codeType) {
+        List<String> payorCode=clientServiceRepository.getDistinctPayorCodes(entityManager,codeType);
+        return payorCode;
+    }
 }

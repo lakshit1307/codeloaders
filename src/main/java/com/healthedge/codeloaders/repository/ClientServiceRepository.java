@@ -20,6 +20,7 @@ public interface ClientServiceRepository {
 
      void save(EntityManager entityManager,ClientService clientService);
 
+     public List<String> getDistinctPayorCodes(EntityManager entityManager,String codeType);
 }
 
 
