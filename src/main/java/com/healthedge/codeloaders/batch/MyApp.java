@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.healthedge.codeloaders.batch.client.TriggerJobController;
+
 @ComponentScan(basePackages = "com.healthedge.*")
 @EnableAutoConfiguration
 @SpringBootApplication
@@ -17,13 +19,13 @@ public class MyApp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MyApp.class);
 
-    public static void main(String[] args) {
-        LOGGER.info("Starting Code Loader Application");
-        LOGGER.info("Preparing any pending code updates");
-
-        ConfigurableApplicationContext  context = SpringApplication.run(MyApp.class, args);
-        context.getBean(StagingLoadProcess.class).startProcess();
-
-        LOGGER.info("Persisted all pending code updates");
-    }
+//    public static void main(String[] args) {
+//        LOGGER.info("Starting Code Loader Application");
+//        LOGGER.info("Preparing any pending code updates");
+//
+//        ConfigurableApplicationContext  context = SpringApplication.run(MyApp.class, args);
+//        context.getBean(TriggerJobController.class).getThings();
+//
+//        LOGGER.info("Persisted all pending code updates");
+//    }
 }

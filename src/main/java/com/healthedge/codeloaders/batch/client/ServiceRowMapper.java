@@ -25,7 +25,7 @@ public class ServiceRowMapper implements RowMapper<Service> {
 		service.setLastTransactionDate(rs.getDate("LAST_TX_DT"));
 		service.setLastTransactionUserText(rs.getString("LAST_TX_USER_TXT"));
 		service.setCodeProcessingHistoryId(rs.getInt("CODE_PROCESSING_HISTORY_ID"));
-		service.setVersion(rs.getDate("VERSION"));
+//		service.setVersion(rs.getDate("VERSION"));
 		service.setAction(rs.getString("ACTION"));
 		return service;
 	}

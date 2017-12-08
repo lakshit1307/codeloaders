@@ -29,7 +29,7 @@ public class CodeloadersApplication {
 		ConfigurableApplicationContext  context = SpringApplication.run(CodeloadersApplication.class, args);
 
         LOGGER.info("Preparing any pending code updates");
-		context.getBean(LoadPendingCodes.class).startProcess();
+//		context.getBean(LoadPendingCodes.class).startProcess();
         LOGGER.info("Persisted all pending code updates");
         //context.getBean(LoadPayorDelta.class).startLoadProcess();
 	}

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -39,14 +40,15 @@ public class ServiceCodeWriter implements ItemWriter<ClientService> {
 	@Autowired
 	private ClientConnectionService clientConnectionService;
 
-	public ServiceCodeWriter() {
+	@PostConstruct
+	public void onInit() {
 		this.emf = clientConnectionService.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(),
 				tenantEnv.getDbPassword());
 	}
 
 	@Override
 	public void write(List<? extends ClientService> items) throws Exception {
-//		LOGGER.info("writing for id: " + clientService.getServiceCode());
+		// LOGGER.info("writing for id: " + clientService.getServiceCode());
 		clientConnectionService.saveToClient(items, emf);
 
 	}
