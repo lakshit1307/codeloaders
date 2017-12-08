@@ -3,7 +3,7 @@ package com.healthedge.codeloaders.dto;
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
 
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class FileMetadata {
 
@@ -17,6 +17,7 @@ public class FileMetadata {
     private final String baseFileName;
     private String year;
     private String month;
+    private List<String> dependencies = new ArrayList<>();
 
     public FileMetadata (final String fileName) {
         fileNameWithExt = fileName;
@@ -33,7 +34,12 @@ public class FileMetadata {
             month = st.nextToken();
 
             fileDate = prepareDateStartingFromFirstOfMonth ();
+            //identifyDependencies();
         }
+    }
+
+    public List<String> getDependencies() {
+        return dependencies;
     }
 
     public String getYear() {
@@ -67,6 +73,16 @@ public class FileMetadata {
     private DateTime prepareDateStartingFromFirstOfMonth () {
         return new DateTime(Integer.parseInt(year), Integer.parseInt(month), 01,0,0);
     }
+
+//    private void identifyDependencies () {
+//        Properties properties = CodeLoaderProperty.getInstance().getProperties();
+//        String dependencyPropName = this.fileType + CodeLoaderProperty.PROP_NAME_DELIMITER + CodeLoaderProperty.DEPENDENCIES_PROPERTY_NAME;
+//        String dependency = properties.getProperty(dependencyPropName);
+//        if (StringUtils.isNotBlank(dependency) && StringUtils.isNotBlank(dependency)) {
+//            String[] split = StringUtils.split(dependency, CodeLoaderProperty.DEPENDENCIES_DELIMITER);
+//            dependencies = new ArrayList<>(Arrays.asList(split));
+//        }
+//    }
 
 
 }

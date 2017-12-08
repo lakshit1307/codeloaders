@@ -3,13 +3,12 @@ package com.healthedge.codeloaders.service;
 
 import com.healthedge.codeloaders.dto.FileMetadata;
 import com.healthedge.codeloaders.entity.Service;
-import com.healthedge.codeloaders.util.CodeLoaderPropertyUtil;
+import com.healthedge.codeloaders.util.CodeLoaderProperty;
 
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
@@ -22,9 +21,6 @@ import java.util.*;
 public class FileParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileParser.class);
-
-    @Autowired
-    private CodeLoaderPropertyUtil codeLoaderPropertyUtil;
 
     private Properties properties;
     private static final String CODE=".code";
@@ -40,7 +36,7 @@ public class FileParser {
 
     @PostConstruct
     public void onInit () {
-        properties = codeLoaderPropertyUtil.getProperties();
+        properties = CodeLoaderProperty.getInstance().getProperties();
     }
 
     public Map<String, Service> parse(String filePath) throws IOException {
