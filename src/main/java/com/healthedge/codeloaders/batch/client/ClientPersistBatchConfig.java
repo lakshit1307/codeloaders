@@ -65,7 +65,7 @@ public class ClientPersistBatchConfig {
 
 	@Bean
 	public Step slaveStep() throws UnexpectedInputException, MalformedURLException, ParseException {
-		return stepBuilderFactory.get("slaveStep").listener(serviceCodeListener()).<Service, ClientService>chunk(1).reader(serviceCodeReader())
+		return stepBuilderFactory.get("slaveStep").listener(serviceCodeListener()).<Service, ClientService>chunk(20).reader(serviceCodeReader())
 				.processor(serviceCodeProcessor()).writer(serviceCodeWriter()).build();
 	}
 	
