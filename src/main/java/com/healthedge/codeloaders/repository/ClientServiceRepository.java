@@ -14,11 +14,11 @@ public interface ClientServiceRepository {
 
      List<String> getDistinctPayorCodes(EntityManager entityManager);
 
-     void update(EntityManager entityManager, ClientService clientService);
+     void update(EntityManager entityManager, List<ClientService> clientServices);
 
-     void terminate(EntityManager entityManager,ClientService clientService);
+     void terminate(EntityManager entityManager,List<ClientService> clientServices);
 
-     void save(EntityManager entityManager,ClientService clientService);
+     void save(EntityManager entityManager,List<ClientService> clientServices);
 
      public List<String> getDistinctPayorCodes(EntityManager entityManager,String codeType);
 }
