@@ -3,10 +3,12 @@ package com.healthedge.codeloaders.util;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.Properties;
 
+@Service
 public class CodeLoaderProperty {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeLoaderProperty.class);
 

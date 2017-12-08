@@ -40,12 +40,13 @@ public class ClientServiceRepositoryImpl implements ClientServiceRepository {
 		entityManager.getTransaction().begin();
 		for (ClientService clientService : clientServices) {
 			Query query = entityManager.createNativeQuery(
-					"UPDATE SERVICES SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3,EFF_END_DT=?4 WHERE SERV_CD= ?5");
+					"UPDATE SERVICES SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3,EFF_START_DT=?4,EFF_END_DT=?5 WHERE SERV_CD= ?6");
 			query.setParameter(1, clientService.getServiceShortDesciption());
 			query.setParameter(2, clientService.getServiceLongDesciption());
 			query.setParameter(3, clientService.getServiceAlternateDesciption());
-			query.setParameter(4, clientService.getEffectiveEndDate());
-			query.setParameter(5, clientService.getServiceCode());
+			query.setParameter(4,clientService.getEffectiveStartDate());
+			query.setParameter(5, clientService.getEffectiveEndDate());
+			query.setParameter(6, clientService.getServiceCode());
 			query.executeUpdate();
 		}
 		entityManager.getTransaction().commit();
