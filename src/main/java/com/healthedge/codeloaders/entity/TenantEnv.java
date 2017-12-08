@@ -69,7 +69,7 @@ public class TenantEnv implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedDate = new Date();
 
-	public int getTenantEnvId() {
+	public Integer getTenantEnvId() {
 		return tenantEnvId;
 	}
 
@@ -117,7 +117,7 @@ public class TenantEnv implements Serializable {
 		this.dbPassword = dbPassword;
 	}
 
-	public int getIsAutoLoad() {
+	public Integer getIsAutoLoad() {
 		return isAutoLoad;
 	}
 
@@ -125,7 +125,7 @@ public class TenantEnv implements Serializable {
 		this.isAutoLoad = isAutoLoad;
 	}
 
-	public int getIsActive() {
+	public Integer getIsActive() {
 		return isActive;
 	}
 
