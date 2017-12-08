@@ -26,9 +26,9 @@ import com.healthedge.codeloaders.batch.StagingLoadProcess;
 import com.healthedge.codeloaders.dto.BaseResponse;
 
 @Controller
-public class TriggerJobController {
+public class BatchJobController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TriggerJobController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatchJobController.class);
 
 	@Autowired
 	private ApplicationContext appContext;
@@ -42,18 +42,22 @@ public class TriggerJobController {
 	@RequestMapping(method = RequestMethod.GET, value = "/trigger", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody BaseResponse getThings() {
 		BaseResponse baseResponse = new BaseResponse();
-		stagingLoadProcess.startProcess();
 		try {
-		for (String fileType : getFileTypes()) {
-			runClientPersitentJobForFileType(fileType);
-		}
+			runPersistence();
 			baseResponse.setStatus("SUCCESS");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			baseResponse.setMessage(e.getMessage());
 			baseResponse.setStatus("FAILURE");
 		}
 		return baseResponse;
+	}
+	
+	public String runPersistence() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
+		stagingLoadProcess.startProcess();
+		for (String fileType : getFileTypes()) {
+			runClientPersitentJobForFileType(fileType);
+		}
+		return "SUCCESS";
 	}
 
 	public String runClientPersitentJobForFileType(String fileType) throws JobExecutionAlreadyRunningException,

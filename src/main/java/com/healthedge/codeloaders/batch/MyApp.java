@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.healthedge.codeloaders.batch.client.TriggerJobController;
+import com.healthedge.codeloaders.batch.client.BatchJobController;
 
 @ComponentScan(basePackages = "com.healthedge.*")
 @EnableAutoConfiguration
