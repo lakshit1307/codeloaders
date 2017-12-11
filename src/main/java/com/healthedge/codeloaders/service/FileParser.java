@@ -5,6 +5,7 @@ import com.healthedge.codeloaders.dto.FileMetadata;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.util.CodeLoaderProperty;
 
+import com.healthedge.codeloaders.util.StringUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -89,22 +90,34 @@ public class FileParser {
         }
         //alt_dsc
         if (Integer.parseInt(properties.getProperty(fileType + FULL_DESC)) < fields.length){
-            pojo.setServiceAlternateDesciption(fields[Integer.parseInt(properties.getProperty(fileType + FULL_DESC))]);
+            String altDesc = fields[Integer.parseInt(properties.getProperty(fileType + FULL_DESC))];
+            altDesc = modifyInputString(altDesc, 1000);
+            pojo.setServiceAlternateDesciption(altDesc);
         }
 
 
         if (Integer.parseInt(properties.getProperty(fileType + LONG_DESC)) < fields.length){
-            pojo.setServiceLongDesciption(fields[Integer.parseInt(properties.getProperty(fileType + LONG_DESC))]);
+            String longDesc = fields[Integer.parseInt(properties.getProperty(fileType + LONG_DESC))];
+            longDesc = modifyInputString(longDesc, 1000);
+            pojo.setServiceLongDesciption(longDesc);
 
         }
 
         if (Integer.parseInt(properties.getProperty(fileType + SHORT_DESC)) < fields.length){
-            pojo.setServiceShortDesciption(fields[Integer.parseInt(properties.getProperty(fileType + SHORT_DESC))]);
+            String shortDesc = fields[Integer.parseInt(properties.getProperty(fileType + SHORT_DESC))];
+            shortDesc = modifyInputString(shortDesc, 50);
+            pojo.setServiceShortDesciption(shortDesc);
 
         }
         pojo.setServiceTypeCD(properties.getProperty(fileType + SERV_TYPE_CODE));
         pojo.setStandardizedServiceCode(pojo.getServiceCode());
         return pojo;
+    }
+
+    private String modifyInputString(String input, int limit) {
+        input = StringUtil.replaceMultipleSpacesWithSingleSpace(input);
+        input = StringUtil.restrictLengthOfInput(input, limit);
+        return input;
     }
 
 }
