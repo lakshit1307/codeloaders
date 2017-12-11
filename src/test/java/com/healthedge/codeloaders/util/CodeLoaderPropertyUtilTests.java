@@ -14,7 +14,7 @@ import java.util.Properties;
 public class CodeLoaderPropertyUtilTests {
 
     @Autowired
-    private CodeLoaderPropertyUtil codeLoaderPropertyUtil;
+    private CodeLoaderProperty codeLoaderProperty;
    /* @Before
     public void setUp() throws Exception{
 
@@ -24,7 +24,7 @@ public class CodeLoaderPropertyUtilTests {
     @Test
     public void testGetProperties() {
 
-        Properties properties=codeLoaderPropertyUtil.getProperties();
+        Properties properties=codeLoaderProperty.getProperties();
         if(!properties.isEmpty()){
             System.out.println("Property file is read correctly");
             assert true;

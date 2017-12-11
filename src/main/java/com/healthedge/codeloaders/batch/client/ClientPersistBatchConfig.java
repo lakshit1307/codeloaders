@@ -9,21 +9,26 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 
+import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.entity.Service;
 
 @Configuration
-@EnableBatchProcessing
+//@EnableBatchProcessing
 public class ClientPersistBatchConfig {
 
 	@Autowired
@@ -31,6 +36,15 @@ public class ClientPersistBatchConfig {
 
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
+
+	@Autowired
+	private DataSource dataSource;
+
+	@Autowired
+	private ApplicationContext appContext;
+	
+	@Autowired
+	private ServiceDao serviceDao;
 
 	@Bean(name = "partitionerJob")
 	public Job partitionerJob() throws UnexpectedInputException, MalformedURLException, ParseException {
@@ -51,8 +65,14 @@ public class ClientPersistBatchConfig {
 
 	@Bean
 	public Step slaveStep() throws UnexpectedInputException, MalformedURLException, ParseException {
-		return stepBuilderFactory.get("slaveStep").<Service, ClientService>chunk(1).reader(serviceCodeReader())
+		return stepBuilderFactory.get("slaveStep").listener(serviceCodeListener()).<Service, ClientService>chunk(20).reader(serviceCodeReader())
 				.processor(serviceCodeProcessor()).writer(serviceCodeWriter()).build();
+	}
+	
+	@Bean
+	@StepScope
+	public ClientPersistenceListener serviceCodeListener() {
+		return new ClientPersistenceListener();
 	}
 
 	@Bean
@@ -70,11 +90,13 @@ public class ClientPersistBatchConfig {
 	@Bean
 	@StepScope
 	public ServiceCodeReader serviceCodeReader() {
-		return new ServiceCodeReader();
+		ServiceCodeReader reader=new ServiceCodeReader();
+//		reader.setOffset(0);
+//		reader.setServices(serviceDao.getServiceCodesByCodeType(reader.getCodeType()));
+		return reader;
 	}
 
 	@Bean
-	@StepScope
 	public TaskExecutor taskExecutor() {
 		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
 		taskExecutor.setConcurrencyLimit(10);

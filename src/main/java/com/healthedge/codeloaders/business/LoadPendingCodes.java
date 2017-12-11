@@ -80,7 +80,7 @@ public class LoadPendingCodes {
             }
 
         }
-        //clientService.persistToClients();
+        clientService.persistToClients();
 
     }
 
