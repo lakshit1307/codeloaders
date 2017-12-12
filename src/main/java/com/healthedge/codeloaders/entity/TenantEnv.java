@@ -3,27 +3,25 @@ package com.healthedge.codeloaders.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "M_TENANT_ENV")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdDate", "updatedDate"},
+		allowGetters = true)
 public class TenantEnv implements Serializable {
 
 	@Id
-	@NotNull
-	@Column(name = "TENANT_ENV_ID")
+	@Column(name = "TENANT_ENV_ID",nullable = false)
 	private int tenantEnvId;
 
 	// @NotNull
@@ -31,43 +29,43 @@ public class TenantEnv implements Serializable {
 	@JoinColumn(name = "TENANT_ID", referencedColumnName = "TENANT_ID")
 	private Tenant tenant;
 
-	@NotNull
-	@Column(name = "NAME")
+
+	@Column(name = "NAME",nullable = false)
 	private String name;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@Column(name = "DB_URL")
+	@Column(name = "DB_URL",nullable = false)
 	private String dbUrl;
 
-	@Column(name = "DB_USER_NAME")
+	@Column(name = "DB_USER_NAME",nullable = false)
 	private String dbUserName;
 
-	@Column(name = "DB_PASSWORD")
+	@Column(name = "DB_PASSWORD",nullable = false)
 	private String dbPassword;
 
-	@Column(name = "IS_AUTO_LOAD")
+	@Column(name = "IS_AUTO_LOAD",nullable = false)
 	private int isAutoLoad;
 
 	@Column(name = "IS_ACTIVE")
 	private int isActive;
 
-	@Column(name = "CREATED_BY")
+	@Column(name = "CREATED_BY",nullable = false,updatable = false)
 	private String createdBy;
 
-	@Column(name = "CREATED_DATE")
+	@Column(name = "CREATED_DATE",nullable = false,updatable = false)
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdDate = new Date();
+	private Date createdDate;
 
-	@Column(name = "UPDATED_BY", nullable = false, updatable = true)
+	@Column(name = "UPDATED_BY", nullable = false)
 	private String updatedBy;
 
-	@Column(name = "UPDATED_DATE", nullable = false, updatable = true)
+	@Column(name = "UPDATED_DATE", nullable = false)
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date updatedDate = new Date();
+	private Date updatedDate;
 
 	public Integer getTenantEnvId() {
 		return tenantEnvId;

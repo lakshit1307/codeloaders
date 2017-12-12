@@ -5,22 +5,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @SuppressWarnings({"PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @Entity
 @Table(name = "M_TENANT")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdDate", "updatedDate"},
+        allowGetters = true)
 public class Tenant /* extends BaseDate */ implements Serializable {
 
 	@Id
@@ -28,40 +27,48 @@ public class Tenant /* extends BaseDate */ implements Serializable {
 	// @GeneratedValue(generator = "InvSeq")
 	// @SequenceGenerator(name = "InvSeq", sequenceName = "INV_SEQ", allocationSize
 	// = 5)
-	@Column(name = "TENANT_ID")
+	@Column(name = "TENANT_ID",nullable = false)
 	private int tenantId;
 
-	@Column(name = "NAME")
+	@Column(name = "NAME",nullable = false)
 	private String name;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@Column(name = "IS_AUTO_LOAD")
+	@Column(name = "IS_AUTO_LOAD",nullable = false)
 	private int isAutoLoad;
 
 	@Column(name = "IS_ACTIVE")
 	private int isActive;
 
-	@OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-//	@JoinColumn(name = "TENANT_ID")
-	private List<TenantEnv> tenantEnv = new ArrayList<>();
+	@OneToMany(mappedBy = "tenant",cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+	private List<TenantEnv> tenantEnv;
 
-	@Column(name = "CREATED_BY")
+	@Column(name = "CREATED_BY",nullable = false,updatable = false)
 	private String createdBy;
 
-	@Column(name = "CREATED_DATE")
-	@LastModifiedDate
+	@Column(name = "CREATED_DATE",nullable = false,updatable = false)
+	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdDate = new Date();
+	private Date createdDate;
 
-	@Column(name = "UPDATED_BY", nullable = false, updatable = true)
+	@Column(name = "UPDATED_BY", nullable = false)
 	private String updatedBy;
 
-	@Column(name = "UPDATED_DATE", nullable = false, updatable = true)
+	@Column(name = "UPDATED_DATE", nullable = false)
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date updatedDate = new Date();
+	private Date updatedDate;
+
+    @JsonIgnore
+    public List<TenantEnv> getTenantEnv() {
+        return tenantEnv;
+    }
+
+    public void setTenantEnv(List<TenantEnv> tenantEnv) {
+        this.tenantEnv = tenantEnv;
+    }
 
 	public int getTenantId() {
 		return tenantId;
@@ -101,14 +108,6 @@ public class Tenant /* extends BaseDate */ implements Serializable {
 
 	public void setIsActive(int isActive) {
 		this.isActive = isActive;
-	}
-
-	public List<TenantEnv> getTenantEnv() {
-		return tenantEnv;
-	}
-
-	public void setTenantEnv(List<TenantEnv> tenantEnv) {
-		this.tenantEnv = tenantEnv;
 	}
 
 	public String getCreatedBy() {

@@ -1,6 +1,7 @@
 package com.healthedge.codeloaders.service;
 
 
+import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.dto.FileMetadata;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.util.CodeLoaderProperty;
@@ -76,8 +77,9 @@ public class FileParser {
         //LAST_TX_DT
         pojo.setLastTransactionDate(current.toDate());
         //LAST_TX_USER_TXT
-        pojo.setLastTransactionUserText("hello");
+        pojo.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);
         //CODE_PROCESSING_HISTORY_ID
+        //TODO: Remove the hard-coded value
         pojo.setCodeProcessingHistoryId(5);
 
         pojo.setVersion(fileMetadata.getFileDate().toDate());

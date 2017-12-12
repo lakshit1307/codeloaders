@@ -34,7 +34,17 @@ public class TenantDao {
 		tenantRepository.save(tenant);
 	}
 
+	public Tenant findByName(String name){
+		Tenant tenant=tenantRepository.findByName(name);
+		return tenant;
+	}
 
 
+    public Tenant getTenantById(int tenantId) {
+	  Tenant tenant=  tenantRepository.findByTenantId(tenantId);
+	  return tenant;
+    }
 
+    public void update(Tenant tenant) {
+    }
 }
