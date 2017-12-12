@@ -49,6 +49,7 @@ public class ClientConnectionService {
 		properties.put("hibernate.connection.username", userName);
 		properties.put("hibernate.connection.password", password);
 		properties.put("hibernate.show-sql", "true");
+		properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
 		emf = Persistence.createEntityManagerFactory("jpablogPUnit", properties);
 		// emf.createEntityManager();
 		return emf;
