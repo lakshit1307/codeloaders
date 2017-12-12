@@ -35,15 +35,26 @@ public class StagingPersistenceStepPartitioner implements Partitioner {
 
 		Map<String, ExecutionContext> map = new HashMap<>();
 		try {
+			long startTime = System.currentTimeMillis();
+			long endTime = 0;
 			final Map<String, Service> record = fileParser.parse(filePath);
+			endTime = System.currentTimeMillis();
+			LOGGER.info("Total time required to parse file [{}]: {} ms", filePath, endTime - startTime);
+
+			startTime = System.currentTimeMillis();
 			final Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
+			endTime = System.currentTimeMillis();
+			LOGGER.info("Total time required to diff file [{}]: {} ms", filePath, endTime - startTime);
+
+			startTime = System.currentTimeMillis();
 			createExecutionContext(map, diffRecords);
+			endTime = System.currentTimeMillis();
+			LOGGER.info("Total time required to create ExecutionContext [{}]: {} ms", filePath, endTime - startTime);
 		} catch (Exception ex) { //NOPMD
 			LOGGER.error("Error encountered during parsing or diff [{}]", ExceptionUtils.getStackTrace(ex));
 		}
 
 		return map;
-
 	}
 
 	private void createExecutionContext(Map<String, ExecutionContext> map, Map<String, List<Service>> diffRecords) {

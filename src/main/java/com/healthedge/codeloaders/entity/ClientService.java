@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("PMD")
 @Entity
-@Table(name = "SERVICES")
+@Table(name = "SERVICE")
 public class ClientService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
