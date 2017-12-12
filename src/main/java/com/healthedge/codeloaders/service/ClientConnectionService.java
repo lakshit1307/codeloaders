@@ -80,7 +80,7 @@ public class ClientConnectionService {
 
 	        @Override
 	        public String getPersistenceProviderClassName() {
-	            return "org.hibernate.jpa.HibernatePersistenceProvider";
+	            return "com.healthedge.codeloaders.entity.ClientService";
 	        }
 
 	        @Override
