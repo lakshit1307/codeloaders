@@ -21,6 +21,7 @@ import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,10 @@ import com.healthedge.codeloaders.entity.ClientService;
 @SuppressWarnings({ "PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal" })
 @Service
 public class ClientConnectionService {
-
+	
+	@Value("${oracle.dialect}")
+	private String oracleHibernateDialect;
+	
 	public EntityManagerFactory configureEntityManager(String dbUrl, String userName, String password) {
 		Map properties = new HashMap();
 		// EntityManagerFactory emf = new
@@ -49,7 +53,7 @@ public class ClientConnectionService {
 		properties.put("hibernate.connection.username", userName);
 		properties.put("hibernate.connection.password", password);
 		properties.put("hibernate.show-sql", "true");
-		properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
+		properties.put("hibernate.dialect", oracleHibernateDialect);
 		emf = Persistence.createEntityManagerFactory("jpablogPUnit", properties);
 		// emf.createEntityManager();
 		return emf;
