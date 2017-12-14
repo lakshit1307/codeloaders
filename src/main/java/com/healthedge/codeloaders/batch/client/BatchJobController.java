@@ -42,20 +42,20 @@ public class BatchJobController {
 	@Autowired
 	private StagingLoadProcess stagingLoadProcess;
 
-//	@RequestMapping(method = RequestMethod.POST, value = "/trigger", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public @ResponseBody BaseResponse getThings() {
-//		BaseResponse baseResponse = new BaseResponse();
-//		try {
-//			runPersistence();
-//			baseResponse.setStatus("SUCCESS");
-//		} catch (Exception e) {
-//			baseResponse.setMessage(e.getMessage());
-//			baseResponse.setStatus("FAILURE");
-//		}
-//		return baseResponse;
-//	}
+	@RequestMapping(method = RequestMethod.POST, value = "/trigger/all", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody BaseResponse getThings() {
+		BaseResponse baseResponse = new BaseResponse();
+		try {
+			runPersistence();
+			baseResponse.setStatus("SUCCESS");
+		} catch (Exception e) {
+			baseResponse.setMessage(e.getMessage());
+			baseResponse.setStatus("FAILURE");
+		}
+		return baseResponse;
+	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/trigger/{tenantId}/{tenantEnvId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/trigger", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody BaseResponse getThings(@RequestBody TenantRequest tenantRequest) {
 		BaseResponse baseResponse = new BaseResponse();
 		try {
