@@ -50,7 +50,7 @@ public class ClientPersistenceStepPartioner implements Partitioner {
 			}
 		} else {
 			TenantEnv tenantEnv = tenantEnvDao.geTenantEnvById(tenantEnvId);
-			if (validateTenant(tenantEnv.getTenant()) && validateTenantEnv(tenantEnv)) {
+			if (tenantEnv.getTenant().getIsActive() == 1 && tenantEnv.getIsActive() == 1) {
 				ExecutionContext context = new ExecutionContext();
 				context.put("tenant_environment", tenantEnv);
 
