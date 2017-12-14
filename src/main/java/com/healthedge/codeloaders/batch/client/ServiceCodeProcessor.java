@@ -19,7 +19,7 @@ public class ServiceCodeProcessor implements ItemProcessor<Service, ClientServic
 
 	@Override
 	public ClientService process(Service item) throws Exception {
-		LOGGER.info("Item service code: " + item.getServiceCode());
+		LOGGER.debug("Item service code: " + item.getServiceCode());
 		return clientPersistenceService.mapServiceToClient(item);
 	}
 
