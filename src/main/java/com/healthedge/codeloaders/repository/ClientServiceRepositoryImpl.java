@@ -35,7 +35,7 @@ public class ClientServiceRepositoryImpl implements ClientServiceRepository {
 		return distinctCodes;
 	}
 
-	@Override
+	/*@Override
 	public void update(EntityManager entityManager, List<ClientService> clientServices) {
 		entityManager.getTransaction().begin();
 		for (ClientService clientService : clientServices) {
@@ -50,7 +50,22 @@ public class ClientServiceRepositoryImpl implements ClientServiceRepository {
 			query.executeUpdate();
 		}
 		entityManager.getTransaction().commit();
-	}
+	}*/
+
+    @Override
+    public void update(EntityManager entityManager, List<ClientService> clientServices) {
+        entityManager.getTransaction().begin();
+        for (ClientService clientService : clientServices) {
+            Query query = entityManager.createNativeQuery(
+                    "UPDATE SERVICE SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3 WHERE SERV_CD= ?4");
+            query.setParameter(1, clientService.getServiceShortDesciption());
+            query.setParameter(2, clientService.getServiceLongDesciption());
+            query.setParameter(3, clientService.getServiceAlternateDesciption());
+            query.setParameter(4, clientService.getServiceCode());
+            query.executeUpdate();
+        }
+        entityManager.getTransaction().commit();
+    }
 
 	@Override
 	public void terminate(EntityManager entityManager, List<ClientService> clientServices) {

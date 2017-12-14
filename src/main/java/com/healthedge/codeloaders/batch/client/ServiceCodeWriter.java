@@ -65,16 +65,25 @@ public class ServiceCodeWriter implements ItemWriter<ClientService> {
 
 	@Override
 	public void write(List<? extends ClientService> items) throws Exception {
-		List<ClientService> clientServicesInsert = new ArrayList<ClientService>();
+		List<ClientService> clientServicesInsert = new ArrayList<>();
 		List<ClientService> clientServicesUpdate = new ArrayList<ClientService>();
+		List<ClientService> clientServicesTerminate = new ArrayList<ClientService>();
+
 		for (ClientService clientService : items) {
 			LOGGER.debug("writing for id: " + clientService.getServiceCode());
 			if (clientCodes.contains(clientService.getServiceCode())) {
-				clientServicesUpdate.add(clientService);
+				if(clientService.getEffectiveEndDate()!=null){
+				    clientServicesTerminate.add(clientService);
+                }
+                else{
+				    clientServicesUpdate.add(clientService);
+                }
 			} else {
 				clientServicesInsert.add(clientService);
 			}
 		}
+
+		clientDao.terminate(entityManager,clientServicesTerminate);
 		clientDao.update(entityManager, clientServicesUpdate);
 		clientDao.save(entityManager, clientServicesInsert);
 		// clientConnectionService.saveToClient(items, emf);
