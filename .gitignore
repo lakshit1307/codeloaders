@@ -25,3 +25,7 @@ nbdist/
 
 out
 bin
+
+src/dist/config/application.properties
+src/main/resources/application.properties
+src/main/resources/codeType.properties
