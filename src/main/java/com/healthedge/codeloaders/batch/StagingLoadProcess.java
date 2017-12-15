@@ -5,6 +5,7 @@ import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.service.DiffCreator;
 import com.healthedge.codeloaders.service.FileSorter;
+import com.healthedge.codeloaders.service.FileTypeOrdering;
 import com.healthedge.codeloaders.service.InitLoadTracker;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -47,12 +48,15 @@ public class StagingLoadProcess {
     @Autowired
     private FileStatusDao fileStatusDao;
 
+    @Autowired
+    private FileTypeOrdering fileTypeOrdering;
+
     private FileStatus fileStatus=new FileStatus();
 
 
     public void startProcess () {
         final Job job = (Job) appContext.getBean("stagingJob");
-        for (final String fileType : getFileTypes()) {
+        for (final String fileType : fileTypeOrdering.getFileTypes()) {
             diffCreator.flushPreviousData();
             final String directoryPath = baseData + File.separator + fileType;
             String startFile= initLoadTracker.startFileProcessingOf(fileType);
@@ -111,14 +115,5 @@ public class StagingLoadProcess {
         fileStatus.setFileName(fileName);
         fileStatus.setStatus(status);
         fileStatusDao.updateStatus(fileStatus);
-    }
-
-    //TODO: get data from db or config
-    private List<String> getFileTypes () {
-        final List<String> fileTypes = new ArrayList<String>();
-        fileTypes.add("CPT");
-        fileTypes.add("HCPCS");
-
-        return fileTypes;
     }
 }
