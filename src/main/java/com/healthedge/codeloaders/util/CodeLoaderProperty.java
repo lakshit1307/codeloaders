@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.util.Properties;
 
-@Service
 public class CodeLoaderProperty {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeLoaderProperty.class);
 
     public static final String PROP_NAME_DELIMITER = ".";
     public static final String DEPENDENCIES_DELIMITER = ",";
     public static final String DEPENDENCIES_PROPERTY_NAME = "dependencies";
+    public static final String PARSER_CLASS_SUFFIX = "parser.class";
 
     private final Properties properties = new Properties();
 

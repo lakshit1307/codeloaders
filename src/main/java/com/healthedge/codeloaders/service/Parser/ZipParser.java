@@ -6,6 +6,7 @@ import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.ZipCode;
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Service
 public class ZipParser implements Parser{
 
     private ZipCode zipCode;
