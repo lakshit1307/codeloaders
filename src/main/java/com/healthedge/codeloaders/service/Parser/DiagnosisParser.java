@@ -4,6 +4,7 @@ import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.dto.FileMetadata;
 import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.Diagnosis;
+import com.healthedge.codeloaders.util.CodeLoaderProperty;
 import com.healthedge.codeloaders.util.StringUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,6 +30,11 @@ public class DiagnosisParser implements Parser{
     private static final String FULL_DESC=".full.desc";
     private static final String DIAG_TYPE_CODE=".diagtypecode";
     private static final String DELEMITER=".delimiter";
+
+    @PostConstruct
+    public void onInit () {
+        properties = CodeLoaderProperty.getInstance().getProperties();
+    }
 
     @Override
     public List<BaseEntity> parse(String filepath) throws IOException{

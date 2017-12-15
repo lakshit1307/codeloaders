@@ -20,7 +20,7 @@ public class DiagnosisParserTest {
 
     @Test
     public void testFileParsing() throws Exception{
-        File file = new File("src/test/resources/basedata/ICD10DIAG/OPTUM_ICD10CM_BASE_2017.TAB");
+        File file = new File("src/test/resources/basedata/ICD10DIAG/OPTUM_ICD10DIAGNOSIS_2017_10.TAB");
 
         List<BaseEntity> record=diagnosisParser.parse(file.getAbsolutePath());
        // for (BaseEntity baseEntity:record)
