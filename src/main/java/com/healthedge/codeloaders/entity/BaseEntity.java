@@ -15,7 +15,25 @@ public class BaseEntity implements Serializable{
 
     private Long txCnt;
 
-    private Integer codeProcessingHistoryId;
+    private Date version;
+
+    private String action;
+
+    public Date getVersion() {
+        return version;
+    }
+
+    public void setVersion(Date version) {
+        this.version = version;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 
     public Date getLastTransactionDate() {
         return lastTransactionDate;
@@ -41,11 +59,5 @@ public class BaseEntity implements Serializable{
         this.txCnt = txCnt;
     }
 
-    public Integer getCodeProcessingHistoryId() {
-        return codeProcessingHistoryId;
-    }
 
-    public void setCodeProcessingHistoryId(Integer codeProcessingHistoryId) {
-        this.codeProcessingHistoryId = codeProcessingHistoryId;
-    }
 }
