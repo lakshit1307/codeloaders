@@ -53,7 +53,6 @@ public class ZipParser implements Parser{
         zipCode.setLastTransactionDate(current.toDate());
         zipCode.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);
         //TODO: Remove the hard-coded value
-        zipCode.setCodeProcessingHistoryId(5);
 
         return zipCode;
     }

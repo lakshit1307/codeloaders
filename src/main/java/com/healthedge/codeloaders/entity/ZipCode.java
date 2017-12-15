@@ -14,8 +14,10 @@ import javax.validation.constraints.NotNull;
         @Column(name = "LAST_TX_USER_TXT")),
         @AttributeOverride(name = "txCnt", column =
         @Column(name = "TX_CNT")),
-        @AttributeOverride(name = "codeProcessingHistoryId", column =
-        @Column(name = "CODE_PROCESSING_HISTORY_ID"))})
+        @AttributeOverride(name = "version", column =
+        @Column(name = "VERSION")),
+        @AttributeOverride(name = "action", column =
+        @Column(name = "ACTION"))})
 public class ZipCode extends BaseEntity{
 
     @Id
