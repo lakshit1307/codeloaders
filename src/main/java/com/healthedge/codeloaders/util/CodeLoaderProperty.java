@@ -12,9 +12,11 @@ public class CodeLoaderProperty {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeLoaderProperty.class);
 
     public static final String PROP_NAME_DELIMITER = ".";
-    public static final String DEPENDENCIES_DELIMITER = ",";
+    public static final String PROP_VALUES_DELIMITER = ",";
     public static final String DEPENDENCIES_PROPERTY_NAME = "dependencies";
     public static final String PARSER_CLASS_SUFFIX = "parser.class";
+
+    public static final String FILE_TYPE_ORDERING = "filetype.ordering";
 
     private final Properties properties = new Properties();
 
@@ -35,5 +37,9 @@ public class CodeLoaderProperty {
 
     public Properties getProperties () {
         return properties;
+    }
+
+    public String getProperty (String key) {
+        return properties.getProperty(key, null);
     }
 }

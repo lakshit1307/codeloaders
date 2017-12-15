@@ -47,24 +47,17 @@ public class LoadPendingCodes {
     @Autowired
     private InitLoadTracker initLoadTracker;
 
+    @Autowired
+    private FileTypeOrdering fileTypeOrdering;
+
 
     public LoadPendingCodes () {
         LOGGER.info("LoadPendingCodes class initialized");
     }
 
 
-    //TODO: get data from db or config
-    private List<String> getFileTypes () {
-        final List<String> fileTypes = new ArrayList<String>();
-        fileTypes.add("CPT");
-        fileTypes.add("HCPCS");
-
-        return fileTypes;
-    }
-
-
     public void startProcess() {
-        for (final String fileType : getFileTypes()) {
+        for (final String fileType : fileTypeOrdering.getFileTypes()) {
 
             diffCreator.flushPreviousData();
             final String directoryPath = baseData + File.separator + fileType;
