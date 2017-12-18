@@ -1,6 +1,9 @@
 package com.healthedge.codeloaders.myparser;
 
+import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.service.FileParser;
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
+import com.healthedge.codeloaders.service.Transformer.Transformer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class ParserImplTest {
     @Autowired
     private AbstractParser abstractParser;
 
+    @Autowired
+    private ImplementationFactory implementationFactory;
+
     @Test
     public void parse() throws Exception {
         File file = new File("src/test/resources/basedata/CPT/OPTUM_CPT_2016-01-01.txt");
@@ -28,6 +34,10 @@ public class ParserImplTest {
         List<Map<String, String>> result = abstractParser.parse(fileMetaData);
 
         System.out.println(result);
+        Transformer transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
+        Map<String, BaseEntity> tranformerResult = transformer.transform(result);
+
+        System.out.println(tranformerResult);
 
         file = new File("src/test/resources/basedata/ZipToCarrierLocality/OPTUM_ZipToCarrierLocality_2003-01-01.txt");
 
@@ -35,6 +45,11 @@ public class ParserImplTest {
         result = abstractParser.parse(fileMetaData);
 
         System.out.println(result);
+
+        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
+        tranformerResult = transformer.transform(result);
+
+        System.out.println(tranformerResult);
 
     }
 
