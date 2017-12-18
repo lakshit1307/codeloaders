@@ -1,5 +1,7 @@
 package com.healthedge.codeloaders.service.Parser;
 
+import com.healthedge.codeloaders.service.Transformer.Transformer;
+import com.healthedge.codeloaders.service.Transformer.ZipCodeTransformer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,13 +22,11 @@ public class ImplementationFactoryTest {
 
     @Test
     public void getParser() throws Exception {
-        Parser zipParser = implementationFactory.getParser("zip");
-        Assert.assertTrue(zipParser instanceof ZipParser);
-        Parser zipToCarrierLocality = implementationFactory.getParser("zipToCarrierLocality");
-        Assert.assertTrue(zipToCarrierLocality instanceof ZipToCarrierLocalityParser);
+        Transformer transformer = implementationFactory.getTransformer("zip");
+        Assert.assertTrue(transformer instanceof ZipCodeTransformer);
 
         try {
-            implementationFactory.getParser("somerandomfileType");
+            implementationFactory.getTransformer("somerandomfileType");
             Assert.fail("The class should not have been initialized");
         } catch (Exception ignored) {}
     }

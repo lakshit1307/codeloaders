@@ -1,9 +1,9 @@
 package com.healthedge.codeloaders.service.Parser;
 
-import com.healthedge.codeloaders.service.FileParser;
+import com.healthedge.codeloaders.service.Transformer.Transformer;
 import com.healthedge.codeloaders.util.CodeLoaderProperty;
-import com.healthedge.codeloaders.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +26,17 @@ public class ImplementationFactory {
         properties = CodeLoaderProperty.getInstance().getProperties();
     }
 
-    public Parser getParser (String fileType) throws Exception {
-        Class clazz = Class.forName(getParserImplementationClassName(fileType));
-        return (Parser) applicationContext.getBean(clazz);
+    public Transformer getTransformer (String fileType) throws Exception {
+        Class clazz = Class.forName(getTransformerImplClassName(fileType));
+        return (Transformer) applicationContext.getBean(clazz);
     }
 
-    private String getParserImplementationClassName (String fileType) throws Exception {
-        String propertyName = new StringBuilder().append(fileType).append(CodeLoaderProperty.PROP_NAME_DELIMITER)
-                .append(CodeLoaderProperty.PARSER_CLASS_SUFFIX).toString();
-        String parserImplClass = properties.getProperty(propertyName);
-        if (StringUtils.isEmpty(parserImplClass) || StringUtils.isBlank(parserImplClass)) {
-            throw new Exception("Parser Class property not set for fileType " + fileType);
+    private String getTransformerImplClassName(String fileType) throws Exception {
+        String propertyName = fileType + CodeLoaderProperty.TRANSFORMER_CLASS_SUFFIX;
+        String transformerImplClassName = properties.getProperty(propertyName);
+        if (StringUtils.isEmpty(transformerImplClassName) || StringUtils.isBlank(transformerImplClassName)) {
+            throw new Exception("Transformer Class property not set for fileType " + fileType);
         }
-        return parserImplClass;
+        return transformerImplClassName;
     }
 }

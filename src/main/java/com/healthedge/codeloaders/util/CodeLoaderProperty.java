@@ -17,6 +17,7 @@ public class CodeLoaderProperty {
     public static final String PROP_VALUES_DELIMITER = ",";
     public static final String DEPENDENCIES_PROPERTY_NAME = "dependencies";
     public static final String PARSER_CLASS_SUFFIX = "parser.class";
+    public static final String TRANSFORMER_CLASS_SUFFIX = ".transformer.class";
 
     public static final String FILE_TYPE_ORDERING = "filetype.ordering";
 
