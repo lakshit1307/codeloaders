@@ -32,7 +32,7 @@ public class ClientDao {
 
 	}
 
-	public Date getPayorVersionOneCode(String codeType, EntityManager entityManager) {
+	public Date getPayorVersionPerCode(String codeType, EntityManager entityManager) {
 
 		return clientServiceRepository.getPayorCodeVersion(codeType, entityManager);
 

@@ -15,16 +15,26 @@ public class BaseEntity implements Serializable{
 
     private Long txCnt;
 
-    private Date version;
+    private Date versionStart;
 
     private String action;
 
-    public Date getVersion() {
-        return version;
+    private Date versionEnd;
+
+    public Date getVersionEnd() {
+        return versionEnd;
     }
 
-    public void setVersion(Date version) {
-        this.version = version;
+    public void setVersionEnd(Date versionEnd) {
+        this.versionEnd = versionEnd;
+    }
+
+    public Date getVersionStart() {
+        return versionStart;
+    }
+
+    public void setVersionStart(Date version) {
+        this.versionStart = version;
     }
 
     public String getAction() {
