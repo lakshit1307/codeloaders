@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
-import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -58,7 +57,7 @@ public class ServiceCodeReader implements ItemReader<Service> {
 		this.entityManager = clientConnectionService
 				.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword())
 				.createEntityManager();
-		this.currentCodeVersion = clientDao.getPayorVersionOneCode(codeType, entityManager);
+		this.currentCodeVersion = clientDao.getPayorVersionPerCode(codeType, entityManager);
 		List<Service> services = serviceDao.getDeltaCodes(currentCodeVersion, codeType);
 		this.services = services.toArray(new Service[services.size()]);
 
