@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ZipCodeTransformer implements Transformer {
     @Override
-    public Map<String, BaseEntity> transform(List<BaseEntity> baseEntityList) {
+    public Map<String, BaseEntity> transform(List<Map<String, String>> input) {
         return null;
     }
 }
