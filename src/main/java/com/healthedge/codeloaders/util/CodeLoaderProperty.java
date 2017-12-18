@@ -1,12 +1,14 @@
 package com.healthedge.codeloaders.util;
 
+import com.oracle.webservices.internal.api.message.PropertySet;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.*;
 
 public class CodeLoaderProperty {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeLoaderProperty.class);
@@ -19,6 +21,8 @@ public class CodeLoaderProperty {
     public static final String FILE_TYPE_ORDERING = "filetype.ordering";
 
     private final Properties properties = new Properties();
+
+    private Map<String, Properties> propertyCacheByFileType = new HashMap<>();
 
     private static CodeLoaderProperty ourInstance = new CodeLoaderProperty();
 
@@ -41,5 +45,23 @@ public class CodeLoaderProperty {
 
     public String getProperty (String key) {
         return properties.getProperty(key, null);
+    }
+
+    public Properties getPropertiesByFileType (String fileType) {
+        if (!propertyCacheByFileType.containsKey(fileType)) {
+            loadPropertiesByFileType(fileType);
+        }
+
+        return propertyCacheByFileType.get(fileType);
+    }
+
+    private void loadPropertiesByFileType (String fileType) {
+        Properties properties = new Properties();
+        for (String key : this.properties.stringPropertyNames()) {
+            if (StringUtils.startsWith(key,fileType)) {
+                properties.setProperty(key,this.properties.getProperty(key));
+            }
+        }
+        propertyCacheByFileType.put(fileType, properties);
     }
 }

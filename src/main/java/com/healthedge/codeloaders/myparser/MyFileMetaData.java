@@ -52,7 +52,7 @@ public class MyFileMetaData {
     private void identifyVersion () throws Exception {
         int index = this.baseFileName.lastIndexOf(FILE_DELIMITER);
         if (index != -1) {
-            String date = this.baseFileName.substring(index);
+            String date = this.baseFileName.substring(index + 1);
             this.fileDate = new DateTime(sdf.parse(date))
                     .withHourOfDay(0)
                     .withMinuteOfHour(0)

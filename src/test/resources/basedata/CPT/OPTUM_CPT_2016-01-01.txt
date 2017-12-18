@@ -1,0 +1,5 @@
+CPT_CODE	PLACE_HOLDER	SHORT_DESCRIPTION	LONG_DESCRIPTION	FULL_DESCRIPTION	NF_TOTAL_RVU	FAC_TOTAL_RVU	STATUS
+
+0003M		LIVER DIS 10 ASSAYS W/NASH	LIVER DIS 10 ASSAYS SERUM ALGORITHM W/NASH	Liver disease, ten biochemical assays (ALT, A2-macroglobulin, apolipoprotein A-1, total bilirubin, GGT, haptoglobin, AST, glucose, total cholesterol and triglycerides) utilizing serum, prognostic algorithm reported as quantitative scores for fibrosis, steatosis and nonalcoholic steatohepatitis (NASH)	0.00	0.00			10119
+
+0004M		SCOLIOSIS 53 SNP SALIVA SCOR	SCOLIOSIS 53 SNPS SALIVA PROGNOSTIC RISK SCORE	Scoliosis, DNA analysis of 53 single nucleotide polymorphisms (SNPs), using saliva, prognostic algorithm reported as a risk score	0.00	0.00			10120
