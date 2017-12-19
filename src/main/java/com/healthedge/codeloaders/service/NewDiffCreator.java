@@ -28,9 +28,6 @@ public class NewDiffCreator {
 	@Autowired
 	private ImplementationFactory implementationFactory;
 
-	@Autowired
-	BaseDao baseDao;
-
 	private Map previous = new ConcurrentHashMap<>();
 
 //	public void initDiff(Map current, MyFileMetaData fileMetaData) throws SQLException, ClassNotFoundException {
