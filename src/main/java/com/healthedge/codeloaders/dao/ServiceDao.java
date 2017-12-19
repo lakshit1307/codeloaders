@@ -31,14 +31,14 @@ public class ServiceDao implements BaseDao {
 	@Transactional
 	public Boolean update(final Service service) {
 		serviceRepository.update(service.getServiceShortDesciption(), service.getServiceLongDesciption(),
-				service.getServiceAlternateDesciption(), service.getAction(), service.getVersion(),
+				service.getServiceAlternateDesciption(), service.getAction(), service.getVersionStart(),
 				service.getServiceCode());
 		return true;
 	}
 
 	@Transactional
 	public Boolean terminate(final Service service) {
-		serviceRepository.terminate(service.getEffectiveEndDate(), service.getAction(), service.getVersion(),
+		serviceRepository.terminate(service.getEffectiveEndDate(), service.getAction(), service.getVersionStart(),
 				service.getServiceCode());
 		return true;
 	}

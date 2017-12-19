@@ -2,6 +2,7 @@ package com.healthedge.codeloaders.entity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,29 +15,42 @@ public class BaseEntity implements Serializable {
 
 	private Long txCnt;
 
-	private Date versionStart;
+	private Long versionStart;
 
 	private String action;
 
-	private Date versionEnd;
+	private Long versionEnd;
 
 	private Date effectiveStartDate;
 
 	private Date effectiveEndDate;
 
-	public Date getVersionEnd() {
+	@Transient
+	private String code;
+
+	@Transient
+	public String getCode() {
+		return code;
+	}
+
+	@Transient
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Long getVersionEnd() {
 		return versionEnd;
 	}
 
-	public void setVersionEnd(Date versionEnd) {
+	public void setVersionEnd(Long versionEnd) {
 		this.versionEnd = versionEnd;
 	}
 
-	public Date getVersionStart() {
+	public Long getVersionStart() {
 		return versionStart;
 	}
 
-	public void setVersionStart(Date version) {
+	public void setVersionStart(Long version) {
 		this.versionStart = version;
 	}
 

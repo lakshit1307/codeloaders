@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.Service;
+import com.healthedge.codeloaders.myparser.AbstractParser;
+import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import com.healthedge.codeloaders.service.DiffCreator;
-import com.healthedge.codeloaders.service.FileParser;
+import com.healthedge.codeloaders.service.NewDiffCreator;
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
+import com.healthedge.codeloaders.service.Transformer.Transformer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -21,33 +26,44 @@ public class StagingPersistenceStepPartitioner implements Partitioner {
 
 	public static final String ACTION = "action";
 	public static final String ITEM = "item";
+	public static final String FILE_META_DATA = "filemetadata";
 
 	@Autowired
-	private FileParser fileParser;
+	private AbstractParser abstractParser;
 
 	@Autowired
-	private DiffCreator diffCreator;
+	private ImplementationFactory implementationFactory;
+
+	@Autowired
+	private NewDiffCreator diffCreator;
 
 	@Override
 	public Map<String, ExecutionContext> partition(int gridSize) {
-		String filePath = CodeLoaderContext.getInstance().getCurrentFilePath();
+		MyFileMetaData fileMetaData = CodeLoaderContext.getInstance().getFileMetaData();
+		String filePath = fileMetaData.getFilePath();
 		LOGGER.info("Processing filePath [{}]", filePath);
 
 		Map<String, ExecutionContext> map = new HashMap<>();
 		try {
 			long startTime = System.currentTimeMillis();
 			long endTime = 0;
-			final Map<String, Service> record = fileParser.parse(filePath);
+			List<Map<String, String>> parseResult = abstractParser.parse(fileMetaData);
 			endTime = System.currentTimeMillis();
 			LOGGER.info("Total time required to parse file [{}]: {} ms", filePath, endTime - startTime);
 
 			startTime = System.currentTimeMillis();
-			final Map<String, List<Service>> diffRecords = diffCreator.diff(filePath,record);
+			Transformer transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
+			Map<String, BaseEntity> record = transformer.transform(parseResult);
+			endTime = System.currentTimeMillis();
+			LOGGER.info("Total time required to transform file [{}]: {} ms", filePath, endTime - startTime);
+
+			startTime = System.currentTimeMillis();
+			final Map<String, List<BaseEntity>> diffRecords = diffCreator.configureDiff(record, fileMetaData);
 			endTime = System.currentTimeMillis();
 			LOGGER.info("Total time required to diff file [{}]: {} ms", filePath, endTime - startTime);
 
 			startTime = System.currentTimeMillis();
-			createExecutionContext(map, diffRecords);
+			createExecutionContext(map, diffRecords, fileMetaData);
 			endTime = System.currentTimeMillis();
 			LOGGER.info("Total time required to create ExecutionContext [{}]: {} ms", filePath, endTime - startTime);
 		} catch (Exception ex) { //NOPMD
@@ -57,35 +73,38 @@ public class StagingPersistenceStepPartitioner implements Partitioner {
 		return map;
 	}
 
-	private void createExecutionContext(Map<String, ExecutionContext> map, Map<String, List<Service>> diffRecords) {
+	private void createExecutionContext(Map<String, ExecutionContext> map, Map<String, List<BaseEntity>> diffRecords, MyFileMetaData fileMetaData) {
 		ExecutionContext executionContext;
-		List<Service> createList = diffRecords.get(DiffCreator.CREATE_ACTION);
+		List<BaseEntity> createList = diffRecords.get(DiffCreator.CREATE_ACTION);
 		if (CollectionUtils.isNotEmpty(createList)) {
-            for (Service service : createList) {
+            for (BaseEntity service : createList) {
                 executionContext = new ExecutionContext();
                 executionContext.put(ACTION, DiffCreator.CREATE_ACTION);
                 executionContext.put(ITEM, service);
-                map.put(service.getServiceCode(), executionContext);
+                executionContext.put(FILE_META_DATA, fileMetaData);
+                map.put(service.getCode(), executionContext);
             }
         }
 
-		List<Service> appendList = diffRecords.get(DiffCreator.APPEND_ACTION);
+		List<BaseEntity> appendList = diffRecords.get(DiffCreator.APPEND_ACTION);
 		if (CollectionUtils.isNotEmpty(appendList)) {
-            for (Service service : appendList) {
+            for (BaseEntity service : appendList) {
                 executionContext = new ExecutionContext();
                 executionContext.put(ACTION, DiffCreator.APPEND_ACTION);
                 executionContext.put(ITEM, service);
-                map.put(service.getServiceCode(), executionContext);
+				executionContext.put(FILE_META_DATA, fileMetaData);
+                map.put(service.getCode(), executionContext);
             }
         }
 
-		List<Service> terminateList = diffRecords.get(DiffCreator.TERMINATE_ACTION);
+		List<BaseEntity> terminateList = diffRecords.get(DiffCreator.TERMINATE_ACTION);
 		if (CollectionUtils.isNotEmpty(terminateList)) {
-            for (Service service : terminateList) {
+            for (BaseEntity service : terminateList) {
                 executionContext = new ExecutionContext();
                 executionContext.put(ACTION, DiffCreator.TERMINATE_ACTION);
                 executionContext.put(ITEM, service);
-                map.put(service.getServiceCode(), executionContext);
+				executionContext.put(FILE_META_DATA, fileMetaData);
+                map.put(service.getCode(), executionContext);
             }
         }
 	}

@@ -19,7 +19,11 @@ import javax.validation.constraints.NotNull;
         @AttributeOverride(name = "action", column =
         @Column(name = "ACTION")),
         @AttributeOverride(name = "versionEnd", column =
-        @Column(name = "VERSION_END"))})
+        @Column(name = "VERSION_END")),
+        @AttributeOverride(name = "effectiveEndDate", column =
+        @Column(name = "EFF_END_DT")),
+        @AttributeOverride(name = "effectiveStartDate", column =
+        @Column(name = "EFF_START_DT"))})
 public class ZipCode extends BaseEntity{
 
     @Id
@@ -32,6 +36,7 @@ public class ZipCode extends BaseEntity{
     }
 
     public void setZipCode(String zipCode) {
+        super.setCode(zipCode);
         this.zipCode = zipCode;
     }
 }

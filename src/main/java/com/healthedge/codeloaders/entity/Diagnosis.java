@@ -70,6 +70,7 @@ public class Diagnosis extends BaseEntity{
     }
 
     public void setDiagnosisCode(String diagnosisCode) {
+        super.setCode(diagnosisCode);
         this.diagnosisCode = diagnosisCode;
     }
 

@@ -3,15 +3,29 @@ package com.healthedge.codeloaders.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_SERVICE")
+@AttributeOverrides({
+		@AttributeOverride(name = "lastTransactionDate", column =
+		@Column(name = "LAST_TX_DT")),
+		@AttributeOverride(name = "lastTransactionUserText", column =
+		@Column(name = "LAST_TX_USER_TXT")),
+		@AttributeOverride(name = "txCnt", column =
+		@Column(name = "TX_CNT")),
+		@AttributeOverride(name = "effectiveEndDate", column =
+		@Column(name = "EFF_END_DT")),
+		@AttributeOverride(name = "effectiveStartDate", column =
+		@Column(name = "EFF_START_DT")),
+		@AttributeOverride(name = "versionStart", column =
+		@Column(name = "VERSION_START")),
+		@AttributeOverride(name = "action", column =
+		@Column(name = "ACTION")),
+		@AttributeOverride(name = "versionEnd", column =
+		@Column(name = "VERSION_END"))})
 public class Service extends BaseEntity {
 
 	@Id
@@ -37,35 +51,15 @@ public class Service extends BaseEntity {
 	@Column(name = "WRK_FLOW_CD")
 	private String workFlowCode;
 
-	@Column(name = "EFF_END_DT")
-	private Date effectiveEndDate;
-
-	@Column(name = "EFF_START_DT")
-	private Date effectiveStartDate;
-
-	@Column(name = "LAST_TX_DT")
-	private Date lastTransactionDate;
-
-	@Column(name = "LAST_TX_USER_TXT")
-	private String lastTransactionUserText;
-
-	@Column(name = "TX_CNT")
-	private Long txCnt;
-
 	@Column(name = "CODE_PROCESSING_HISTORY_ID")
 	private Integer codeProcessingHistoryId;
-
-	@Column(name = "VERSION")
-	private Date version;
-
-	@Column(name = "ACTION")
-	private String action;
 
 	public String getServiceCode() {
 		return serviceCode;
 	}
 
 	public void setServiceCode(String serviceCode) {
+		super.setCode(serviceCode);
 		this.serviceCode = serviceCode;
 	}
 
@@ -116,45 +110,6 @@ public class Service extends BaseEntity {
 		this.workFlowCode = wprl;
 	}
 
-	public Date getEffectiveEndDate() {
-		return effectiveEndDate;
-	}
-
-	public void setEffectiveEndDate(Date effectiveEndDate) {
-		this.effectiveEndDate = effectiveEndDate;
-	}
-
-	public Date getEffectiveStartDate() {
-		return effectiveStartDate;
-	}
-
-	public void setEffectiveStartDate(Date effectiveStartDate) {
-		this.effectiveStartDate = effectiveStartDate;
-	}
-
-	public Date getLastTransactionDate() {
-		return lastTransactionDate;
-	}
-
-	public void setLastTransactionDate(Date lastTransactionUserDate) {
-		this.lastTransactionDate = lastTransactionUserDate;
-	}
-
-	public String getLastTransactionUserText() {
-		return lastTransactionUserText;
-	}
-
-	public void setLastTransactionUserText(String lastTransactionUserText) {
-		this.lastTransactionUserText = lastTransactionUserText;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
 
 	public String getWorkFlowCode() {
 		return workFlowCode;
@@ -164,28 +119,12 @@ public class Service extends BaseEntity {
 		this.workFlowCode = workFlowCode;
 	}
 
-	public Long getTxCnt() {
-		return txCnt;
-	}
-
-	public void setTxCnt(Long txCnt) {
-		this.txCnt = txCnt;
-	}
-
 	public Integer getCodeProcessingHistoryId() {
 		return codeProcessingHistoryId;
 	}
 
 	public void setCodeProcessingHistoryId(Integer codeProcessingHistoryId) {
 		this.codeProcessingHistoryId = codeProcessingHistoryId;
-	}
-
-	public Date getVersion() {
-		return version;
-	}
-
-	public void setVersion(Date version) {
-		this.version = version;
 	}
 
 	@Override
