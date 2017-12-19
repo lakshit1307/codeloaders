@@ -44,22 +44,24 @@ public class NewDiffCreator {
 		if (CollectionUtils.isEmpty(previous)) {
 			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersion(fileMetaData);
 		}
-		return createDiff(currentFileCodes, previous, fileMetaData.getFileDate().toDate());
+		return createDiff(previous, currentFileCodes, fileMetaData);
 
 	}
 
 	public <T extends BaseEntity> Map<String, List<T>> createDiff(Map<String, T> previousFileCodes,
-			Map<String, T> currentFileCodes, Date fileDate) {
+			Map<String, T> currentFileCodes, MyFileMetaData fileMetaData) {
 
 		final List<T> create = new ArrayList<T>();
 		final List<T> append = new ArrayList<T>();
 		final List<T> terminate = new ArrayList<T>();
 		final Map<String, List<T>> result = new ConcurrentHashMap<>();
 		if (CollectionUtils.isEmpty(previousFileCodes)) {
-			for (final String code : previousFileCodes.keySet()) {
+			for (final String code : currentFileCodes.keySet()) {
 				final T entity = currentFileCodes.get(code);
 				entity.setAction(CodeLoaderConstants.CREATE_ACTION);
-				entity.setEffectiveStartDate(fileDate);
+				entity.setEffectiveStartDate(fileMetaData.getFileDate().toDate());
+				entity.setVersionStart(fileMetaData.getFileVersion());
+				entity.setVersionEnd(fileMetaData.getFileVersion());
 				create.add(entity);
 			}
 			previousFileCodes.putAll(currentFileCodes);
@@ -72,25 +74,25 @@ public class NewDiffCreator {
 					final T pojo1 = previousFileCodes.get(code);
 					if (!pojo1.equals(pojo2)) {
 						pojo2.setAction(CodeLoaderConstants.APPEND_ACTION);
-						pojo2.setVersionStart(fileDate);
-						pojo2.setVersionEnd(fileDate);
+						pojo2.setVersionStart(fileMetaData.getFileVersion());
+						pojo2.setVersionEnd(fileMetaData.getFileVersion());
 						append.add(pojo2);
 					}
 					previousFileCodes.remove(code);
 				} else {
 					final T pojo = currentFileCodes.get(code);
 					pojo.setAction(CodeLoaderConstants.CREATE_ACTION);
-					pojo.setEffectiveStartDate(fileDate);
-					pojo.setVersionStart(fileDate);
-					pojo.setVersionEnd(fileDate);
+					pojo.setEffectiveStartDate(fileMetaData.getFileDate().toDate());
+					pojo.setVersionStart(fileMetaData.getFileVersion());
+					pojo.setVersionEnd(fileMetaData.getFileVersion());
 					create.add(pojo);
 				}
 			}
 			for (final String key : previousFileCodes.keySet()) {
 				final T pojo = previousFileCodes.get(key);
 				pojo.setAction(CodeLoaderConstants.TERMINATE_ACTION);
-				pojo.setEffectiveEndDate(fileDate);
-				pojo.setVersionEnd(fileDate);
+				pojo.setEffectiveEndDate(fileMetaData.getFileDate().toDate());
+				pojo.setVersionEnd(fileMetaData.getFileVersion());
 				terminate.add(pojo);
 
 			}

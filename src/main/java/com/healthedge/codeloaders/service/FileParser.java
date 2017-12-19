@@ -82,7 +82,7 @@ public class FileParser {
         //TODO: Remove the hard-coded value
         pojo.setCodeProcessingHistoryId(5);
 
-        pojo.setVersion(fileMetadata.getFileDate().toDate());
+        pojo.setVersionStart(null);
 
 
         //serv_cd

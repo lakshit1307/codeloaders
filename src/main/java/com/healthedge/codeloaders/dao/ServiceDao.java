@@ -28,22 +28,17 @@ public class ServiceDao implements BaseDao {
 		LOGGER.info("ServieDao initialized");
 	}
 
-	public Boolean save(final Service service) {
-		serviceRepository.save(service);
-		return true;
-	}
-
 	@Transactional
 	public Boolean update(final Service service) {
 		serviceRepository.update(service.getServiceShortDesciption(), service.getServiceLongDesciption(),
-				service.getServiceAlternateDesciption(), service.getAction(), service.getVersion(),
+				service.getServiceAlternateDesciption(), service.getAction(), service.getVersionStart(),
 				service.getServiceCode());
 		return true;
 	}
 
 	@Transactional
 	public Boolean terminate(final Service service) {
-		serviceRepository.terminate(service.getEffectiveEndDate(), service.getAction(), service.getVersion(),
+		serviceRepository.terminate(service.getEffectiveEndDate(), service.getAction(), service.getVersionStart(),
 				service.getServiceCode());
 		return true;
 	}
@@ -82,5 +77,17 @@ public class ServiceDao implements BaseDao {
 			map.put(service.getServiceCode(), service);
 		}
 		return map;
+	}
+
+	@Override
+	public <T extends BaseEntity> boolean save(T entity) {
+		serviceRepository.save((Service) entity);
+		return true;
+	}
+
+	@Override
+	public <T extends BaseEntity> boolean save(List<T> entity) {
+		serviceRepository.save((List<Service>) entity);
+		return false;
 	}
 }

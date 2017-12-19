@@ -17,11 +17,11 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE T_SERVICE SET SERV_SHORT_DSC=?1,SERV_LONG_DSC=?2,ALT_DSC=?3,ACTION=?4,VERSION=?5 WHERE SERV_CD = ?6",
             nativeQuery = true)
-    void update(String serviceShortDesciption,String serviceLongDesciption, String serviceAlternateDesciption,String action,Date version,String serviceCode);
+    void update(String serviceShortDesciption,String serviceLongDesciption, String serviceAlternateDesciption,String action,Long version,String serviceCode);
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE T_SERVICE SET EFF_END_DT=?1,ACTION =?2,VERSION=?3 WHERE SERV_CD=?4", nativeQuery = true)
-    void terminate(Date effectiveEndDate,String action,Date version, String serviceCode);
+    void terminate(Date effectiveEndDate,String action,Long version, String serviceCode);
 
 
     @Query(value = "SELECT VERSION FROM(SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 ORDER BY VERSION DESC) WHERE ROWNUM=1",
@@ -40,6 +40,6 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
     List<Service> getServiceCodesByCodeType(String codeType);
     
     @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_END=?2", nativeQuery = true)
-    List<Service> getServiceCodesByCodeTypeForVersion(String codeType, Date versionEnd);
+    List<Service> getServiceCodesByCodeTypeForVersion(String codeType, Long versionEnd);
  
 }
