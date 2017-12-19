@@ -3,14 +3,15 @@ package com.healthedge.codeloaders.service.Transformer;
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.Diagnosis;
-import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.util.StringUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class DiagnosisTransformer implements Transformer {
     @Override
     public Map<String, BaseEntity> transform(List<Map<String, String>> input) {
