@@ -86,21 +86,26 @@ public class TenantController {
 
 
         TenantDTO tenantDTO1=new TenantDTO();
+
         tenantDTO1.setDescription(tenant.getDescription());
         tenantDTO1.setIsAutoLoad(tenant.getIsAutoLoad());
+        tenantDTO1.setIsActive(tenant.getIsActive());
         tenantDTO1.setName(tenant.getName());
         tenantDTO1.setTenantId(tenant.getTenantId());
 
         List<EnvironmentDTO> environments= new ArrayList<>();
         for(TenantEnv tenantEnv: tenant.getTenantEnv()){
             EnvironmentDTO environmentDTO=new EnvironmentDTO();
+
             environmentDTO.setName(tenantEnv.getName());
             environmentDTO.setDbPassword(tenantEnv.getDbPassword());
             environmentDTO.setDbUrl(tenantEnv.getDbUrl());
             environmentDTO.setDbUserName(tenantEnv.getDbUserName());
             environmentDTO.setDescription(tenantEnv.getDescription());
             environmentDTO.setIsAutoLoad(tenantEnv.getIsAutoLoad());
+            environmentDTO.setIsActive(tenantEnv.getIsActive());
             environmentDTO.setTenantEnvId(tenantEnv.getTenantEnvId());
+
             environments.add(environmentDTO);
         }
         tenantDTO1.setEnvironments(environments);
@@ -112,11 +117,11 @@ public class TenantController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody TenantDTO getTenant(@PathVariable(value="tenantId") int tenantId){
         Tenant tenant=tenantDao.getTenantById(tenantId);
-        TenantDTO tenantDTO1=new TenantDTO();
-        tenantDTO1.setDescription(tenant.getDescription());
-        tenantDTO1.setIsAutoLoad(tenant.getIsAutoLoad());
-        tenantDTO1.setName(tenant.getName());
-        tenantDTO1.setTenantId(tenant.getTenantId());
+        TenantDTO tenantDTO=new TenantDTO();
+        tenantDTO.setDescription(tenant.getDescription());
+        tenantDTO.setIsAutoLoad(tenant.getIsAutoLoad());
+        tenantDTO.setName(tenant.getName());
+        tenantDTO.setTenantId(tenant.getTenantId());
 
         List<EnvironmentDTO> environments= new ArrayList<>();
 
@@ -131,18 +136,16 @@ public class TenantController {
             environmentDTO.setTenantEnvId(tenantEnv.getTenantEnvId());
             environments.add(environmentDTO);
         }
-        tenantDTO1.setEnvironments(environments);
-        return  tenantDTO1;
+        tenantDTO.setEnvironments(environments);
+        return  tenantDTO;
     }
 
     @PutMapping("/tenants/{tenantId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateTenant(@PathVariable(value = "tenantId") int tenantId, @Valid @RequestBody TenantDTO tenantDTO){
-
+    public void updateTenant(@Valid @RequestBody TenantDTO tenantDTO){
+        int tenantId=tenantDTO.getTenantId();
         Tenant tenant=tenantDao.getTenantById(tenantId);
-        //tenant.setTenantId(tenantDTO.getTenantId());
-        //tenant.setName(tenantDTO.getName());
-        //Exceptions to be thrown if PUT contains the above two fields
+        tenant.setName(tenantDTO.getName());
         tenant.setDescription(tenantDTO.getDescription());
         tenant.setIsAutoLoad(tenantDTO.getIsAutoLoad());
         tenant.setIsActive(tenantDTO.getIsActive());
@@ -155,10 +158,8 @@ public class TenantController {
         for(EnvironmentDTO environmentDTO:tenantDTO.getEnvironments())
         {
             TenantEnv tenantEnv=tenantEnvironmentDao.getByEnvId(environmentDTO.getTenantEnvId());
-            //tenantEnv.setName(environmentDTO.getName());
-            //tenantEnv.setTenant(tenant);
-            //tenantEnv.setTenantEnvId(environmentDTO.getTenantEnvId());
-            //Exceptions to be thrown if PUT contains the above three fields
+
+            tenantEnv.setName(environmentDTO.getName());
             tenantEnv.setDescription(environmentDTO.getDescription());
             tenantEnv.setDbUrl(environmentDTO.getDbUrl());
             tenantEnv.setDbPassword(environmentDTO.getDbPassword());
