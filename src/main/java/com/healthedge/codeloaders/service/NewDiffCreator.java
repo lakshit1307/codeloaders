@@ -44,7 +44,7 @@ public class NewDiffCreator {
 		if (CollectionUtils.isEmpty(previous)) {
 			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersion(fileMetaData);
 		}
-		return createDiff(currentFileCodes, previous, fileMetaData.getFileDate().toDate());
+		return createDiff(previous, currentFileCodes, fileMetaData.getFileDate().toDate());
 
 	}
 
@@ -56,7 +56,7 @@ public class NewDiffCreator {
 		final List<T> terminate = new ArrayList<T>();
 		final Map<String, List<T>> result = new ConcurrentHashMap<>();
 		if (CollectionUtils.isEmpty(previousFileCodes)) {
-			for (final String code : previousFileCodes.keySet()) {
+			for (final String code : currentFileCodes.keySet()) {
 				final T entity = currentFileCodes.get(code);
 				entity.setAction(CodeLoaderConstants.CREATE_ACTION);
 				entity.setEffectiveStartDate(fileDate);
