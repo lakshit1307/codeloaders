@@ -35,7 +35,7 @@ public class DiagnosisTransformer implements Transformer {
             diagnosis.setAlternateDescription(modifyInputString(item.get("fulldesc"),1000));
             diagnosis.setDiagnosisLongDescription(modifyInputString(item.get("longdesc"),1000));
             diagnosis.setDiagnosisShortDescription(modifyInputString(item.get("shortdesc"),50));
-            diagnosis.setDiagnosisTypeCode("dia"); //TODO
+            diagnosis.setDiagnosisTypeCode(item.get("filetypecd"));
             result.put(diagnosis.getDiagnosisCode(),diagnosis);
         });
 
