@@ -1,6 +1,5 @@
 package com.healthedge.codeloaders.util;
 
-import com.oracle.webservices.internal.api.message.PropertySet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
