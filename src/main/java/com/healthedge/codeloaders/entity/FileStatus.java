@@ -10,45 +10,78 @@ import java.util.Date;
 
 @SuppressWarnings("PMD")
 @Entity
-@Table(name="CODE_FILE_STATUS")
+@Table(name = "CODE_FILE_STATUS")
 public class FileStatus implements Serializable {
 
-    public static final String FAILURE="FAILURE";
-    public static final String IN_PROGRESS="IN_PROGRESS";
-    public static final String PERSISTED ="PERSISTED";
+	public static final String FAILURE = "FAILURE";
+	public static final String IN_PROGRESS = "IN_PROGRESS";
+	public static final String PERSISTED = "PERSISTED";
 
-    @Id
-    @NotNull
-    @Column(name= "SERV_TYPE_CD")
-    private String codeType;
+	@NotNull
+	@Column(name = "FILE_TYPE")
+	private String fileType;
 
-    @Column(name= "FILE_NAME")
-    private String fileName;
+	@Column(name = "FILE_NAME")
+	private String fileName;
 
-    @Column(name = "STATUS")
-    private String status;
+	@Column(name = "STATUS")
+	private String status;
 
-    public String getCodeType() {
-        return codeType;
-    }
+	@Column(name = "VERSION")
+	private Long version;
 
-    public void setCodeType(String codeType) {
-        this.codeType = codeType;
-    }
+	@Column(name = "TX_DATE")
+	private Date txDate;
 
-    public String getFileName() {
-        return fileName;
-    }
+	@Column(name = "TX_CNT")
+	private Long txCnt;
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+	public String getFileType() {
+		return fileType;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	public Date getTxDate() {
+		return txDate;
+	}
+
+	public void setTxDate(Date txDate) {
+		this.txDate = txDate;
+	}
+
+	public Long getTxCnt() {
+		return txCnt;
+	}
+
+	public void setTxCnt(Long txCnt) {
+		this.txCnt = txCnt;
+	}
+
 }

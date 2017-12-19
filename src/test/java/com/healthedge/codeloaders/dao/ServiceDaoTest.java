@@ -79,7 +79,7 @@ public class ServiceDaoTest {
 		service.setworkFlowCode("sd");
 		service.setServiceCode("d");
 		service.setLastTransactionUserText("user text");
-		service.setVersion(new Date());
+		service.setVersionStart(new Date().getTime());
 		serviceDao.update(service);
 		services=serviceDao.getAll();
         assertEquals("check Account has been created", service, services.get(0));
