@@ -53,6 +53,7 @@ public class ClientPersistenceStepPartioner implements Partitioner {
 			if (tenantEnv.getTenant().getIsActive() == 1 && tenantEnv.getIsActive() == 1) {
 				ExecutionContext context = new ExecutionContext();
 				context.put("tenant_environment", tenantEnv);
+				partitionMap.put(tenantEnv.getTenant().getTenantId() + "_" + tenantEnv.getTenantEnvId(), context);
 
 			}
 		}

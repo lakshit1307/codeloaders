@@ -5,69 +5,87 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @MappedSuperclass
-public class BaseEntity implements Serializable{
+public class BaseEntity implements Serializable {
 
-    private Date lastTransactionDate;
+	private Date lastTransactionDate;
 
-    private String lastTransactionUserText;
+	private String lastTransactionUserText;
 
-    private Long txCnt;
+	private Long txCnt;
 
-    private Date versionStart;
+	private Date versionStart;
 
-    private String action;
+	private String action;
 
-    private Date versionEnd;
+	private Date versionEnd;
 
-    public Date getVersionEnd() {
-        return versionEnd;
-    }
+	private Date effectiveStartDate;
 
-    public void setVersionEnd(Date versionEnd) {
-        this.versionEnd = versionEnd;
-    }
+	private Date effectiveEndDate;
 
-    public Date getVersionStart() {
-        return versionStart;
-    }
+	public Date getVersionEnd() {
+		return versionEnd;
+	}
 
-    public void setVersionStart(Date version) {
-        this.versionStart = version;
-    }
+	public void setVersionEnd(Date versionEnd) {
+		this.versionEnd = versionEnd;
+	}
 
-    public String getAction() {
-        return action;
-    }
+	public Date getVersionStart() {
+		return versionStart;
+	}
 
-    public void setAction(String action) {
-        this.action = action;
-    }
+	public void setVersionStart(Date version) {
+		this.versionStart = version;
+	}
 
-    public Date getLastTransactionDate() {
-        return lastTransactionDate;
-    }
+	public String getAction() {
+		return action;
+	}
 
-    public void setLastTransactionDate(Date lastTransactionDate) {
-        this.lastTransactionDate = lastTransactionDate;
-    }
+	public void setAction(String action) {
+		this.action = action;
+	}
 
-    public String getLastTransactionUserText() {
-        return lastTransactionUserText;
-    }
+	public Date getLastTransactionDate() {
+		return lastTransactionDate;
+	}
 
-    public void setLastTransactionUserText(String lastTransactionUserText) {
-        this.lastTransactionUserText = lastTransactionUserText;
-    }
+	public void setLastTransactionDate(Date lastTransactionDate) {
+		this.lastTransactionDate = lastTransactionDate;
+	}
 
-    public Long getTxCnt() {
-        return txCnt;
-    }
+	public String getLastTransactionUserText() {
+		return lastTransactionUserText;
+	}
 
-    public void setTxCnt(Long txCnt) {
-        this.txCnt = txCnt;
-    }
+	public void setLastTransactionUserText(String lastTransactionUserText) {
+		this.lastTransactionUserText = lastTransactionUserText;
+	}
 
+	public Long getTxCnt() {
+		return txCnt;
+	}
+
+	public void setTxCnt(Long txCnt) {
+		this.txCnt = txCnt;
+	}
+
+	public Date getEffectiveStartDate() {
+		return effectiveStartDate;
+	}
+
+	public void setEffectiveStartDate(Date effectiveStartDate) {
+		this.effectiveStartDate = effectiveStartDate;
+	}
+
+	public Date getEffectiveEndDate() {
+		return effectiveEndDate;
+	}
+
+	public void setEffectiveEndDate(Date effectiveEndDate) {
+		this.effectiveEndDate = effectiveEndDate;
+	}
 
 }

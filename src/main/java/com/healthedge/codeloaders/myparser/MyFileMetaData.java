@@ -1,10 +1,13 @@
 package com.healthedge.codeloaders.myparser;
 
+import com.healthedge.codeloaders.util.CodeLoaderProperty;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Properties;
 
 public class MyFileMetaData {
 
@@ -15,6 +18,7 @@ public class MyFileMetaData {
     private DateTime fileDate;
     private String baseFileName;
     private long fileVersion;
+    private String fileTypeCd;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -23,6 +27,7 @@ public class MyFileMetaData {
         this.filePath = filePath;
         this.baseFileName = FilenameUtils.getBaseName(filePath);
         identifyVersion();
+        identifyFileTypeCd();
     }
 
     public String getFilePath() {
@@ -45,6 +50,10 @@ public class MyFileMetaData {
         return fileVersion;
     }
 
+    public String getFileTypeCd() {
+        return fileTypeCd;
+    }
+
     private DateTime prepareDateStartingFromFirstOfMonth () {
         return this.fileDate;
     }
@@ -59,6 +68,15 @@ public class MyFileMetaData {
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
             this.fileVersion = this.fileDate.getMillis();
+        }
+    }
+
+    private void identifyFileTypeCd () {
+        Properties properties = CodeLoaderProperty.getInstance().getPropertiesByFileType(this.fileType);
+        String propertyName = this.fileType + CodeLoaderProperty.FILE_TYPE_CD_SUFFIX;
+        String property = properties.getProperty(propertyName);
+        if (StringUtils.isNotEmpty(property) && StringUtils.isNotBlank(property)) {
+            this.fileTypeCd = property.trim();
         }
     }
 }
