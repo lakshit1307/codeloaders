@@ -28,11 +28,6 @@ public class ServiceDao implements BaseDao {
 		LOGGER.info("ServieDao initialized");
 	}
 
-	public Boolean save(final Service service) {
-		serviceRepository.save(service);
-		return true;
-	}
-
 	@Transactional
 	public Boolean update(final Service service) {
 		serviceRepository.update(service.getServiceShortDesciption(), service.getServiceLongDesciption(),
@@ -82,5 +77,17 @@ public class ServiceDao implements BaseDao {
 			map.put(service.getServiceCode(), service);
 		}
 		return map;
+	}
+
+	@Override
+	public <T extends BaseEntity> boolean save(T entity) {
+		serviceRepository.save((Service) entity);
+		return true;
+	}
+
+	@Override
+	public <T extends BaseEntity> boolean save(List<T> entity) {
+		serviceRepository.save((List<Service>) entity);
+		return false;
 	}
 }
