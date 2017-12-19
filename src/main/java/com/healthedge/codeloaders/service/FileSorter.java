@@ -19,12 +19,12 @@ public class FileSorter {
         LOGGER.info("FileSorter class initialized");
     }
 
-    public List<String> sortFilesInDirectory (final String directoryPath) {
+    public List<String> sortFilesInDirectory (final String fileType, final String directoryPath) {
         List<String> fileNames = new ArrayList<String>();
         final File filePath = new File(directoryPath);
         if (filePath.exists() && filePath.isDirectory()) {
             fileNames = Arrays.asList(filePath.list());
-            Collections.sort(fileNames, new FileNameDateComparator());
+            Collections.sort(fileNames, new FileNameDateComparator(fileType));
         }
 
         return fileNames;
