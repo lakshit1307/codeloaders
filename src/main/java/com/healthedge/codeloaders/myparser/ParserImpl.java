@@ -37,9 +37,9 @@ public class ParserImpl extends AbstractParser {
                 String delimiterPropName = fileType + MAPPER_DELIMITER_SUFFIX;
                 String delimiter = properties.getProperty(delimiterPropName);
                 String[] fields = read(line, delimiter);
-                result.add(createMapBasedOnColumns(fileType, properties, fields));
+                result.add(createMapBasedOnColumns(fileMetaData, properties, fields));
             } else if (mapperType.equalsIgnoreCase("line")) {
-                result.add(createMapBasedOnLines(fileType, properties, line));
+                result.add(createMapBasedOnLines(fileMetaData, properties, line));
             }
         });
 
@@ -47,8 +47,9 @@ public class ParserImpl extends AbstractParser {
     }
 
 
-    private Map<String, String> createMapBasedOnColumns(String fileType, Properties properties, String[] fields) {
+    private Map<String, String> createMapBasedOnColumns(MyFileMetaData fileMetaData, Properties properties, String[] fields) {
         Map<String, String> map = new HashMap<>();
+        String fileType = fileMetaData.getFileType();
         String propertyPrefix = fileType + ".mapperinfo.";
         for (String key : properties.stringPropertyNames()) {
             if (key.startsWith(propertyPrefix)) {
@@ -59,11 +60,13 @@ public class ParserImpl extends AbstractParser {
             }
         }
         map.put("fileType", fileType);
+        map.put("filetypecd", fileMetaData.getFileTypeCd());
         return map;
     }
 
-    private Map<String, String> createMapBasedOnLines(String fileType, Properties properties, String line) {
+    private Map<String, String> createMapBasedOnLines(MyFileMetaData fileMetaData, Properties properties, String line) {
         Map<String, String> map = new HashMap<>();
+        String fileType = fileMetaData.getFileType();
         String propertyPrefix = fileType + ".mapperinfo.";
         for (String key : properties.stringPropertyNames()) {
             if (key.startsWith(propertyPrefix)) {
@@ -77,6 +80,7 @@ public class ParserImpl extends AbstractParser {
             }
         }
         map.put("fileType", fileType);
+        map.put("filetypecd", fileMetaData.getFileTypeCd());
         return map;
     }
 

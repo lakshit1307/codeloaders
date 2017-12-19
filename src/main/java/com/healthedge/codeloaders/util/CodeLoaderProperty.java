@@ -4,10 +4,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class CodeLoaderProperty {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeLoaderProperty.class);
@@ -18,6 +19,7 @@ public class CodeLoaderProperty {
     public static final String PARSER_CLASS_SUFFIX = "parser.class";
     public static final String TRANSFORMER_CLASS_SUFFIX = ".transformer.class";
     public static final String DAO_CLASS_SUFFIX = ".dao.class";
+    public static final String FILE_TYPE_CD_SUFFIX = ".mapper.filetypecd";
 
     public static final String FILE_TYPE_ORDERING = "filetype.ordering";
 

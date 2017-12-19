@@ -30,7 +30,7 @@ public class ServiceTransformer implements Transformer {
             service.setServiceAlternateDesciption(modifyInputString(item.get("fulldesc"),1000));
             service.setServiceLongDesciption(modifyInputString(item.get("longdesc"),1000));
             service.setServiceShortDesciption(modifyInputString(item.get("shortdesc"),50));
-            service.setServiceTypeCD("cp"); //TODO
+            service.setServiceTypeCD(item.get("filetypecd"));
             result.put(service.getServiceCode(),service);
         });
 
