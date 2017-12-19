@@ -23,7 +23,7 @@ import java.util.Date;
         @Column(name = "VERSION_END"))})
 public class ZipToCarrierLocality extends BaseEntity{
 
-
+    @Id //TO DO: make version plus zipToCarrLocalityId as the primary key
     @NotNull
     @Column(name = "ZIP_TO_CARR_LOCALITY_ID")
     private Long  zipToCarrierLocalityId;
