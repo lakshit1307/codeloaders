@@ -38,5 +38,8 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
     
     @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1", nativeQuery = true)
     List<Service> getServiceCodesByCodeType(String codeType);
+    
+    @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_END=?2", nativeQuery = true)
+    List<Service> getServiceCodesByCodeTypeForVersion(String codeType, Date versionEnd);
  
 }

@@ -58,6 +58,19 @@ public class ParserImplTest {
 
         System.out.println(tranformerResult);
 
+
+        file = new File("src\\test\\resources\\basedata\\ICD10DIAG\\OPTUM_ICD10DIAGNOSIS_2017-10-01.TAB");
+
+        fileMetaData = new MyFileMetaData("ICD10DIAG", file.getAbsolutePath());
+        result = abstractParser.parse(fileMetaData);
+
+        System.out.println(result);
+
+        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
+        tranformerResult = transformer.transform(result);
+
+        System.out.println(tranformerResult);
+
     }
 
 }

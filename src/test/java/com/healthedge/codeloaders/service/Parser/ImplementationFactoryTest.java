@@ -1,5 +1,7 @@
 package com.healthedge.codeloaders.service.Parser;
 
+import com.healthedge.codeloaders.dao.BaseDao;
+import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.service.Transformer.Transformer;
 import com.healthedge.codeloaders.service.Transformer.ZipCodeTransformer;
 import org.junit.Assert;
@@ -24,6 +26,9 @@ public class ImplementationFactoryTest {
     public void getParser() throws Exception {
         Transformer transformer = implementationFactory.getTransformer("zip");
         Assert.assertTrue(transformer instanceof ZipCodeTransformer);
+
+        BaseDao baseDao = implementationFactory.getDao("cpt");
+        Assert.assertTrue(baseDao instanceof ServiceDao);
 
         try {
             implementationFactory.getTransformer("somerandomfileType");
