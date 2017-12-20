@@ -46,7 +46,7 @@ public class InitLoadTracker {
 
         String startFile="";
         final String directoryPath = baseData + File.separator + fileType;
-        final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
+        final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(fileType, directoryPath);
         FileStatus codeFileStatus = dbFileStatus(fileType);
         if(codeFileStatus!=null){
 

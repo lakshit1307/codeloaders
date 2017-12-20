@@ -1,19 +1,14 @@
 package com.healthedge.codeloaders;
 
 import com.healthedge.codeloaders.batch.client.BatchJobController;
-import com.healthedge.codeloaders.repository.ServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import com.healthedge.codeloaders.business.LoadPendingCodes;
-
 
 @SuppressWarnings({"PMD.UseUtilityClass","PMD.LocalVariableCouldBeFinal", "PMD.MethodArgumentCouldBeFinal"})
 @ComponentScan(basePackages = "com.healthedge.*")

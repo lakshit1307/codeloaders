@@ -15,10 +15,16 @@ import java.util.Date;
         @Column(name = "LAST_TX_USER_TXT")),
         @AttributeOverride(name = "txCnt", column =
         @Column(name = "TX_CNT")),
-        @AttributeOverride(name = "version", column =
-        @Column(name = "VERSION")),
+        @AttributeOverride(name = "effectiveEndDate", column =
+        @Column(name = "EFF_END_DT")),
+        @AttributeOverride(name = "effectiveStartDate", column =
+        @Column(name = "EFF_START_DT")),
+        @AttributeOverride(name = "versionStart", column =
+        @Column(name = "VERSION_START")),
         @AttributeOverride(name = "action", column =
-        @Column(name = "ACTION"))})
+        @Column(name = "ACTION")),
+        @AttributeOverride(name = "versionEnd", column =
+        @Column(name = "VERSION_END"))})
 public class Diagnosis extends BaseEntity{
 
     @Id
@@ -46,12 +52,6 @@ public class Diagnosis extends BaseEntity{
 
     @Column(name = "WRK_FLOW_CD")
     private String workFlowCode;
-
-    @Column(name = "EFF_END_DT")
-    private Date effectiveEndDate;
-
-    @Column(name = "EFF_START_DT")
-    private Date effectiveStartDate;
 
     @Column(name = "CAT_NM")
     private String catNM;
@@ -128,22 +128,6 @@ public class Diagnosis extends BaseEntity{
 
     public void setWorkFlowCode(String workFlowCode) {
         this.workFlowCode = workFlowCode;
-    }
-
-    public Date getEffectiveEndDate() {
-        return effectiveEndDate;
-    }
-
-    public void setEffectiveEndDate(Date effectiveEndDate) {
-        this.effectiveEndDate = effectiveEndDate;
-    }
-
-    public Date getEffectiveStartDate() {
-        return effectiveStartDate;
-    }
-
-    public void setEffectiveStartDate(Date effectiveStartDate) {
-        this.effectiveStartDate = effectiveStartDate;
     }
 
 }

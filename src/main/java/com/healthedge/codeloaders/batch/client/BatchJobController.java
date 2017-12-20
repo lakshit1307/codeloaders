@@ -68,8 +68,7 @@ public class BatchJobController {
 		return baseResponse;
 	}
 
-	public String runPersistence() throws JobExecutionAlreadyRunningException, JobRestartException,
-			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
+	public String runPersistence() throws Exception {
 		stagingLoadProcess.startProcess();
 		for (String fileType : getFileTypes()) {
 			runClientPersitentJobForFileType(fileType);
