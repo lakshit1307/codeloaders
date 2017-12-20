@@ -1,29 +1,50 @@
 package com.healthedge.codeloaders.dao;
 
 import com.healthedge.codeloaders.entity.BaseEntity;
+import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.entity.ZipCode;
+import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import com.healthedge.codeloaders.repository.ZipCodeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class ZipCodeDao {
+public class ZipCodeDao implements BaseDao{
 
     @Autowired
     private ZipCodeRepository zipCodeRepository;
 
+    @Autowired
+    private FileStatusDao fileStatusDao;
+
     private static final Logger LOGGER= LoggerFactory.getLogger("ZipCodeDao is initalized");
 
-    public void save(ZipCode zipCode){
-        zipCodeRepository.save(zipCode);
-    }
-    public void saveAll(List<ZipCode> zipCodeList){
-        for (ZipCode zipCode: zipCodeList){
-            zipCodeRepository.save(zipCode);
+
+    @Override
+    public Map<String, ? extends BaseEntity> getLatestVersion(MyFileMetaData fileMetaData) {
+        FileStatus fileStatus=fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
+        Map<String, ZipCode> map = new HashMap<>();
+        for (ZipCode zipCode : zipCodeRepository.getZipCodesForVersion(fileStatus.getVersion())) {
+            map.put(zipCode.getZipCode(), zipCode);
         }
+        return map;
+    }
+
+    @Override
+    public <T extends BaseEntity> boolean save(T entity) {
+        zipCodeRepository.save((ZipCode)entity);
+        return true;
+    }
+
+    @Override
+    public <T extends BaseEntity> boolean save(List<T> entity) {
+        zipCodeRepository.save((List<ZipCode>)entity);
+        return false;
     }
 }
