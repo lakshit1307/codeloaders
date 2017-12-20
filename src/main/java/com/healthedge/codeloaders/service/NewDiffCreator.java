@@ -111,6 +111,9 @@ public class NewDiffCreator {
 						pojo2.setVersionEnd(fileMetaData.getFileVersion());
 						append.add(pojo2);
 						codes.add(pojo1.getCode());
+					} else {
+						//This setting is done mainly to support effective start in memory date if no change in the code
+						pojo2.setEffectiveStartDate(pojo1.getEffectiveStartDate());
 					}
 					previousFileCodes.remove(code);
 
