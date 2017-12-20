@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -47,7 +48,7 @@ public class InitLoadTracker {
         String startFile="";
         final String directoryPath = baseData + File.separator + fileType;
         final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(fileType, directoryPath);
-        FileStatus codeFileStatus = dbFileStatus(fileType);
+        FileStatus codeFileStatus = dbFileStatus(fileType.toLowerCase(Locale.getDefault()));
         if(codeFileStatus!=null){
 
             if (codeFileStatus.getStatus().equals(FileStatus.FAILURE)){

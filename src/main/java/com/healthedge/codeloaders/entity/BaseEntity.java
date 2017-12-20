@@ -1,6 +1,7 @@
 package com.healthedge.codeloaders.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -15,10 +16,12 @@ public class BaseEntity implements Serializable {
 
 	private Long txCnt;
 
+	@Id
 	private Long versionStart;
 
 	private String action;
 
+	@Id
 	private Long versionEnd;
 
 	private Date effectiveStartDate;

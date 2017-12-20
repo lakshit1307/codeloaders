@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "PROCEDURE")
+@IdClass(BaseEntity.class)
 @AttributeOverrides({
         @AttributeOverride(name = "lastTransactionDate", column =
         @Column(name = "LAST_TX_DT")),

@@ -39,7 +39,11 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
     @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1", nativeQuery = true)
     List<Service> getServiceCodesByCodeType(String codeType);
     
-    @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_END=?2 AND ACTION!='TERMINATE'", nativeQuery = true)
+    @Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_END=?2 AND ACTION!=?3", nativeQuery = true)
     List<Service> getServiceCodesByCodeTypeForVersionWithoutAction(String codeType, Long versionEnd, String action);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value="UPDATE T_SERVICE SET VERSION_END = ?1 WHERE VERSION_END = ?2 AND SERV_CD NOT IN (?3)", nativeQuery = true)
+    void updateLatestVersionForProcessedFile (Long currentVersion, Long previousVersion, List<String> codes);
  
 }
