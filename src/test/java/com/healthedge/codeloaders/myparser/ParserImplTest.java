@@ -54,54 +54,5 @@ public class ParserImplTest {
             tranformerResult = transformer.transform(fileLoadResult);
             it.remove();
         }
-
-
-
-
-
-
-//        File file = new File("src/test/resources/basedata/CPT/OPTUM_CPT_2016-01-01.txt");
-//        MyFileMetaData fileMetaData = new MyFileMetaData("CPT", file.getAbsolutePath());
-//        List<Map<String, String>> result = abstractParser.parse(fileMetaData);
-//        System.out.println(result);
-//        Transformer transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-//        Map<String, BaseEntity> tranformerResult = transformer.transform(result);
-//        System.out.println(tranformerResult);
-//
-//        file = new File("src/test/resources/basedata/ICD10PROC/OPTUM_ICD10PCS_BASE_2018-01-01.tab");
-//        fileMetaData = new MyFileMetaData("icd10proc", file.getAbsolutePath());
-//        result = abstractParser.parse(fileMetaData);
-//        System.out.println(result);
-//        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-//        tranformerResult = transformer.transform(result);
-//
-//        System.out.println(tranformerResult);
-//
-//
-//        file = new File("src/test/resources/basedata/ZipToCarrierLocality/OPTUM_ZipToCarrierLocality_2003-01-01.txt");
-//
-//        fileMetaData = new MyFileMetaData("ZIP", file.getAbsolutePath());
-//        result = abstractParser.parse(fileMetaData);
-//
-//        System.out.println(result);
-//
-//        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-//        tranformerResult = transformer.transform(result);
-//
-//        System.out.println(tranformerResult);
-//
-//
-//        file = new File("src\\test\\resources\\basedata\\ICD10DIAG\\OPTUM_ICD10DIAGNOSIS_2017-10-01.TAB");
-//
-//        fileMetaData = new MyFileMetaData("ICD10DIAG", file.getAbsolutePath());
-//        result = abstractParser.parse(fileMetaData);
-//
-//        System.out.println(result);
-//
-//        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-//        tranformerResult = transformer.transform(result);
-//
-//        System.out.println(tranformerResult);
-
     }
 }
