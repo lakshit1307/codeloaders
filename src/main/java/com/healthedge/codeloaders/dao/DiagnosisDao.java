@@ -35,4 +35,9 @@ public class DiagnosisDao implements BaseDao {
 		diagnosisRepository.save((List<Diagnosis>) entity);
 		return false;
 	}
+
+	@Override
+	public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
+
+	}
 }

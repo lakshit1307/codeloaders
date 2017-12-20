@@ -50,14 +50,32 @@ public class NewDiffCreator {
 	// createDiff(previous, current, new Date());
 	// }
 
+
+	public Long getCurrVersion() {
+		return currVersion;
+	}
+
+	public Long getPrevVersion() {
+		return prevVersion;
+	}
+
+	public List<String> getCodes() {
+		return codes;
+	}
+
 	public <T extends BaseEntity, D extends BaseDao> Map<String, List<T>> configureDiff(Map<String, T> currentFileCodes,
-			MyFileMetaData fileMetaData) throws Exception {
+																						MyFileMetaData fileMetaData) throws Exception {
 		if (CollectionUtils.isEmpty(previous)) {
 			FileStatus fileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
-			previous = implementationFactory.getDao(fileMetaData.getFileType())
-					.getLatestVersionWithoutTerminate(fileMetaData, fileStatus.getVersion());
-			prevVersion = fileStatus.getVersion();
+			if (fileStatus != null) {
+				previous = implementationFactory.getDao(fileMetaData.getFileType())
+						.getLatestVersionWithoutTerminate(fileMetaData, fileStatus.getVersion());
+				prevVersion = fileStatus.getVersion();
+			}
+		} else {
+			prevVersion = currVersion;
 		}
+
 		currVersion = fileMetaData.getFileVersion();
 		return createDiff(previous, currentFileCodes, fileMetaData);
 
@@ -88,13 +106,17 @@ public class NewDiffCreator {
 					final T pojo1 = previousFileCodes.get(code);
 					if (!pojo1.equals(pojo2)) {
 						pojo2.setAction(CodeLoaderConstants.APPEND_ACTION);
+						pojo2.setEffectiveStartDate(pojo1.getEffectiveStartDate());
 						pojo2.setVersionStart(fileMetaData.getFileVersion());
 						pojo2.setVersionEnd(fileMetaData.getFileVersion());
 						append.add(pojo2);
 						codes.add(pojo1.getCode());
+					} else {
+						//This setting is done mainly to support effective start in memory date if no change in the code
+						pojo2.setEffectiveStartDate(pojo1.getEffectiveStartDate());
 					}
 					previousFileCodes.remove(code);
-					
+
 				} else {
 					final T pojo = currentFileCodes.get(code);
 					pojo.setAction(CodeLoaderConstants.CREATE_ACTION);
@@ -124,6 +146,9 @@ public class NewDiffCreator {
 
 	public void flushPreviousData() {
 		previous.clear();
+		currVersion = null;
+		prevVersion = null;
+		codes.clear();
 	}
 
 	public <T extends BaseEntity> void setPreviousData(Map<String, T> records, Class<T> entityClass) {

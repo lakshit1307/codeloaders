@@ -8,6 +8,7 @@ import java.util.Date;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_ZIP_TO_CARRIER_LOCALITY")
+@IdClass(BaseEntity.class)
 @AttributeOverrides({
         @AttributeOverride(name = "lastTransactionDate", column =
         @Column(name = "LAST_TX_DT")),

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_SERVICE")
+@IdClass(BaseEntity.class)
 @AttributeOverrides({
 		@AttributeOverride(name = "lastTransactionDate", column =
 		@Column(name = "LAST_TX_DT")),

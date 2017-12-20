@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.batch;
 
+import com.healthedge.codeloaders.dao.BaseDao;
 import com.healthedge.codeloaders.dao.ClientDao;
 import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.entity.FileStatus;
@@ -10,6 +11,8 @@ import com.healthedge.codeloaders.service.FileTypeOrdering;
 import com.healthedge.codeloaders.service.InitLoadTracker;
 import com.healthedge.codeloaders.service.NewDiffCreator;
 
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +57,9 @@ public class StagingLoadProcess {
 	@Autowired
 	private FileTypeOrdering fileTypeOrdering;
 
+	@Autowired
+	private ImplementationFactory implementationFactory;
+
 	// private FileStatus fileStatus=new FileStatus();
 
 	public void startProcess() throws Exception {
@@ -68,7 +74,11 @@ public class StagingLoadProcess {
 				for (int i = sortedFileNames.indexOf(startFile); i < sortedFileNames.size(); ++i) {
 
 					final String filePath = directoryPath + File.separator + sortedFileNames.get(i);
+
+					MyFileMetaData fileMetaData = new MyFileMetaData(fileType, filePath);
+
 					CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
+					CodeLoaderContext.getInstance().setFileMetaData(fileMetaData);
 
 					JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath)
 							.addLong("time", System.currentTimeMillis()).toJobParameters();
@@ -77,7 +87,6 @@ public class StagingLoadProcess {
 					long startTime = System.currentTimeMillis();
 					long endTime = 0;
 					long tnxCnt = 0;
-					MyFileMetaData fileMetaData = new MyFileMetaData(fileType, filePath);
 					try {
 						LOGGER.info("Processing for file [{}] started at [{}]", filePath, new Date());
 
@@ -90,6 +99,7 @@ public class StagingLoadProcess {
 						LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
 						LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
 						this.updateFileStatus(tnxCnt, FileStatus.PERSISTED);
+						this.updateLatestVersion(fileMetaData);
 					} catch (final Exception e) {
 						endTime = System.currentTimeMillis();
 						LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
@@ -103,6 +113,16 @@ public class StagingLoadProcess {
 				LOGGER.info(fileType + " is upto date in CLOADER DB");
 			}
 
+		}
+	}
+
+	private void updateLatestVersion (MyFileMetaData fileMetaData) throws Exception {
+		BaseDao baseDao = implementationFactory.getDao(fileMetaData.getFileType());
+		Long currentVersion = diffCreator.getCurrVersion();
+		Long previousVersion = diffCreator.getPrevVersion();
+		List<String> codes = diffCreator.getCodes();
+		if (previousVersion != null && CollectionUtils.isNotEmpty(codes)) {
+			baseDao.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
 		}
 	}
 

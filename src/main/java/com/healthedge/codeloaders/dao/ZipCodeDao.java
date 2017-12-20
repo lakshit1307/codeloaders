@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.dao;
 
+import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.entity.ZipCode;
@@ -20,31 +21,35 @@ public class ZipCodeDao implements BaseDao{
     @Autowired
     private ZipCodeRepository zipCodeRepository;
 
-    @Autowired
-    private FileStatusDao fileStatusDao;
 
     private static final Logger LOGGER= LoggerFactory.getLogger("ZipCodeDao is initalized");
 
 
     @Override
-    public Map<String, ? extends BaseEntity> getLatestVersion(MyFileMetaData fileMetaData) {
-        FileStatus fileStatus=fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
-        Map<String, ZipCode> map = new HashMap<>();
-        for (ZipCode zipCode : zipCodeRepository.getZipCodesForVersion(fileStatus.getVersion())) {
-            map.put(zipCode.getZipCode(), zipCode);
+    public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData, Long prevVersion) {
+        Map<String,ZipCode> map=new HashMap<>();
+        for(ZipCode zipCode: zipCodeRepository.getZipCodesForVersionWithoutAction(fileMetaData.getFileType(),
+                prevVersion, CodeLoaderConstants.TERMINATE_ACTION)){
+            map.put(zipCode.getZipCode(),zipCode);
         }
+
         return map;
     }
 
     @Override
     public <T extends BaseEntity> boolean save(T entity) {
-        zipCodeRepository.save((ZipCode)entity);
+        zipCodeRepository.save((ZipCode) entity);
         return true;
     }
 
     @Override
     public <T extends BaseEntity> boolean save(List<T> entity) {
-        zipCodeRepository.save((List<ZipCode>)entity);
-        return false;
+        zipCodeRepository.save( (ZipCode) entity);
+        return true;
+    }
+
+    @Override
+    public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
+
     }
 }

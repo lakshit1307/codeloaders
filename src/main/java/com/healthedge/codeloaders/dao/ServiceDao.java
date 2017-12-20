@@ -96,4 +96,10 @@ public class ServiceDao implements BaseDao {
 		serviceRepository.save((List<Service>) entity);
 		return false;
 	}
+
+	@Override
+	@Transactional
+	public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
+		serviceRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
+	}
 }
