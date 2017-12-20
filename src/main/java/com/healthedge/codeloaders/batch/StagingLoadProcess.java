@@ -76,11 +76,12 @@ public class StagingLoadProcess {
 					// Initiate jobs for each file
 					long startTime = System.currentTimeMillis();
 					long endTime = 0;
+					long tnxCnt = 0;
 					MyFileMetaData fileMetaData = new MyFileMetaData(fileType, filePath);
 					try {
 						LOGGER.info("Processing for file [{}] started at [{}]", filePath, new Date());
 
-						this.saveFileStatus(fileMetaData, FileStatus.IN_PROGRESS);
+						tnxCnt = this.saveFileStatus(fileMetaData, FileStatus.IN_PROGRESS);
 
 						LOGGER.info("Starting batch job for file [{}]", filePath);
 						JobExecution execution = jobLauncher.run(job, jobParameters);
@@ -88,14 +89,14 @@ public class StagingLoadProcess {
 						endTime = System.currentTimeMillis();
 						LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
 						LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
-						this.updateFileStatus(fileMetaData, FileStatus.PERSISTED);
+						this.updateFileStatus(tnxCnt, FileStatus.PERSISTED);
 					} catch (final Exception e) {
 						endTime = System.currentTimeMillis();
 						LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
 						LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
 						LOGGER.error("Batch job failed for file [{}] with exception", filePath,
 								ExceptionUtils.getStackTrace(e));
-						this.updateFileStatus(fileMetaData, FileStatus.FAILURE);
+						this.updateFileStatus(tnxCnt, FileStatus.FAILURE);
 					}
 				}
 			} else {
@@ -105,38 +106,24 @@ public class StagingLoadProcess {
 		}
 	}
 
-	// private void saveFileStatus (String fileType, String fileName, String status)
-	// {
-	// fileStatus.setCodeType(fileType);
-	// fileStatus.setFileName(fileName);
-	// fileStatus.setStatus(status);
-	// fileStatusDao.save(fileStatus);
-	// }
-
-	private void saveFileStatus(MyFileMetaData fileMetaData, String status) {
+	private long saveFileStatus(MyFileMetaData fileMetaData, String status) {
+		Date currDate = new Date();
+		long tnxCnt = currDate.getTime();
 		FileStatus fileStatus = new FileStatus();
 		fileStatus.setFileName(fileMetaData.getBaseFileName());
 		fileStatus.setFileType(fileMetaData.getFileType());
 		fileStatus.setStatus(status);
-		Date currDate = new Date();
-		fileStatus.setTxCnt(currDate.getTime());
+		fileStatus.setTxCnt(tnxCnt);
 		fileStatus.setTxDate(currDate);
 		fileStatus.setVersion(fileMetaData.getFileVersion());
 		fileStatusDao.save(fileStatus);
+		return tnxCnt;
 	}
 
-	// private void updateFileStatus (String fileType, String fileName, String
-	// status) {
-	// fileStatus.setCodeType(fileType);
-	// fileStatus.setFileName(fileName);
-	// fileStatus.setStatus(status);
-	// fileStatusDao.updateStatus(fileStatus);
-	// }
 
-	private void updateFileStatus(MyFileMetaData fileMetaData, String status) {
+	private void updateFileStatus(Long txCnt, String status) {
 		FileStatus fileStatus = new FileStatus();
-		fileStatus.setVersion(fileMetaData.getFileVersion());
-		fileStatus.setFileName(fileMetaData.getBaseFileName());
+		fileStatus.setTxCnt(txCnt);
 		fileStatus.setStatus(status);
 		fileStatusDao.updateStatus(fileStatus);
 	}
