@@ -13,6 +13,7 @@ import com.healthedge.codeloaders.service.NewDiffCreator;
 
 import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class StagingLoadProcess {
 			diffCreator.flushPreviousData();
 			final String directoryPath = baseData + File.separator + fileType;
 			String startFile = initLoadTracker.startFileProcessingOf(fileType);
-			if (!startFile.equals(initLoadTracker.EOF)) {
+			if (!startFile.equals(initLoadTracker.EOF) && StringUtils.isNotBlank(startFile)) {
 
 				final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(fileType, directoryPath);
 				for (int i = sortedFileNames.indexOf(startFile); i < sortedFileNames.size(); ++i) {
