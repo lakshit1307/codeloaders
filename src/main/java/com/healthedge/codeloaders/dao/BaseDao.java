@@ -13,4 +13,4 @@ public interface BaseDao {
 	<T extends BaseEntity> boolean save(T entity);
 
 	<T extends BaseEntity> boolean save(List<T> entity);
-}
+	}
