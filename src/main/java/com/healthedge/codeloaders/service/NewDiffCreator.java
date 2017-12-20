@@ -15,7 +15,9 @@ import org.springframework.util.CollectionUtils;
 
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.dao.BaseDao;
+import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.entity.BaseEntity;
+import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 
@@ -30,9 +32,12 @@ public class NewDiffCreator {
 
 	private Map previous = new ConcurrentHashMap<>();
 	
-	private String currVersion;
+	private Long currVersion;
 	
-	private String prevVersion;
+	private Long prevVersion;
+	
+	@Autowired
+	private FileStatusDao fileStatusDao;
 
 //	public void initDiff(Map current, MyFileMetaData fileMetaData) throws SQLException, ClassNotFoundException {
 //		Class entityClass = Class.forName("com.healthedge.codeloaders.entity." + fileMetaData.getTableName());
@@ -43,8 +48,10 @@ public class NewDiffCreator {
 	public <T extends BaseEntity, D extends BaseDao> Map<String, List<T>> configureDiff(Map<String, T> currentFileCodes,
 			MyFileMetaData fileMetaData) throws Exception {
 		if (CollectionUtils.isEmpty(previous)) {
-			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersionWithoutTerminate(fileMetaData);
+			FileStatus fileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
+			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersionWithoutTerminate(fileMetaData,fileStatus.getVersion());
 		}
+		currVersion=fileMetaData.getFileVersion();
 		return createDiff(previous, currentFileCodes, fileMetaData);
 
 	}
@@ -116,4 +123,6 @@ public class NewDiffCreator {
 		records.clear();
 		records.putAll(records);
 	}
+	
+	
 }
