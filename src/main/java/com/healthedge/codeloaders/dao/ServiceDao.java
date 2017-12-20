@@ -78,7 +78,7 @@ public class ServiceDao implements BaseDao {
 	public Map<String, ? extends BaseEntity> getLatestVersion(MyFileMetaData fileMetaData) {
 		FileStatus fileStatus=fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
 		Map<String, Service> map = new HashMap<String, Service>();
-		for (Service service : serviceRepository.getServiceCodesByCodeTypeForVersion(fileMetaData.getFileTypeCd(),fileMetaData.getFileVersion())) {
+		for (Service service : serviceRepository.getServiceCodesByCodeTypeForVersion(fileMetaData.getFileTypeCd(),fileStatus.getVersion())) {
 			map.put(service.getServiceCode(), service);
 		}
 		return map;
