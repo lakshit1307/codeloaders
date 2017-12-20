@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,42 +30,29 @@ public class ParserImplTest {
 
     @Test
     public void parse() throws Exception {
-        File file = new File("src/test/resources/basedata/CPT/OPTUM_CPT_2016-01-01.txt");
+        File readFile;
+        MyFileMetaData fileMetaData;
+        Transformer transformer;
+        List<Map<String, String>> fileLoadResult;
+        Map<String, BaseEntity> tranformerResult;
 
-        MyFileMetaData fileMetaData = new MyFileMetaData("CPT", file.getAbsolutePath());
-        List<Map<String, String>> result = abstractParser.parse(fileMetaData);
+        HashMap<String,String> fileInfoList = new HashMap<String, String>();
+        fileInfoList.put("CPT","src/test/resources/basedata/CPT/OPTUM_CPT_2016-01-01.txt" );
+        fileInfoList.put("icd10proc","src/test/resources/basedata/ICD10PROC/OPTUM_ICD10PCS_BASE_2018-01-01.tab" );
+        fileInfoList.put("ZIP","src/test/resources/basedata/ZipToCarrierLocality/OPTUM_ZipToCarrierLocality_2003-01-01.txt" );
+        fileInfoList.put("ICD10DIAG","src\\test\\resources\\basedata\\ICD10DIAG\\OPTUM_ICD10DIAGNOSIS_2017-10-01.TAB" );
 
-        System.out.println(result);
-        Transformer transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-        Map<String, BaseEntity> tranformerResult = transformer.transform(result);
-
-        System.out.println(tranformerResult);
-
-        file = new File("src/test/resources/basedata/ZipToCarrierLocality/OPTUM_ZipToCarrierLocality_2003-01-01.txt");
-
-        fileMetaData = new MyFileMetaData("ZIP", file.getAbsolutePath());
-        result = abstractParser.parse(fileMetaData);
-
-        System.out.println(result);
-
-        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-        tranformerResult = transformer.transform(result);
-
-        System.out.println(tranformerResult);
-
-
-        file = new File("src\\test\\resources\\basedata\\ICD10DIAG\\OPTUM_ICD10DIAGNOSIS_2017-10-01.TAB");
-
-        fileMetaData = new MyFileMetaData("ICD10DIAG", file.getAbsolutePath());
-        result = abstractParser.parse(fileMetaData);
-
-        System.out.println(result);
-
-        transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
-        tranformerResult = transformer.transform(result);
-
-        System.out.println(tranformerResult);
-
+        // Iterate the files
+        Iterator it = fileInfoList.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry item = (Map.Entry)it.next();
+            readFile = new File(item.getValue().toString());
+            fileMetaData = new MyFileMetaData( item.getKey().toString(), readFile.getAbsolutePath());
+            fileLoadResult = abstractParser.parse(fileMetaData);
+            System.out.println(fileLoadResult);
+            transformer = implementationFactory.getTransformer(fileMetaData.getFileType());
+            tranformerResult = transformer.transform(fileLoadResult);
+            it.remove();
+        }
     }
-
 }

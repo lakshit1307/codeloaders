@@ -64,7 +64,7 @@ public class StagingLoadProcess {
 			String startFile = initLoadTracker.startFileProcessingOf(fileType);
 			if (!startFile.equals(initLoadTracker.EOF)) {
 
-				final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
+				final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(fileType, directoryPath);
 				for (int i = sortedFileNames.indexOf(startFile); i < sortedFileNames.size(); ++i) {
 
 					final String filePath = directoryPath + File.separator + sortedFileNames.get(i);
