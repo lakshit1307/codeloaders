@@ -33,8 +33,8 @@ public class FileStatusDao {
         fileStatusRepository.updateStatusByFileNameAndCodeType(fileStatus.getStatus(),fileStatus.getVersion(),fileStatus.getFileType(), FileStatus.PERSISTED);
     }
 
-    public FileStatus getFileTypeDetails(String fileType) {
-        FileStatus fileStatus=fileStatusRepository.getFileTypeDetails(fileType);
+    public FileStatus getFileTypeDetailsForLatestVersion(String fileType) {
+        FileStatus fileStatus=fileStatusRepository.getFileTypeDetailsForLatestVersion(fileType);
         return fileStatus;
     }
 

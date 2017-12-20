@@ -28,9 +28,6 @@ public class NewDiffCreator {
 	@Autowired
 	private ImplementationFactory implementationFactory;
 
-	@Autowired
-	BaseDao baseDao;
-
 	private Map previous = new ConcurrentHashMap<>();
 
 //	public void initDiff(Map current, MyFileMetaData fileMetaData) throws SQLException, ClassNotFoundException {
@@ -42,6 +39,8 @@ public class NewDiffCreator {
 	public <T extends BaseEntity, D extends BaseDao> Map<String, List<T>> configureDiff(Map<String, T> currentFileCodes,
 			MyFileMetaData fileMetaData) throws Exception {
 		if (CollectionUtils.isEmpty(previous)) {
+//			getprevlatest(fileMetaData.getFileVersion())
+//			previous=getfrom
 			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersion(fileMetaData);
 		}
 		return createDiff(previous, currentFileCodes, fileMetaData);

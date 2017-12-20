@@ -37,7 +37,7 @@ public class InitLoadTracker {
     public FileStatus dbFileStatus(String fileType) {
 
         FileStatus codeFileStatus;
-        codeFileStatus = fileStatusDao.getFileTypeDetails(fileType);
+        codeFileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileType);
         return codeFileStatus;
 
     }
