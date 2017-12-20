@@ -1,6 +1,8 @@
 package com.healthedge.codeloaders.dao;
 
+import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
+import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import com.healthedge.codeloaders.repository.ServiceRepository;
@@ -23,6 +25,9 @@ public class ServiceDao implements BaseDao {
 
 	@Autowired
 	private ServiceRepository serviceRepository;
+
+	@Autowired
+	private FileStatusDao fileStatusDao;
 
 	public ServiceDao() {
 		LOGGER.info("ServieDao initialized");
@@ -71,9 +76,11 @@ public class ServiceDao implements BaseDao {
 	}
 
 	@Override
-	public Map<String, ? extends BaseEntity> getLatestVersion(MyFileMetaData fileMetaData) {
+	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData) {
+		FileStatus fileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
 		Map<String, Service> map = new HashMap<String, Service>();
-		for (Service service : serviceRepository.getServiceCodesByCodeType(fileMetaData.getFileType())) {
+		for (Service service : serviceRepository.getServiceCodesByCodeTypeForVersionWithoutAction(
+				fileMetaData.getFileTypeCd(), fileStatus.getVersion(), CodeLoaderConstants.TERMINATE_ACTION)) {
 			map.put(service.getServiceCode(), service);
 		}
 		return map;

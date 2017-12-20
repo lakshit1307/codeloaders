@@ -16,6 +16,6 @@ public interface FileStatusRepository extends JpaRepository<FileStatus, String> 
     @Query(value = "UPDATE CODE_FILE_STATUS SET STATUS=?1 WHERE VERSION=?2 AND FILE_TYPE=?3 AND STATUS=?4",nativeQuery = true)
 	void updateStatusByFileNameAndCodeType(String status, Long fileVersion, String fileType, String currStatus);
 
-    @Query(value ="SELECT * FROM CODE_FILE_STATUS WHERE FILE_TYPE=?1 AND TX_DATE=(SELECT MAX(TX_DATE) FROM CODE_FILE_STATUS)" ,nativeQuery = true)
-     FileStatus getFileTypeDetails(String fileType);
+    @Query(value ="SELECT * FROM CODE_FILE_STATUS WHERE FILE_TYPE=?1 AND TX_DATE=(SELECT MAX(TX_DATE) FROM CODE_FILE_STATUS WHERE FILE_TYPE=?1 AND STATUS=?2)" ,nativeQuery = true)
+     FileStatus getFileTypeDetailsForLatestVersion(String fileType, String status);
 }

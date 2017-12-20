@@ -8,9 +8,9 @@ import com.healthedge.codeloaders.myparser.MyFileMetaData;
 
 public interface BaseDao {
 
-	Map<String,? extends BaseEntity> getLatestVersion(MyFileMetaData fileMetaData);
+	Map<String,? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData);
 	
 	<T extends BaseEntity> boolean save(T entity);
 
 	<T extends BaseEntity> boolean save(List<T> entity);
-}
+	}
