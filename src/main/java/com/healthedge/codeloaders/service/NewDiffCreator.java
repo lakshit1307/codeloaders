@@ -29,6 +29,10 @@ public class NewDiffCreator {
 	private ImplementationFactory implementationFactory;
 
 	private Map previous = new ConcurrentHashMap<>();
+	
+	private String currVersion;
+	
+	private String prevVersion;
 
 //	public void initDiff(Map current, MyFileMetaData fileMetaData) throws SQLException, ClassNotFoundException {
 //		Class entityClass = Class.forName("com.healthedge.codeloaders.entity." + fileMetaData.getTableName());
@@ -39,9 +43,7 @@ public class NewDiffCreator {
 	public <T extends BaseEntity, D extends BaseDao> Map<String, List<T>> configureDiff(Map<String, T> currentFileCodes,
 			MyFileMetaData fileMetaData) throws Exception {
 		if (CollectionUtils.isEmpty(previous)) {
-//			getprevlatest(fileMetaData.getFileVersion())
-//			previous=getfrom
-			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersion(fileMetaData);
+			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersionWithoutTerminate(fileMetaData);
 		}
 		return createDiff(previous, currentFileCodes, fileMetaData);
 

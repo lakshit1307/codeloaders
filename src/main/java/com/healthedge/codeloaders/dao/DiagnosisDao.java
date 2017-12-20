@@ -20,7 +20,7 @@ public class DiagnosisDao implements BaseDao {
 
 
     @Override
-    public Map<String, ? extends BaseEntity> getLatestVersion(MyFileMetaData fileMetaData) {
+    public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData) {
         return new HashMap<String, Diagnosis>();
     }
 
