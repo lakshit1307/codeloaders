@@ -33,6 +33,7 @@ public class FileStatus implements Serializable {
 	@Column(name = "TX_DATE")
 	private Date txDate;
 
+	@Id
 	@Column(name = "TX_CNT")
 	private Long txCnt;
 

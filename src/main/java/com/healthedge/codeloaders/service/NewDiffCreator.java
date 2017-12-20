@@ -31,34 +31,40 @@ public class NewDiffCreator {
 	private ImplementationFactory implementationFactory;
 
 	private Map previous = new ConcurrentHashMap<>();
-	
-	private Long currVersion;
-	
-	private Long prevVersion;
-	
+
+	private Long currVersion = null;
+
+	private Long prevVersion = null;
+
 	@Autowired
 	private FileStatusDao fileStatusDao;
+	
+	List<String> codes=new ArrayList<String>();
 
-//	public void initDiff(Map current, MyFileMetaData fileMetaData) throws SQLException, ClassNotFoundException {
-//		Class entityClass = Class.forName("com.healthedge.codeloaders.entity." + fileMetaData.getTableName());
-//		Class daoClass = Class.forName("com.healthedge.codeloaders.dao." + fileMetaData.getTableName() + "Dao");
-//		createDiff(previous, current, new Date());
-//	}
+	// public void initDiff(Map current, MyFileMetaData fileMetaData) throws
+	// SQLException, ClassNotFoundException {
+	// Class entityClass = Class.forName("com.healthedge.codeloaders.entity." +
+	// fileMetaData.getTableName());
+	// Class daoClass = Class.forName("com.healthedge.codeloaders.dao." +
+	// fileMetaData.getTableName() + "Dao");
+	// createDiff(previous, current, new Date());
+	// }
 
 	public <T extends BaseEntity, D extends BaseDao> Map<String, List<T>> configureDiff(Map<String, T> currentFileCodes,
 			MyFileMetaData fileMetaData) throws Exception {
 		if (CollectionUtils.isEmpty(previous)) {
 			FileStatus fileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
-			previous = implementationFactory.getDao(fileMetaData.getFileType()).getLatestVersionWithoutTerminate(fileMetaData,fileStatus.getVersion());
+			previous = implementationFactory.getDao(fileMetaData.getFileType())
+					.getLatestVersionWithoutTerminate(fileMetaData, fileStatus.getVersion());
+			prevVersion = fileStatus.getVersion();
 		}
-		currVersion=fileMetaData.getFileVersion();
+		currVersion = fileMetaData.getFileVersion();
 		return createDiff(previous, currentFileCodes, fileMetaData);
 
 	}
 
 	public <T extends BaseEntity> Map<String, List<T>> createDiff(Map<String, T> previousFileCodes,
 			Map<String, T> currentFileCodes, MyFileMetaData fileMetaData) {
-
 		final List<T> create = new ArrayList<T>();
 		final List<T> append = new ArrayList<T>();
 		final List<T> terminate = new ArrayList<T>();
@@ -85,8 +91,10 @@ public class NewDiffCreator {
 						pojo2.setVersionStart(fileMetaData.getFileVersion());
 						pojo2.setVersionEnd(fileMetaData.getFileVersion());
 						append.add(pojo2);
+						codes.add(pojo1.getCode());
 					}
 					previousFileCodes.remove(code);
+					
 				} else {
 					final T pojo = currentFileCodes.get(code);
 					pojo.setAction(CodeLoaderConstants.CREATE_ACTION);
@@ -102,7 +110,7 @@ public class NewDiffCreator {
 				pojo.setEffectiveEndDate(fileMetaData.getFileDate().toDate());
 				pojo.setVersionEnd(fileMetaData.getFileVersion());
 				terminate.add(pojo);
-
+				codes.add(pojo.getCode());
 			}
 			previousFileCodes.clear();
 			previousFileCodes.putAll(currentFileCodes);
@@ -123,6 +131,5 @@ public class NewDiffCreator {
 		records.clear();
 		records.putAll(records);
 	}
-	
-	
+
 }
