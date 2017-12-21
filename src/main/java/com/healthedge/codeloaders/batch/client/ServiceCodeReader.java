@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
+import com.healthedge.codeloaders.dao.ClientBaseDao;
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -23,8 +25,11 @@ import com.healthedge.codeloaders.service.ClientConnectionService;
 @StepScope
 public class ServiceCodeReader implements ItemReader<Service> {
 
-	@Value("#{jobParameters['filePath']}")
+	@Value("#{jobParameters['fileTypeCd']}")
 	String codeType;
+
+	@Value("#{jobParameters['fileType']}")
+	String fileType;
 
 	private EntityManager entityManager;
 
@@ -45,6 +50,9 @@ public class ServiceCodeReader implements ItemReader<Service> {
 
 	@Value("#{stepExecutionContext[tenant_environment]}")
 	TenantEnv tenantEnv;
+
+	@Autowired
+	private ImplementationFactory implementationFactory;
 
 	// public ServiceCodeReader() {
 	// this.services = serviceDao.getServiceCodesByCodeType(codeType);
