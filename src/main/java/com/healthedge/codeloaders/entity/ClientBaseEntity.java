@@ -3,10 +3,11 @@ package com.healthedge.codeloaders.entity;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-public class ClientBaseEntity {
+public class ClientBaseEntity implements Serializable {
 
     private Date lastTransactionDate;
     private String lastTransactionUserText;

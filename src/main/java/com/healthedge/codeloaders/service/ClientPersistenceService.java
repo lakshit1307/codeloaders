@@ -73,7 +73,7 @@ public class ClientPersistenceService {
 				clientService.setServiceShortDesciption(service.getServiceShortDesciption());
 				clientService.setServiceTypeCode(service.getServiceTypeCD());
 				clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
-				clientService.setTransactionCount(service.getTxCnt());
+				clientService.setTxCnt(service.getTxCnt());
 				clientService.setWorkFlowCode(service.getWorkFlowCode());
 				clientConnectionService.saveToClient(clientService, entityManagerFactory);
 			}
@@ -97,7 +97,7 @@ public class ClientPersistenceService {
 		clientService.setServiceShortDesciption(service.getServiceShortDesciption());
 		clientService.setServiceTypeCode(service.getServiceTypeCD());
 		clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
-		clientService.setTransactionCount(service.getTxCnt());
+		clientService.setTxCnt(service.getTxCnt());
 		clientService.setWorkFlowCode(service.getWorkFlowCode());
 		return clientService;
 		

@@ -46,21 +46,6 @@ public class ClientService extends ClientBaseEntity {
 	@Column(name = "WRK_FLOW_CD")
 	private String workFlowCode;
 
-	@Column(name = "EFF_END_DT")
-	private Date effectiveEndDate;
-
-	@Column(name = "EFF_START_DT")
-	private Date effectiveStartDate;
-
-	@Column(name = "LAST_TX_DT")
-	private Date lastTransactionDate;
-
-	@Column(name = "LAST_TX_USER_TXT")
-	private String lastTransactionUserText;
-
-	@Column(name = "TX_CNT")
-	private Long transactionCount;
-
 	public ClientService () {
 		LOGGER.info("ClientService class initialized");
 	}
@@ -113,44 +98,5 @@ public class ClientService extends ClientBaseEntity {
 		this.workFlowCode = workFlowCode;
 	}
 
-	public Date getEffectiveEndDate() {
-		return effectiveEndDate;
-	}
-
-	public void setEffectiveEndDate(final Date effectiveEndDate) {
-		this.effectiveEndDate = effectiveEndDate;
-	}
-
-	public Date getEffectiveStartDate() {
-		return effectiveStartDate;
-	}
-
-	public void setEffectiveStartDate(final Date effectiveStartDate) {
-		this.effectiveStartDate = effectiveStartDate;
-	}
-
-	public Date getLastTransactionDate() {
-		return lastTransactionDate;
-	}
-
-	public void setLastTransactionDate(final Date lastTransactionDate) {
-		this.lastTransactionDate = lastTransactionDate;
-	}
-
-	public String getLastTransactionUserText() {
-		return lastTransactionUserText;
-	}
-
-	public void setLastTransactionUserText(final String lastTransactionUserText) {
-		this.lastTransactionUserText = lastTransactionUserText;
-	}
-
-	public Long getTransactionCount() {
-		return transactionCount;
-	}
-
-	public void setTransactionCount(final Long transactionCount) {
-		this.transactionCount = transactionCount;
-	}
 
 }
