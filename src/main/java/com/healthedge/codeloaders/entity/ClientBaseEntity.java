@@ -1,6 +1,8 @@
 package com.healthedge.codeloaders.entity;
 
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @MappedSuperclass
@@ -11,6 +13,9 @@ public class ClientBaseEntity {
     private Long txCnt;
     private Date effectiveStartDate;
     private Date effectiveEndDate;
+
+    @Id
+    @NotNull
     private String code;
 
     public Date getLastTransactionDate() {

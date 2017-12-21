@@ -5,22 +5,28 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "SERVICE")
+@IdClass(ClientBaseEntity.class)
+@AttributeOverrides({
+		@AttributeOverride(name = "lastTransactionDate", column =
+		@Column(name = "LAST_TX_DT")),
+		@AttributeOverride(name = "lastTransactionUserText", column =
+		@Column(name = "LAST_TX_USER_TXT")),
+		@AttributeOverride(name = "txCnt", column =
+		@Column(name = "TX_CNT")),
+		@AttributeOverride(name = "effectiveEndDate", column =
+		@Column(name = "EFF_END_DT")),
+		@AttributeOverride(name = "effectiveStartDate", column =
+		@Column(name = "EFF_START_DT")),
+		@AttributeOverride(name = "code", column =
+		@Column(name = "SERV_CD"))})
 public class ClientService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
-
-	@Id
-	@NotNull
-	@Column(name = "SERV_CD")
-	private String serviceCode;
 
 	@Column(name = "SERV_TYPE_CD")
 	private String serviceTypeCode;
@@ -57,14 +63,6 @@ public class ClientService {
 
 	public ClientService () {
 		LOGGER.info("ClientService class initialized");
-	}
-
-	public String getServiceCode() {
-		return serviceCode;
-	}
-
-	public void setServiceCode(final String serviceCode) {
-		this.serviceCode = serviceCode;
 	}
 
 	public String getServiceTypeCode() {
