@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.Map;
 public class ZipToCarrierLocalityDao implements BaseDao{
 
     @Autowired
-    private ZipToCarrierLocalityRepository zipToCarrierLocalityRepositoryDao;
+    private ZipToCarrierLocalityRepository zipToCarrierLocalityRepository;
     private static final Logger LOGGER= LoggerFactory.getLogger("ZipToCarrierLocalityDao is initalized");
 
 
     @Override
     public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData, Long prevVersion) {
         Map<String,ZipToCarrierLocality> map=new HashMap<>();
-        for(ZipToCarrierLocality zipToCarrierLocality:zipToCarrierLocalityRepositoryDao.getZipToCarrierLocalityCodesForVersionWithoutAction(
+        for(ZipToCarrierLocality zipToCarrierLocality:zipToCarrierLocalityRepository.getZipToCarrierLocalityCodesForVersionWithoutAction(
                 fileMetaData.getFileType(),prevVersion, CodeLoaderConstants.TERMINATE_ACTION)){
             map.put(zipToCarrierLocality.getZipCode(),zipToCarrierLocality);
         }
@@ -34,18 +35,19 @@ public class ZipToCarrierLocalityDao implements BaseDao{
 
     @Override
     public <T extends BaseEntity> boolean save(T entity) {
-        zipToCarrierLocalityRepositoryDao.save((ZipToCarrierLocality) entity);
+        zipToCarrierLocalityRepository.save((ZipToCarrierLocality) entity);
         return true;
     }
 
     @Override
     public <T extends BaseEntity> boolean save(List<T> entity) {
-        zipToCarrierLocalityRepositoryDao.save((ZipToCarrierLocality) entity);
+        zipToCarrierLocalityRepository.save((ZipToCarrierLocality) entity);
         return true;
     }
 
     @Override
+    @Transactional
     public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
-
+        zipToCarrierLocalityRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
     }
 }

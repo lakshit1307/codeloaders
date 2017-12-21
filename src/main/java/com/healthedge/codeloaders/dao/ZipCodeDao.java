@@ -50,6 +50,6 @@ public class ZipCodeDao implements BaseDao{
 
     @Override
     public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
-
+        zipCodeRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
     }
 }
