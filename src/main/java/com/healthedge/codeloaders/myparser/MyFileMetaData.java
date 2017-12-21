@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -19,6 +20,8 @@ public class MyFileMetaData {
     private String baseFileName;
     private long fileVersion;
     private String fileTypeCd;
+    private Date effectiveStartDate;
+    private Date effectiveEndDate;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -54,8 +57,12 @@ public class MyFileMetaData {
         return fileTypeCd;
     }
 
-    private DateTime prepareDateStartingFromFirstOfMonth () {
-        return this.fileDate;
+    public Date getEffectiveStartDate() {
+        return this.effectiveStartDate;
+    }
+
+    public Date getEffectiveEndDate() {
+        return effectiveEndDate;
     }
 
     private void identifyVersion () throws Exception {
@@ -68,6 +75,10 @@ public class MyFileMetaData {
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
             this.fileVersion = this.fileDate.getMillis();
+            this.effectiveStartDate = new DateTime(this.fileDate)
+                    .withDayOfMonth(this.fileDate.dayOfMonth().withMinimumValue().getDayOfMonth()).toDate();
+            this.effectiveEndDate = new DateTime(this.fileDate)
+                    .withDayOfMonth(this.fileDate.dayOfMonth().withMaximumValue().getDayOfMonth()).toDate();
         }
     }
 

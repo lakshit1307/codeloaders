@@ -1,8 +1,6 @@
 package com.healthedge.codeloaders.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,7 +89,7 @@ public class NewDiffCreator {
 			for (final String code : currentFileCodes.keySet()) {
 				final T entity = currentFileCodes.get(code);
 				entity.setAction(CodeLoaderConstants.CREATE_ACTION);
-				entity.setEffectiveStartDate(fileMetaData.getFileDate().toDate());
+				entity.setEffectiveStartDate(fileMetaData.getEffectiveStartDate());
 				entity.setVersionStart(fileMetaData.getFileVersion());
 				entity.setVersionEnd(fileMetaData.getFileVersion());
 				create.add(entity);
@@ -120,7 +118,7 @@ public class NewDiffCreator {
 				} else {
 					final T pojo = currentFileCodes.get(code);
 					pojo.setAction(CodeLoaderConstants.CREATE_ACTION);
-					pojo.setEffectiveStartDate(fileMetaData.getFileDate().toDate());
+					pojo.setEffectiveStartDate(fileMetaData.getEffectiveStartDate());
 					pojo.setVersionStart(fileMetaData.getFileVersion());
 					pojo.setVersionEnd(fileMetaData.getFileVersion());
 					create.add(pojo);
@@ -129,7 +127,7 @@ public class NewDiffCreator {
 			for (final String key : previousFileCodes.keySet()) {
 				final T pojo = previousFileCodes.get(key);
 				pojo.setAction(CodeLoaderConstants.TERMINATE_ACTION);
-				pojo.setEffectiveEndDate(fileMetaData.getFileDate().toDate());
+				pojo.setEffectiveEndDate(fileMetaData.getEffectiveEndDate());
 				pojo.setVersionEnd(fileMetaData.getFileVersion());
 				terminate.add(pojo);
 				codes.add(pojo.getCode());
