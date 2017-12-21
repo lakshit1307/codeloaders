@@ -115,7 +115,7 @@ public class NewDiffCreator {
 					}
 					previousFileCodes.remove(code);
 
-				} else {
+ 				} else {
 					final T pojo = currentFileCodes.get(code);
 					pojo.setAction(CodeLoaderConstants.CREATE_ACTION);
 					pojo.setEffectiveStartDate(fileMetaData.getEffectiveStartDate());

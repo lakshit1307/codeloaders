@@ -24,7 +24,7 @@ public class DiagnosisDao implements BaseDao {
 	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData,
 			Long prevVersion) {
 		Map<String, Diagnosis> map = new HashMap<>();
-		for (Diagnosis diagnosis : diagnosisRepository.getServiceCodesByCodeTypeForVersionWithoutAction(
+		for (Diagnosis diagnosis : diagnosisRepository.getDiagnosisCodesByCodeTypeForVersionWithoutAction(
 				fileMetaData.getFileTypeCd(), prevVersion, CodeLoaderConstants.TERMINATE_ACTION)) {
 			map.put(diagnosis.getCode(), diagnosis);
 		}
