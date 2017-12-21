@@ -1,13 +1,10 @@
 package com.healthedge.codeloaders.batch.client;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
-import com.healthedge.codeloaders.dao.ClientBaseDao;
-import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -16,43 +13,44 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.healthedge.codeloaders.dao.ClientServiceDao;
-import com.healthedge.codeloaders.dao.ServiceDao;
-import com.healthedge.codeloaders.entity.Service;
+import com.healthedge.codeloaders.dao.BaseDao;
+import com.healthedge.codeloaders.dao.ClientBaseDao;
+import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.TenantEnv;
 import com.healthedge.codeloaders.service.ClientConnectionService;
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 
 @StepScope
-public class ServiceCodeReader implements ItemReader<Service> {
+public class ServiceCodeReader implements ItemReader<BaseEntity> {
 
-	@Value("#{jobParameters['fileTypeCd']}")
+	@Value("#{jobParameters['filePath']}")
 	String codeType;
 
-	@Value("#{jobParameters['fileType']}")
-	String fileType;
+	@Value("#{jobParameters['toVersion']}")
+	Long toVersion;
 
 	private EntityManager entityManager;
 
-	private Date currentCodeVersion;
+	private Long currentCodeVersion;
 
-	private Service[] services;
+	private BaseEntity[] entitites;
 
 	private int offset;
 
 	@Autowired
-	private ServiceDao serviceDao;
+	private BaseDao baseDao;
 
 	@Autowired
-	private ClientServiceDao clientDao;
+	private ImplementationFactory implementationFactory;
+	
+	
+	private ClientBaseDao clientBaseDao;
 
 	@Autowired
 	private ClientConnectionService clientConnectionService;
 
 	@Value("#{stepExecutionContext[tenant_environment]}")
 	TenantEnv tenantEnv;
-
-	@Autowired
-	private ImplementationFactory implementationFactory;
 
 	// public ServiceCodeReader() {
 	// this.services = serviceDao.getServiceCodesByCodeType(codeType);
@@ -65,21 +63,20 @@ public class ServiceCodeReader implements ItemReader<Service> {
 		this.entityManager = clientConnectionService
 				.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword())
 				.createEntityManager();
-		this.currentCodeVersion = clientDao.getPayorVersionPerCode(codeType, entityManager);
-		List<Service> services = serviceDao.getDeltaCodes(currentCodeVersion, codeType);
-		this.services = services.toArray(new Service[services.size()]);
+//		clientBaseDao=implementationFactory.
+		this.currentCodeVersion = clientBaseDao.getPayorVersionPerCode(codeType, entityManager);
+		List<? extends BaseEntity> baseEntities = baseDao.getDeltaCodes(currentCodeVersion, toVersion, codeType);
+		this.entitites = baseEntities.toArray(new BaseEntity[baseEntities.size()]);
 
 	}
 
 	@Override
-	public Service read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		Service service = null;
-		// this.services = serviceDao.getServiceCodesByCodeType(codeType);
-		// this.offset = 0;
-		if (offset < services.length) {
-			service = services[offset];
+	public BaseEntity read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+		BaseEntity baseEntity = null;
+		if (offset < entitites.length) {
+			baseEntity = entitites[offset];
 		}
 		offset++;
-		return service;
+		return baseEntity;
 	}
 }

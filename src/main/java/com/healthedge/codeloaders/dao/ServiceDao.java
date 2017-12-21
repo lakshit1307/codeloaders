@@ -2,12 +2,9 @@ package com.healthedge.codeloaders.dao;
 
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
-import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import com.healthedge.codeloaders.repository.ServiceRepository;
-import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +22,6 @@ public class ServiceDao implements BaseDao {
 
 	@Autowired
 	private ServiceRepository serviceRepository;
-
-	@Autowired
-	private FileStatusDao fileStatusDao;
 
 	public ServiceDao() {
 		LOGGER.info("ServieDao initialized");
@@ -111,7 +105,6 @@ public class ServiceDao implements BaseDao {
 		if(payorRequestedVersion<currPayorVersion) {
 			return null;
 		}
-//		service
-		return null;
+		return serviceRepository.getDeltaCodes(currPayorVersion, payorRequestedVersion, codeType);
 	}
 }

@@ -8,8 +8,8 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Service;
 
+import com.healthedge.codeloaders.entity.ClientBaseEntity;
 import com.healthedge.codeloaders.entity.ClientService;
-
 
 @Service
 public class ClientServiceRepositoryImpl implements ClientServiceRepository {
@@ -35,42 +35,40 @@ public class ClientServiceRepositoryImpl implements ClientServiceRepository {
 		return distinctCodes;
 	}
 
-	/*@Override
-	public void update(EntityManager entityManager, List<ClientService> clientServices) {
+	/*
+	 * @Override public void update(EntityManager entityManager, List<ClientService>
+	 * clientServices) { entityManager.getTransaction().begin(); for (ClientService
+	 * clientService : clientServices) { Query query =
+	 * entityManager.createNativeQuery(
+	 * "UPDATE SERVICE SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3,EFF_START_DT=?4,EFF_END_DT=?5 WHERE SERV_CD= ?6"
+	 * ); query.setParameter(1, clientService.getServiceShortDesciption());
+	 * query.setParameter(2, clientService.getServiceLongDesciption());
+	 * query.setParameter(3, clientService.getServiceAlternateDesciption());
+	 * query.setParameter(4,clientService.getEffectiveStartDate());
+	 * query.setParameter(5, clientService.getEffectiveEndDate());
+	 * query.setParameter(6, clientService.getServiceCode()); query.executeUpdate();
+	 * } entityManager.getTransaction().commit(); }
+	 */
+
+	@Override
+	public void update(EntityManager entityManager, List<? extends ClientBaseEntity> clientEntity) {
 		entityManager.getTransaction().begin();
-		for (ClientService clientService : clientServices) {
+		for (ClientService clientService : (List<ClientService>) clientEntity) {
 			Query query = entityManager.createNativeQuery(
-					"UPDATE SERVICE SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3,EFF_START_DT=?4,EFF_END_DT=?5 WHERE SERV_CD= ?6");
+					"UPDATE SERVICE SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3 WHERE SERV_CD= ?4");
 			query.setParameter(1, clientService.getServiceShortDesciption());
 			query.setParameter(2, clientService.getServiceLongDesciption());
 			query.setParameter(3, clientService.getServiceAlternateDesciption());
-			query.setParameter(4,clientService.getEffectiveStartDate());
-			query.setParameter(5, clientService.getEffectiveEndDate());
-			query.setParameter(6, clientService.getServiceCode());
+			query.setParameter(4, clientService.getCode());
 			query.executeUpdate();
 		}
 		entityManager.getTransaction().commit();
-	}*/
-
-    @Override
-    public void update(EntityManager entityManager, List<ClientService> clientServices) {
-        entityManager.getTransaction().begin();
-        for (ClientService clientService : clientServices) {
-            Query query = entityManager.createNativeQuery(
-                    "UPDATE SERVICE SET SERV_SHORT_DSC= ?1,SERV_LONG_DSC= ?2,ALT_DSC= ?3 WHERE SERV_CD= ?4");
-            query.setParameter(1, clientService.getServiceShortDesciption());
-            query.setParameter(2, clientService.getServiceLongDesciption());
-            query.setParameter(3, clientService.getServiceAlternateDesciption());
-            query.setParameter(4, clientService.getCode());
-            query.executeUpdate();
-        }
-        entityManager.getTransaction().commit();
-    }
+	}
 
 	@Override
-	public void terminate(EntityManager entityManager, List<ClientService> clientServices) {
+	public void terminate(EntityManager entityManager, List<? extends ClientBaseEntity> clientEntity) {
 		entityManager.getTransaction().begin();
-		for (ClientService clientService : clientServices) {
+		for (ClientService clientService : (List<ClientService>) clientEntity) {
 			Query query = entityManager.createNativeQuery("UPDATE SERVICE SET EFF_END_DT= ?1 WHERE SERV_CD= ?2");
 			query.setParameter(1, clientService.getEffectiveEndDate());
 			query.setParameter(2, clientService.getCode());
@@ -81,9 +79,9 @@ public class ClientServiceRepositoryImpl implements ClientServiceRepository {
 	}
 
 	@Override
-	public void save(EntityManager entityManager, List<ClientService> clientServices) {
+	public void save(EntityManager entityManager, List<? extends ClientBaseEntity> clientEntity) {
 		entityManager.getTransaction().begin();
-		for (ClientService clientService : clientServices) {
+		for (ClientService clientService : (List<ClientService>) clientEntity) {
 			entityManager.persist(clientService);
 		}
 		entityManager.getTransaction().commit();
