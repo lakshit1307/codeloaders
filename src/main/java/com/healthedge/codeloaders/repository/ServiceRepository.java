@@ -42,10 +42,10 @@ public interface ServiceRepository extends JpaRepository<Service, String> {
 	@Query(value = "UPDATE T_SERVICE SET VERSION_END = ?1 WHERE VERSION_END = ?2 AND SERV_CD NOT IN (?3)", nativeQuery = true)
 	void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes);
 
-	@Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_START>=?2 AND VERSION_END<=?2")
-	List<Service> getEntitiesPerFiletypeForVersion(String filetype, Long version);
+	//@Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_START>=?2 AND VERSION_END<=?2")
+	//List<Service> getEntitiesPerFiletypeForVersion(String filetype, Long version);
 
-	@Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_START>?2 AND VERSION_END<=?3")
-	List<Service> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion, String codeType);
+	//@Query(value = "SELECT * FROM T_SERVICE WHERE SERV_TYPE_CD=?1 AND VERSION_START>?2 AND VERSION_END<=?3")
+	//List<Service> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion, String codeType);
 
 }
