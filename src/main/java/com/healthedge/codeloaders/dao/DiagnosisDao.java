@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.dao;
 
+import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.Diagnosis;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;
@@ -7,6 +8,7 @@ import com.healthedge.codeloaders.repository.DiagnosisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,12 @@ public class DiagnosisDao implements BaseDao {
 	@Override
 	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData,
 			Long prevVersion) {
-		return new HashMap<String, Diagnosis>();
+		Map<String, Diagnosis> map = new HashMap<>();
+		for (Diagnosis diagnosis : diagnosisRepository.getDiagnosisCodesByCodeTypeForVersionWithoutAction(
+				fileMetaData.getFileTypeCd(), prevVersion, CodeLoaderConstants.TERMINATE_ACTION)) {
+			map.put(diagnosis.getCode(), diagnosis);
+		}
+		return map;
 	}
 
 	@Override
@@ -37,7 +44,8 @@ public class DiagnosisDao implements BaseDao {
 	}
 
 	@Override
+	@Transactional
 	public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
-
+		diagnosisRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
 	}
 }
