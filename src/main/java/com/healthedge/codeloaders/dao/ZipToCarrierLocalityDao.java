@@ -41,7 +41,7 @@ public class ZipToCarrierLocalityDao implements BaseDao{
 
     @Override
     public <T extends BaseEntity> boolean save(List<T> entity) {
-        zipToCarrierLocalityRepository.save((ZipToCarrierLocality) entity);
+        zipToCarrierLocalityRepository.save((List<ZipToCarrierLocality>) entity);
         return true;
     }
 

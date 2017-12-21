@@ -44,7 +44,7 @@ public class ZipCodeDao implements BaseDao{
 
     @Override
     public <T extends BaseEntity> boolean save(List<T> entity) {
-        zipCodeRepository.save( (ZipCode) entity);
+        zipCodeRepository.save( (List<ZipCode>) entity);
         return true;
     }
 
