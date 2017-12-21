@@ -104,14 +104,14 @@ public class ServiceDao implements BaseDao {
 	}
 
 	@Override
-	public List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long version) {
-		return getEntitiesPerFiletypeForVersion(filetype, version);
-	}
-
-	@Override
 	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion,
 			String codeType) {
 		// TODO Auto-generated method stub
+		//if client requests for a version lesser than the current version
+		if(payorRequestedVersion<currPayorVersion) {
+			return null;
+		}
+//		service
 		return null;
 	}
 }
