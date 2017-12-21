@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 		@Column(name = "EFF_START_DT")),
 		@AttributeOverride(name = "code", column =
 		@Column(name = "SERV_CD"))})
-public class ClientService {
+public class ClientService extends ClientBaseEntity {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
 	@Column(name = "SERV_TYPE_CD")

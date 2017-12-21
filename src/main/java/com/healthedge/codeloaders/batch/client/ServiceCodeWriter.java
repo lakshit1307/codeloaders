@@ -56,8 +56,8 @@ public class ServiceCodeWriter implements ItemWriter<ClientService> {
 		List<ClientService> clientServicesTerminate = new ArrayList<ClientService>();
 
 		for (ClientService clientService : items) {
-			LOGGER.debug("writing for id: " + clientService.getServiceCode());
-			if (clientCodes.contains(clientService.getServiceCode())) {
+			LOGGER.debug("writing for id: " + clientService.getCode());
+			if (clientCodes.contains(clientService.getCode())) {
 				if(clientService.getEffectiveEndDate()!=null){
 				    clientServicesTerminate.add(clientService);
                 }
