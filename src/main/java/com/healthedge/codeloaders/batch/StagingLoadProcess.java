@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.batch;
 
+import com.healthedge.codeloaders.dao.BaseDao;
 import com.healthedge.codeloaders.dao.ClientDao;
 import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.entity.FileStatus;
@@ -8,6 +9,11 @@ import com.healthedge.codeloaders.service.DiffCreator;
 import com.healthedge.codeloaders.service.FileSorter;
 import com.healthedge.codeloaders.service.FileTypeOrdering;
 import com.healthedge.codeloaders.service.InitLoadTracker;
+import com.healthedge.codeloaders.service.NewDiffCreator;
+
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +41,7 @@ public class StagingLoadProcess {
 	private FileSorter fileSorter;
 
 	@Autowired
-	private DiffCreator diffCreator;
+	private NewDiffCreator diffCreator;
 
 	@Autowired
 	private JobLauncher jobLauncher;
@@ -52,75 +58,94 @@ public class StagingLoadProcess {
 	@Autowired
 	private FileTypeOrdering fileTypeOrdering;
 
-	private FileStatus fileStatus=new FileStatus();
+	@Autowired
+	private ImplementationFactory implementationFactory;
 
+	// private FileStatus fileStatus=new FileStatus();
 
-	public void startProcess () {
+	public void startProcess() throws Exception {
 		final Job job = (Job) appContext.getBean("stagingJob");
 		for (final String fileType : fileTypeOrdering.getFileTypes()) {
 			diffCreator.flushPreviousData();
+			final String directoryPath = baseData + File.separator + fileType;
+			String startFile = initLoadTracker.startFileProcessingOf(fileType);
+			if (!startFile.equals(initLoadTracker.EOF) && StringUtils.isNotBlank(startFile)) {
 
-			//My code
-			try {
-				String filePath = "D:\\HealthEdge\\CodeLoader\\code_new\\codeloaders\\src\\test\\resources\\basedata\\ICD10DIAG\\OPTUM_ICD10DIAGNOSIS_2017-10-01.TAB";
-				MyFileMetaData fileMetaData = new MyFileMetaData("ICD10DIAG", filePath);
-				CodeLoaderContext.getInstance().setFileMetaData(fileMetaData);
-				CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
-				JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath)
-						.addLong("time",System.currentTimeMillis()).toJobParameters();
-				CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
+				final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(fileType, directoryPath);
+				for (int i = sortedFileNames.indexOf(startFile); i < sortedFileNames.size(); ++i) {
 
-				JobExecution execution = jobLauncher.run(job, jobParameters);
-			} catch (Exception ex) {
+					final String filePath = directoryPath + File.separator + sortedFileNames.get(i);
 
+					MyFileMetaData fileMetaData = new MyFileMetaData(fileType, filePath);
+
+					CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
+					CodeLoaderContext.getInstance().setFileMetaData(fileMetaData);
+
+					JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath)
+							.addLong("time", System.currentTimeMillis()).toJobParameters();
+
+					// Initiate jobs for each file
+					long startTime = System.currentTimeMillis();
+					long endTime = 0;
+					long tnxCnt = 0;
+					try {
+						LOGGER.info("Processing for file [{}] started at [{}]", filePath, new Date());
+
+						tnxCnt = this.saveFileStatus(fileMetaData, FileStatus.IN_PROGRESS);
+
+						LOGGER.info("Starting batch job for file [{}]", filePath);
+						JobExecution execution = jobLauncher.run(job, jobParameters);
+						LOGGER.info("Batch Job succeeded for file [{}]", filePath);
+						endTime = System.currentTimeMillis();
+						LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
+						LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
+						this.updateFileStatus(tnxCnt, FileStatus.PERSISTED);
+						this.updateLatestVersion(fileMetaData);
+					} catch (final Exception e) {
+						endTime = System.currentTimeMillis();
+						LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
+						LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
+						LOGGER.error("Batch job failed for file [{}] with exception", filePath,
+								ExceptionUtils.getStackTrace(e));
+						this.updateFileStatus(tnxCnt, FileStatus.FAILURE);
+					}
+				}
+			} else {
+				LOGGER.info(fileType + " is upto date in CLOADER DB");
 			}
-
-
-
-//            final String directoryPath = baseData + File.separator + fileType;
-//            String startFile= initLoadTracker.startFileProcessingOf(fileType);
-//            if(!startFile.equals(initLoadTracker.EOF)){
-//
-//            final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(directoryPath);
-//            for (int i=sortedFileNames.indexOf(startFile);i<sortedFileNames.size();++i) {
-//
-//                final String filePath = directoryPath + File.separator + sortedFileNames.get(i);
-//                CodeLoaderContext.getInstance().setCurrentFilePath(filePath);
-//
-//                JobParameters jobParameters = new JobParametersBuilder().addString("filePath", filePath)
-//                        .addLong("time",System.currentTimeMillis()).toJobParameters();
-//
-//                //Initiate jobs for each file
-//                long startTime = System.currentTimeMillis();
-//                long endTime = 0;
-//                try {
-//                    LOGGER.info("Processing for file [{}] started at [{}]", filePath, new Date());
-//                    this.saveFileStatus(fileType, sortedFileNames.get(i), FileStatus.IN_PROGRESS);
-//
-//                    LOGGER.info("Starting batch job for file [{}]", filePath);
-//                    JobExecution execution = jobLauncher.run(job, jobParameters);
-//                    LOGGER.info("Batch Job succeeded for file [{}]", filePath);
-//                    endTime = System.currentTimeMillis();
-//                    LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
-//                    LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
-//                    this.updateFileStatus(fileType, sortedFileNames.get(i), FileStatus.PERSISTED);
-//                } catch (final Exception e) {
-//                    endTime = System.currentTimeMillis();
-//                    LOGGER.info("Processing of file [{}] finished successfully at [{}]", filePath, new Date());
-//                    LOGGER.info("Total time required to process file [{}]: {} ms", filePath, endTime - startTime);
-//                    LOGGER.error("Batch job failed for file [{}] with exception", filePath, ExceptionUtils.getStackTrace(e));
-//                    this.updateFileStatus(fileType, sortedFileNames.get(i), FileStatus.FAILURE);
-//                }
-//            }
-//            }
-//            else{
-//                LOGGER.info(fileType+" is upto date in CLOADER DB");
-//            }
-
-
 
 		}
 	}
 
+	private void updateLatestVersion (MyFileMetaData fileMetaData) throws Exception {
+		BaseDao baseDao = implementationFactory.getDao(fileMetaData.getFileType());
+		Long currentVersion = diffCreator.getCurrVersion();
+		Long previousVersion = diffCreator.getPrevVersion();
+		List<String> codes = diffCreator.getCodes();
+		if (previousVersion != null && CollectionUtils.isNotEmpty(codes)) {
+			baseDao.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
+		}
+	}
 
+	private long saveFileStatus(MyFileMetaData fileMetaData, String status) {
+		Date currDate = new Date();
+		long tnxCnt = currDate.getTime();
+		FileStatus fileStatus = new FileStatus();
+		fileStatus.setFileName(fileMetaData.getBaseFileName());
+		fileStatus.setFileType(fileMetaData.getFileType());
+		fileStatus.setStatus(status);
+		fileStatus.setTxCnt(tnxCnt);
+		fileStatus.setTxDate(currDate);
+		fileStatus.setVersion(fileMetaData.getFileVersion());
+		fileStatusDao.save(fileStatus);
+		return tnxCnt;
+	}
+
+
+	private void updateFileStatus(Long txCnt, String status) {
+		FileStatus fileStatus = new FileStatus();
+		fileStatus.setTxCnt(txCnt);
+		fileStatus.setStatus(status);
+		fileStatusDao.updateStatus(fileStatus);
+	}
 }

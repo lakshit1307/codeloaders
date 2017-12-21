@@ -76,11 +76,10 @@ public class ServiceDao implements BaseDao {
 	}
 
 	@Override
-	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData) {
-		FileStatus fileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
+	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData, Long prevVersion) {
 		Map<String, Service> map = new HashMap<String, Service>();
 		for (Service service : serviceRepository.getServiceCodesByCodeTypeForVersionWithoutAction(
-				fileMetaData.getFileTypeCd(), fileStatus.getVersion(), CodeLoaderConstants.TERMINATE_ACTION)) {
+				fileMetaData.getFileTypeCd(), prevVersion, CodeLoaderConstants.TERMINATE_ACTION)) {
 			map.put(service.getServiceCode(), service);
 		}
 		return map;
@@ -96,5 +95,11 @@ public class ServiceDao implements BaseDao {
 	public <T extends BaseEntity> boolean save(List<T> entity) {
 		serviceRepository.save((List<Service>) entity);
 		return false;
+	}
+
+	@Override
+	@Transactional
+	public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
+		serviceRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
 	}
 }

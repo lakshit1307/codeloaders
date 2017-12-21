@@ -30,7 +30,7 @@ public class FileStatusDao {
 
     @Transactional
     public void updateStatus(FileStatus fileStatus){
-        fileStatusRepository.updateStatusByFileNameAndCodeType(fileStatus.getStatus(),fileStatus.getVersion(),fileStatus.getFileType(), FileStatus.PERSISTED);
+        fileStatusRepository.updateStatusByTnxCnt(fileStatus.getStatus(), fileStatus.getTxCnt());
     }
 
     public FileStatus getFileTypeDetailsForLatestVersion(String fileType) {

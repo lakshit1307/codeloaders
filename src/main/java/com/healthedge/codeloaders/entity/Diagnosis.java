@@ -8,6 +8,7 @@ import java.util.Date;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name="T_DIAGNOSIS")
+@IdClass(BaseEntity.class)
 @AttributeOverrides({
         @AttributeOverride(name = "lastTransactionDate", column =
         @Column(name = "LAST_TX_DT")),

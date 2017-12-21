@@ -2,6 +2,7 @@ package com.healthedge.codeloaders.service;
 
 import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.entity.FileStatus;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -47,64 +49,67 @@ public class InitLoadTracker {
         String startFile="";
         final String directoryPath = baseData + File.separator + fileType;
         final List<String> sortedFileNames = fileSorter.sortFilesInDirectory(fileType, directoryPath);
-        FileStatus codeFileStatus = dbFileStatus(fileType);
-        if(codeFileStatus!=null){
+        if (CollectionUtils.isNotEmpty(sortedFileNames)) {
+            FileStatus codeFileStatus = dbFileStatus(fileType.toLowerCase(Locale.getDefault()));
+            if(codeFileStatus!=null){
 
-            if (codeFileStatus.getStatus().equals(FileStatus.FAILURE)){
+                if (codeFileStatus.getStatus().equals(FileStatus.FAILURE)){
 
-                String currentFile = codeFileStatus.getFileName();
-                for (int i = 0; i < sortedFileNames.size(); ++i) {
+                    String currentFile = codeFileStatus.getFileName();
+                    for (int i = 0; i < sortedFileNames.size(); ++i) {
 
-                    if (sortedFileNames.get(i).equals(currentFile)) {
+                        if (sortedFileNames.get(i).equals(currentFile)) {
 
-                        final String filePathToMap = directoryPath + File.separator + sortedFileNames.get(i - 1);
-                        Map<String, com.healthedge.codeloaders.entity.Service> map = null;
-                        try {
-                            map = fileParser.parse(filePathToMap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            final String filePathToMap = directoryPath + File.separator + sortedFileNames.get(i - 1);
+                            Map<String, com.healthedge.codeloaders.entity.Service> map = null;
+                            try {
+                                map = fileParser.parse(filePathToMap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            diffCreator.setPreviousData(map);
+                            startFile = sortedFileNames.get(i);
+                            break;
+
                         }
-                        diffCreator.setPreviousData(map);
-                        startFile = sortedFileNames.get(i);
-                        break;
-
-                    }
-                }
-
-            }
-            else if(codeFileStatus.getStatus().equals(FileStatus.PERSISTED)){
-
-                String currentFile = codeFileStatus.getFileName();
-                for (int i = 0; i < sortedFileNames.size(); ++i) {
-                    if (sortedFileNames.get(i).equals(currentFile)) {
-
-                        final String fileToMap = directoryPath + File.separator + sortedFileNames.get(i);
-                        Map<String, com.healthedge.codeloaders.entity.Service> map = null;
-                        try {
-                            map = fileParser.parse(fileToMap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        diffCreator.setPreviousData(map);
-
-                        if((i+1)<sortedFileNames.size()){
-                            startFile = sortedFileNames.get(i + 1); //need some modification here, if all files are already persisted,Array issue
-                        }
-                        else{
-                            startFile=EOF;
-                        }
-                        break;
-
                     }
 
                 }
+                else if(codeFileStatus.getStatus().equals(FileStatus.PERSISTED)){
+
+                    String currentFile = codeFileStatus.getFileName();
+                    for (int i = 0; i < sortedFileNames.size(); ++i) {
+                        if (sortedFileNames.get(i).equals(currentFile)) {
+
+                            final String fileToMap = directoryPath + File.separator + sortedFileNames.get(i);
+                            Map<String, com.healthedge.codeloaders.entity.Service> map = null;
+                            try {
+                                map = fileParser.parse(fileToMap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            diffCreator.setPreviousData(map);
+
+                            if((i+1)<sortedFileNames.size()){
+                                startFile = sortedFileNames.get(i + 1); //need some modification here, if all files are already persisted,Array issue
+                            }
+                            else{
+                                startFile=EOF;
+                            }
+                            break;
+
+                        }
+
+                    }
+
+                }
 
             }
+            else{
+                startFile=sortedFileNames.get(0);
+            }
+        }
 
-        }
-        else{
-            startFile=sortedFileNames.get(0);
-        }
         return startFile;
     }
 }
