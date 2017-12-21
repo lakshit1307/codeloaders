@@ -16,5 +16,5 @@ public interface BaseDao {
 
 	void updateLatestVersionForProcessedFile (Long currentVersion, Long previousVersion, List<String> codes);
 	
-	List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long Version);
+//	List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long Version);
 }
