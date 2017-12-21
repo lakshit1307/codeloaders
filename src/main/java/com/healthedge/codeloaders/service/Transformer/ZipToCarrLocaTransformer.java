@@ -2,7 +2,7 @@ package com.healthedge.codeloaders.service.Transformer;
 
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
-import com.healthedge.codeloaders.entity.ZipCode;
+import com.healthedge.codeloaders.entity.ClientBaseEntity;
 import com.healthedge.codeloaders.entity.ZipToCarrierLocality;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -31,5 +31,10 @@ public class ZipToCarrLocaTransformer implements Transformer{
         });
 
         return result;
+    }
+
+    @Override
+    public List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input){
+        return null;
     }
 }
