@@ -102,4 +102,9 @@ public class ServiceDao implements BaseDao {
 	public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
 		serviceRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
 	}
+
+	@Override
+	public List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long version) {
+		return getEntitiesPerFiletypeForVersion(filetype, version);
+	}
 }
