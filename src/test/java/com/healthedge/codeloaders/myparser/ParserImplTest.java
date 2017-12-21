@@ -40,6 +40,7 @@ public class ParserImplTest {
         fileInfoList.put("CPT","src/test/resources/basedata/CPT/OPTUM_CPT_2016-01-01.txt" );
         fileInfoList.put("icd10proc","src/test/resources/basedata/ICD10PROC/OPTUM_ICD10PCS_BASE_2018-01-01.tab" );
         fileInfoList.put("ZIP","src/test/resources/basedata/ZipToCarrierLocality/OPTUM_ZipToCarrierLocality_2003-01-01.txt" );
+        fileInfoList.put("ZIPTOCARRIERLOCALITY","src/test/resources/basedata/ZipToCarrierLocality/OPTUM_ZipToCarrierLocality_2003-01-01.txt" );
         fileInfoList.put("ICD10DIAG","src\\test\\resources\\basedata\\ICD10DIAG\\OPTUM_ICD10DIAGNOSIS_2017-10-01.TAB" );
 
         // Iterate the files

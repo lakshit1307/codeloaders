@@ -24,7 +24,7 @@ public class FileSorterTests {
     public void testFileSorted(){
         File file = new File("src/test/resources/basedata");
 
-        List<String> fileNames=fileSorter.sortFilesInDirectory(file.getAbsolutePath()+ File.separator + "CPT");
+        List<String> fileNames=fileSorter.sortFilesInDirectory("CPT",file.getAbsolutePath()+ File.separator + "CPT");
         if(fileNames.equals(actualFileNamesSorted)){
             System.out.println("File names are sorted correctly based on date");
             assert true;
