@@ -1,7 +1,7 @@
 package com.healthedge.codeloaders.batch;
 
 import com.healthedge.codeloaders.dao.BaseDao;
-import com.healthedge.codeloaders.dao.ClientDao;
+import com.healthedge.codeloaders.dao.ClientServiceDao;
 import com.healthedge.codeloaders.dao.FileStatusDao;
 import com.healthedge.codeloaders.entity.FileStatus;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;

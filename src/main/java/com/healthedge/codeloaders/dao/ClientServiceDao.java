@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import java.util.*;
 
 @Service
-public class ClientDao {
+public class ClientServiceDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("Client Dao initialzied");
 

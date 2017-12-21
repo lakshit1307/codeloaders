@@ -2,7 +2,6 @@ package com.healthedge.codeloaders.dao;
 
 import java.util.List;
 import java.util.Map;
-
 import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;
 
@@ -16,5 +15,7 @@ public interface BaseDao {
 
 	void updateLatestVersionForProcessedFile (Long currentVersion, Long previousVersion, List<String> codes);
 	
-//	List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long Version);
+	List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long Version);
+	
+	List<? extends BaseEntity> getDeltaCodes (Long currPayorVersion, Long payorRequestedVersion, String codeType);
 }

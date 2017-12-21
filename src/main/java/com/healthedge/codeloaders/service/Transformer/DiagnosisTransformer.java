@@ -2,6 +2,7 @@ package com.healthedge.codeloaders.service.Transformer;
 
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
+import com.healthedge.codeloaders.entity.ClientBaseEntity;
 import com.healthedge.codeloaders.entity.Diagnosis;
 import com.healthedge.codeloaders.util.StringUtil;
 import org.joda.time.DateTime;
@@ -54,4 +55,10 @@ public class DiagnosisTransformer implements Transformer {
         }
         return diagCode;
     }
+
+	@Override
+	public List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
