@@ -22,9 +22,10 @@ public class FileSorterTests {
 
     @Test
     public void testFileSorted(){
+        String filePath = "src/test/resources/basedata";
         File file = new File("src/test/resources/basedata");
 
-        List<String> fileNames=fileSorter.sortFilesInDirectory(file.getAbsolutePath()+ File.separator + "CPT");
+        List<String> fileNames=fileSorter.sortFilesInDirectory("CPT", filePath);
         if(fileNames.equals(actualFileNamesSorted)){
             System.out.println("File names are sorted correctly based on date");
             assert true;
