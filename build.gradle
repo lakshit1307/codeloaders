@@ -122,6 +122,10 @@ applicationDistribution.from( files('README.md')) {
 	into("")
 }
 
+applicationDistribution.from( files('main.sql')) {
+	into("doc")
+}
+
 distributions {
 	main {
 		baseName = 'codeloaders'
