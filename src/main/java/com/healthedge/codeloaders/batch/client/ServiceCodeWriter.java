@@ -13,7 +13,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.healthedge.codeloaders.dao.ClientDao;
+import com.healthedge.codeloaders.dao.ClientServiceDao;
 import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.entity.TenantEnv;
 import com.healthedge.codeloaders.service.ClientConnectionService;
@@ -30,22 +30,19 @@ public class ServiceCodeWriter implements ItemWriter<ClientService> {
 
 	private EntityManager entityManager;
 
-	private Date currentCodeVersion;
-
 	private List<String> clientCodes;
 
 	@Autowired
 	private ClientConnectionService clientConnectionService;
 
 	@Autowired
-	private ClientDao clientDao;
+	private ClientServiceDao clientDao;
 
 	@PostConstruct
 	public void onInit() {
 		this.entityManager = clientConnectionService
 				.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword())
 				.createEntityManager();
-		this.currentCodeVersion = clientDao.getPayorVersionPerCode(codeType, entityManager);
 		this.clientCodes = clientDao.getPayorCodes(entityManager, codeType);
 	}
 
@@ -58,18 +55,17 @@ public class ServiceCodeWriter implements ItemWriter<ClientService> {
 		for (ClientService clientService : items) {
 			LOGGER.debug("writing for id: " + clientService.getCode());
 			if (clientCodes.contains(clientService.getCode())) {
-				if(clientService.getEffectiveEndDate()!=null){
-				    clientServicesTerminate.add(clientService);
-                }
-                else{
-				    clientServicesUpdate.add(clientService);
-                }
+				if (clientService.getEffectiveEndDate() != null) {
+					clientServicesTerminate.add(clientService);
+				} else {
+					clientServicesUpdate.add(clientService);
+				}
 			} else {
 				clientServicesInsert.add(clientService);
 			}
 		}
 
-		clientDao.terminate(entityManager,clientServicesTerminate);
+		clientDao.terminate(entityManager, clientServicesTerminate);
 		clientDao.update(entityManager, clientServicesUpdate);
 		clientDao.save(entityManager, clientServicesInsert);
 		// clientConnectionService.saveToClient(items, emf);

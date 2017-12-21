@@ -2,6 +2,7 @@ package com.healthedge.codeloaders.service.Transformer;
 
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
+import com.healthedge.codeloaders.entity.ClientBaseEntity;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.util.StringUtil;
 import org.joda.time.DateTime;
@@ -45,6 +46,13 @@ public class ServiceTransformer implements Transformer {
         input = StringUtil.restrictLengthOfInput(input, limit);
         return input;
     }
+
+
+	@Override
+	public List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 

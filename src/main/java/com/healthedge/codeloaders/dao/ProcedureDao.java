@@ -48,4 +48,17 @@ public class ProcedureDao implements BaseDao {
         procedureRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
     }
 
+	@Override
+	public List<? extends BaseEntity> getEntitiesPerFiletypeForVersion(String filetype, Long Version) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion,
+			String codeType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

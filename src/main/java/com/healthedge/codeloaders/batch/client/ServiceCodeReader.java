@@ -14,7 +14,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.healthedge.codeloaders.dao.ClientDao;
+import com.healthedge.codeloaders.dao.ClientServiceDao;
 import com.healthedge.codeloaders.dao.ServiceDao;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.entity.TenantEnv;
@@ -38,7 +38,7 @@ public class ServiceCodeReader implements ItemReader<Service> {
 	private ServiceDao serviceDao;
 
 	@Autowired
-	private ClientDao clientDao;
+	private ClientServiceDao clientDao;
 
 	@Autowired
 	private ClientConnectionService clientConnectionService;
