@@ -2,6 +2,7 @@ package com.healthedge.codeloaders.dao;
 
 import com.healthedge.codeloaders.entity.ClientBaseEntity;
 import com.healthedge.codeloaders.repository.ClientServiceRepository;
+import com.healthedge.codeloaders.repository.ClientServiceRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class ClientServiceDao implements ClientBaseDao {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientBaseDao.class);
 
 	@Autowired
-	private ClientServiceRepository clientServiceRepository;
+	private ClientServiceRepositoryImpl clientServiceRepository;
 
 	public Map<String, Date> getPayorVersionAllCodes(EntityManager entityManager) {
 
