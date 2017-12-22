@@ -16,6 +16,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ import com.healthedge.codeloaders.dto.TenantRequest;
 public class BatchJobController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BatchJobController.class);
+
+	@Value("${basedata.path}")
+	private String baseData;
 
 	@Autowired
 	private ApplicationContext appContext;
@@ -73,6 +77,16 @@ public class BatchJobController {
 	}
 
 	public String runPersistence() throws Exception {
+		stagingLoadProcess.setBaseData(baseData);
+		stagingLoadProcess.startProcess();
+		for (String fileType : fileTypeOrdering.getFileTypes()) {
+			runClientPersitentJobForFileType(fileType);
+		}
+		return "SUCCESS";
+	}
+
+	public String triggerLoadProcess(String currentData) throws Exception {
+		stagingLoadProcess.setBaseData(currentData);
 		stagingLoadProcess.startProcess();
 		for (String fileType : fileTypeOrdering.getFileTypes()) {
 			runClientPersitentJobForFileType(fileType);

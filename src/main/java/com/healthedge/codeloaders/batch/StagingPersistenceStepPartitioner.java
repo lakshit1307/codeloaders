@@ -58,7 +58,7 @@ public class StagingPersistenceStepPartitioner implements Partitioner {
 			LOGGER.info("Total time required to transform file [{}]: {} ms", filePath, endTime - startTime);
 
 			startTime = System.currentTimeMillis();
-			final Map<String, List<BaseEntity>> diffRecords = diffCreator.configureDiff(record, fileMetaData);
+			final Map<String, List<BaseEntity>> diffRecords = diffCreator.configureDiff(record, fileMetaData, fileMetaData.isTerminateRequired());
 			endTime = System.currentTimeMillis();
 			LOGGER.info("Total time required to diff file [{}]: {} ms", filePath, endTime - startTime);
 
