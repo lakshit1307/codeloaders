@@ -32,7 +32,6 @@ public class StagingLoadProcess {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StagingLoadProcess.class);
 
-	@Value("${basedata.path}")
 	private String baseData;
 
 	@Autowired
@@ -59,7 +58,10 @@ public class StagingLoadProcess {
 	@Autowired
 	private ImplementationFactory implementationFactory;
 
-	// private FileStatus fileStatus=new FileStatus();
+
+	public void setBaseData (String baseData) {
+		this.baseData = baseData;
+	}
 
 	public void startProcess() throws Exception {
 		final Job job = (Job) appContext.getBean("stagingJob");

@@ -1,6 +1,7 @@
 package com.healthedge.codeloaders;
 
 import com.healthedge.codeloaders.batch.client.BatchJobController;
+import com.healthedge.codeloaders.filelistener.FilelistenerApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +27,10 @@ public class CodeloadersApplication {
         LOGGER.info("Preparing any pending code updates");
 		context.getBean(BatchJobController.class).runPersistence();
 		LOGGER.info("Persisted all pending code updates");
+		LOGGER.info("Starting file listner");
+		FilelistenerApplication filelistenerApplication = context.getBean(FilelistenerApplication.class);
+		filelistenerApplication.registerFileListener();
+		filelistenerApplication.startFileListener();
 	}
 
 

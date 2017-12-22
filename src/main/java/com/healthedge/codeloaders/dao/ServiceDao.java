@@ -94,7 +94,7 @@ public class ServiceDao implements BaseDao {
 	@Override
 	@Transactional
 	public void updateLatestVersionForProcessedFile(Long currentVersion, Long previousVersion, List<String> codes) {
-		//serviceRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
+		serviceRepository.updateLatestVersionForProcessedFile(currentVersion, previousVersion, codes);
 	}
 
 	@Override

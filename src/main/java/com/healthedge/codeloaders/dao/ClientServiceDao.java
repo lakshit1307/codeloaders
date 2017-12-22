@@ -31,10 +31,8 @@ public class ClientServiceDao implements ClientBaseDao {
 	}
 
 	@Override
-	public Long getPayorVersionPerCode(String codeType, EntityManager entityManager) {
-
-		return clientServiceRepository.getPayorCodeVersion(codeType, entityManager).getTime();
-
+	public Date getPayorVersionPerCode(String codeType, EntityManager entityManager) {
+		return clientServiceRepository.getPayorCodeVersion(codeType, entityManager);
 	}
 
 	@Override

@@ -22,6 +22,7 @@ public class MyFileMetaData {
     private String fileTypeCd;
     private Date effectiveStartDate;
     private Date effectiveEndDate;
+    private String refFileTypeForStartVersion;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -36,6 +37,7 @@ public class MyFileMetaData {
     public MyFileMetaData (String fileType) {
         this.fileType = fileType.toLowerCase(Locale.getDefault());
         identifyFileTypeCd();
+        identifyRefFileTypeForStartVersion();
     }
 
     public String getFilePath() {
@@ -70,6 +72,10 @@ public class MyFileMetaData {
         return effectiveEndDate;
     }
 
+    public String getRefFileTypeForStartVersion() {
+        return refFileTypeForStartVersion;
+    }
+
     private void identifyVersion () throws Exception {
         int index = this.baseFileName.lastIndexOf(FILE_DELIMITER);
         if (index != -1) {
@@ -93,6 +99,15 @@ public class MyFileMetaData {
         String property = properties.getProperty(propertyName);
         if (StringUtils.isNotEmpty(property) && StringUtils.isNotBlank(property)) {
             this.fileTypeCd = property.trim();
+        }
+    }
+
+    private void identifyRefFileTypeForStartVersion () {
+        Properties properties = CodeLoaderProperty.getInstance().getPropertiesByFileType(this.fileType);
+        String propertyName = this.fileType + CodeLoaderProperty.REF_FILE_TYPE_FOR_VERSION_START;
+        String property = properties.getProperty(propertyName);
+        if (StringUtils.isNotEmpty(property) && StringUtils.isNotBlank(property)) {
+            this.refFileTypeForStartVersion = property.trim();
         }
     }
 }
