@@ -10,9 +10,9 @@ import java.util.List;
 
 public class CopyFilesToBasedata {
 
-    public static void copyFiles(String file) throws IOException {
-        File source = new File(file.concat("\\current"));
-        File destination = new File(file.concat("\\basedata"));
+    public static void copyFiles(String srcFolder, String destFolder) throws IOException {
+        File source = new File(srcFolder);
+        File destination = new File(destFolder);
         List<String> folderList = findFoldersInDirectory(source,destination);
         deleteFoldersInSourceDirectory(folderList,source);
         System.out.println(folderList.toString());
