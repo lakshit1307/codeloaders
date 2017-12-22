@@ -82,4 +82,10 @@ public class DiagnosisTransformer implements Transformer {
 
 		return output;
 	}
+
+	@Override
+	public ClientBaseEntity clientEntityTransform(BaseEntity input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

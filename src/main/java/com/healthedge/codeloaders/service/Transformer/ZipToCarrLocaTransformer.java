@@ -37,4 +37,10 @@ public class ZipToCarrLocaTransformer implements Transformer{
     public List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input){
         return null;
     }
+
+	@Override
+	public ClientBaseEntity clientEntityTransform(BaseEntity input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

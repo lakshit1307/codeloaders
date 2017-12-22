@@ -3,10 +3,7 @@ package com.healthedge.codeloaders.entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("PMD")
 @Entity
