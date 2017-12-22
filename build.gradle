@@ -122,8 +122,12 @@ applicationDistribution.from( files('README.md')) {
 	into("")
 }
 
-applicationDistribution.from( files('main.sql')) {
-	into("doc")
+applicationDistribution.from( files('docs')) {
+	into("docs")
+}
+
+applicationDistribution.from( files('src/db/script')) {
+	into("scripts")
 }
 
 distributions {
