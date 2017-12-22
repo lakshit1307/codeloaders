@@ -19,7 +19,7 @@ public class CodeLoaderProperty {
     public static final String PARSER_CLASS_SUFFIX = "parser.class";
     public static final String TRANSFORMER_CLASS_SUFFIX = ".transformer.class";
     public static final String DAO_CLASS_SUFFIX = ".dao.class";
-    public static final String CLIENT_DAO_CLASS_SUFFIX = "client.dao.class";
+    public static final String CLIENT_DAO_CLASS_SUFFIX = ".client.dao.class";
     public static final String FILE_TYPE_CD_SUFFIX = ".mapper.filetypecd";
     public static final String REF_FILE_TYPE_FOR_VERSION_START = ".ref.filetype.for.versionstart";
 
