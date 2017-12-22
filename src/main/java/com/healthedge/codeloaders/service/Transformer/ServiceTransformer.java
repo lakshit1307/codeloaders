@@ -71,6 +71,7 @@ public class ServiceTransformer implements Transformer {
 		clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
 		clientService.setTxCnt(service.getTxCnt());
 		clientService.setWorkFlowCode(service.getWorkFlowCode());
+		clientService.setCode(service.getServiceCode());
 		return clientService;
 	}
 
