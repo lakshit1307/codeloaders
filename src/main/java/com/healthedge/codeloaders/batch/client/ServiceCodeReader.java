@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
+import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -23,11 +24,11 @@ import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 @StepScope
 public class ServiceCodeReader implements ItemReader<BaseEntity> {
 
-	@Value("#{jobParameters['filePath']}")
-	String codeType;
-
 	@Value("#{jobParameters['toVersion']}")
 	Long toVersion;
+
+	@Value("#{jobParameters['fileType']}")
+	private String fileType;
 
 	private EntityManager entityManager;
 
@@ -58,14 +59,17 @@ public class ServiceCodeReader implements ItemReader<BaseEntity> {
 	// }
 
 	@PostConstruct
-	public void onInit() {
+	public void onInit() throws Exception {
+		MyFileMetaData fileMetaData = new MyFileMetaData(fileType);
+		String fileTypeCd = fileMetaData.getFileTypeCd();
 		this.offset = 0;
 		this.entityManager = clientConnectionService
 				.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword())
 				.createEntityManager();
-//		clientBaseDao=implementationFactory.
-		this.currentCodeVersion = clientBaseDao.getPayorVersionPerCode(codeType, entityManager);
-		List<? extends BaseEntity> baseEntities = baseDao.getDeltaCodes(currentCodeVersion, toVersion, codeType);
+		ClientBaseDao clientBaseDao = implementationFactory.getClientDao(fileType);
+		this.currentCodeVersion = clientBaseDao.getPayorVersionPerCode(fileTypeCd, entityManager);
+		BaseDao baseDao = implementationFactory.getDao(fileType);
+		List<? extends BaseEntity> baseEntities = baseDao.getDeltaCodes(currentCodeVersion, toVersion, fileTypeCd);
 		this.entitites = baseEntities.toArray(new BaseEntity[baseEntities.size()]);
 
 	}

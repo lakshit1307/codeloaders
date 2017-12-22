@@ -33,6 +33,11 @@ public class MyFileMetaData {
         identifyFileTypeCd();
     }
 
+    public MyFileMetaData (String fileType) {
+        this.fileType = fileType.toLowerCase(Locale.getDefault());
+        identifyFileTypeCd();
+    }
+
     public String getFilePath() {
         return filePath;
     }

@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.batch.client;
 
+import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -17,8 +18,8 @@ public class ServiceCodeProcessor implements ItemProcessor< BaseEntity, ClientBa
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceCodeProcessor.class);
 
 	@Value("#{jobParameters['fileType']}")
-	String fileType;
-	
+	private String fileType;
+
 	@Autowired
 	private ClientPersistenceService clientPersistenceService;
 	
@@ -27,7 +28,6 @@ public class ServiceCodeProcessor implements ItemProcessor< BaseEntity, ClientBa
 
 	@Override
 	public ClientBaseEntity process(BaseEntity item) throws Exception {
-//		LOGGER.debug("Item service code: " + item.getServiceCode());
 		Transformer transformer=implementationFactory.getTransformer(fileType);
 		return transformer.clientEntityTransform(item);
 	}

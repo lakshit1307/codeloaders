@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
+import com.healthedge.codeloaders.myparser.MyFileMetaData;
+import com.healthedge.codeloaders.service.Parser.ImplementationFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
@@ -24,8 +26,8 @@ public class ServiceCodeWriter implements ItemWriter<ClientBaseEntity> {
 	@Value("#{stepExecutionContext[tenant_environment]}")
 	TenantEnv tenantEnv;
 
-	@Value("#{jobParameters['filePath']}")
-	String codeType;
+	@Value("#{jobParameters['fileType']}")
+	private String fileType;
 
 	private EntityManager entityManager;
 
@@ -35,14 +37,19 @@ public class ServiceCodeWriter implements ItemWriter<ClientBaseEntity> {
 	private ClientConnectionService clientConnectionService;
 
 	@Autowired
+	private ImplementationFactory implementationFactory;
+
 	private ClientBaseDao clientBaseDao;
 
 	@PostConstruct
-	public void onInit() {
+	public void onInit() throws Exception {
+		MyFileMetaData fileMetaData = new MyFileMetaData(fileType);
+		String fileTypeCd = fileMetaData.getFileTypeCd();
 		this.entityManager = clientConnectionService
 				.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword())
 				.createEntityManager();
-		this.clientCodes = clientBaseDao.getCurrentPayorCodes(codeType, entityManager);
+		clientBaseDao = implementationFactory.getClientDao(fileType);
+		this.clientCodes = clientBaseDao.getCurrentPayorCodes(fileTypeCd, entityManager);
 	}
 
 	@Override
@@ -67,7 +74,5 @@ public class ServiceCodeWriter implements ItemWriter<ClientBaseEntity> {
 		clientBaseDao.terminate(entityManager, clientBaseTerminate);
 		clientBaseDao.update(entityManager, clientBaseUpdate);
 		clientBaseDao.save(entityManager, clientBaseInsert);
-		// clientConnectionService.saveToClient(items, emf);
-
 	}
 }

@@ -3,6 +3,7 @@ package com.healthedge.codeloaders.batch.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.healthedge.codeloaders.service.FileTypeOrdering;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -42,6 +43,9 @@ public class BatchJobController {
 	@Autowired
 	private StagingLoadProcess stagingLoadProcess;
 
+	@Autowired
+	private FileTypeOrdering fileTypeOrdering;
+
 	@RequestMapping(method = RequestMethod.POST, value = "/trigger/all", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody BaseResponse getThings() {
 		BaseResponse baseResponse = new BaseResponse();
@@ -70,7 +74,7 @@ public class BatchJobController {
 
 	public String runPersistence() throws Exception {
 		stagingLoadProcess.startProcess();
-		for (String fileType : getFileTypes()) {
+		for (String fileType : fileTypeOrdering.getFileTypes()) {
 			runClientPersitentJobForFileType(fileType);
 		}
 		return "SUCCESS";
@@ -78,7 +82,7 @@ public class BatchJobController {
 
 	public String runPersistence(Integer tenantId, Integer tenantEnvId) throws JobExecutionAlreadyRunningException,
 			JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-		for (String fileType : getFileTypes()) {
+		for (String fileType : fileTypeOrdering.getFileTypes()) {
 			runClientPersitentJobForFileType(fileType,tenantId, tenantEnvId);
 		}
 		return "SUCCESS";
@@ -87,8 +91,9 @@ public class BatchJobController {
 	public String runClientPersitentJobForFileType(String fileType) throws JobExecutionAlreadyRunningException,
 			JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		final Job job = (Job) appContext.getBean("partitionerJob");
-		JobParameters jobParameters = new JobParametersBuilder().addString("filePath", fileType)
-				.addLong("time", System.currentTimeMillis()).addString("tenantId", "all").addString("tenantEnvId", "all").toJobParameters();
+		JobParameters jobParameters = new JobParametersBuilder().addString("fileType", fileType)
+				.addLong("time", System.currentTimeMillis()).addString("tenantId", "all")
+				.addString("tenantEnvId", "all").toJobParameters();
 		LOGGER.info("Starting the batch job for file: " + "cpt");
 		JobExecution execution = jobLauncher.run(job, jobParameters);
 		LOGGER.info("Job Status : " + execution.getStatus());
@@ -99,8 +104,9 @@ public class BatchJobController {
 	public String runClientPersitentJobForFileType(String fileType,Integer tenantId, Integer tenantEnvId) throws JobExecutionAlreadyRunningException,
 			JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		final Job job = (Job) appContext.getBean("partitionerJob");
-		JobParameters jobParameters = new JobParametersBuilder().addString("filePath", fileType)
-				.addLong("time", System.currentTimeMillis()).addString("tenantId", tenantId.toString()).addString("tenantEnvId", tenantEnvId.toString()).toJobParameters();
+		JobParameters jobParameters = new JobParametersBuilder().addString("fileType", fileType)
+				.addLong("time", System.currentTimeMillis()).addString("tenantId", tenantId.toString())
+				.addString("tenantEnvId", tenantEnvId.toString()).toJobParameters();
 		LOGGER.info("Starting the batch job for file: " + "cpt");
 		JobExecution execution = jobLauncher.run(job, jobParameters);
 		LOGGER.info("Job Status : " + execution.getStatus());
@@ -108,11 +114,5 @@ public class BatchJobController {
 		return "SUCCES";
 	}
 
-	private List<String> getFileTypes() {
-		final List<String> fileTypes = new ArrayList<String>();
-		fileTypes.add("cp");
-		fileTypes.add("hp");
-		return fileTypes;
-	}
 
 }
