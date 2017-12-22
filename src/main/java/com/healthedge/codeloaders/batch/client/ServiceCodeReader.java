@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.batch.client;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -67,7 +68,17 @@ public class ServiceCodeReader implements ItemReader<BaseEntity> {
 				.configureEntityManager(tenantEnv.getDbUrl(), tenantEnv.getDbUserName(), tenantEnv.getDbPassword())
 				.createEntityManager();
 		ClientBaseDao clientBaseDao = implementationFactory.getClientDao(fileType);
-		this.currentCodeVersion = clientBaseDao.getPayorVersionPerCode(fileTypeCd, entityManager);
+		String refFileTypeForStartVersion = fileMetaData.getRefFileTypeForStartVersion();
+		if (refFileTypeForStartVersion != null) {
+			MyFileMetaData fileMetaDataRef = new MyFileMetaData(refFileTypeForStartVersion);
+			ClientBaseDao clientBaseDaoRef = implementationFactory.getClientDao(fileMetaDataRef.getFileType());
+			Date lastUpdatedVersion = clientBaseDaoRef.getPayorVersionPerCode(fileMetaDataRef.getFileTypeCd(), entityManager);
+			this.currentCodeVersion = lastUpdatedVersion.getTime();
+		} else {
+			Date lastUpdatedVersion = clientBaseDao.getPayorVersionPerCode(fileTypeCd, entityManager);
+			this.currentCodeVersion = lastUpdatedVersion.getTime();
+		}
+
 		BaseDao baseDao = implementationFactory.getDao(fileType);
 		List<? extends BaseEntity> baseEntities = baseDao.getDeltaCodes(currentCodeVersion, toVersion, fileTypeCd);
 		this.entitites = baseEntities.toArray(new BaseEntity[baseEntities.size()]);
@@ -83,4 +94,5 @@ public class ServiceCodeReader implements ItemReader<BaseEntity> {
 		offset++;
 		return baseEntity;
 	}
+
 }

@@ -1,5 +1,6 @@
 package com.healthedge.codeloaders.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,7 +9,7 @@ import com.healthedge.codeloaders.entity.ClientBaseEntity;
 
 public interface ClientBaseDao {
 	
-	Long getPayorVersionPerCode(String codeType, EntityManager entityManager);
+	Date getPayorVersionPerCode(String codeType, EntityManager entityManager);
 	
 	List<String> getCurrentPayorCodes(String codeType, EntityManager entityManager);
 	
