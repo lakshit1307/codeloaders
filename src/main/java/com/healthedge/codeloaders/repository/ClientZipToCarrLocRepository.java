@@ -2,12 +2,14 @@ package com.healthedge.codeloaders.repository;
 
 import com.healthedge.codeloaders.entity.ClientBaseEntity;
 import com.healthedge.codeloaders.entity.ClientZipToCarrLocEntity;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class ClientZipToCarrLocRepository implements ClientServiceRepository {
     @Override
     public Date getPayorCodeVersion(String codeType, EntityManager entityManager) {
