@@ -8,9 +8,9 @@ import java.util.Map;
 
 public interface Transformer {
 
-	public Map<String, BaseEntity> transform(List<Map<String, String>> input);
+	Map<String, BaseEntity> transform(List<Map<String, String>> input);
 
-	public List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input);
+	List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input);
 
-	public ClientBaseEntity clientEntityTransform(BaseEntity input);
+	<T extends BaseEntity> ClientBaseEntity clientEntityTransform(T input);
 }

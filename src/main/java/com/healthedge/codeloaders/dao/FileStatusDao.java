@@ -34,7 +34,7 @@ public class FileStatusDao {
     }
 
     public FileStatus getFileTypeDetailsForLatestVersion(String fileType) {
-        FileStatus fileStatus=fileStatusRepository.getFileTypeDetailsForLatestVersion(fileType, FileStatus.PERSISTED);
+        FileStatus fileStatus=fileStatusRepository.getFileTypeDetailsForLatestVersion(fileType.toLowerCase(), FileStatus.PERSISTED);
         return fileStatus;
     }
 

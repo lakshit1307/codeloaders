@@ -23,6 +23,9 @@ public class ServiceDao implements BaseDao {
 	@Autowired
 	private ServiceRepository serviceRepository;
 
+	@Autowired
+	private FileStatusDao fileStatusDao;
+
 	public ServiceDao() {
 		LOGGER.info("ServieDao initialized");
 	}
@@ -99,10 +102,13 @@ public class ServiceDao implements BaseDao {
 	}
 
 	@Override
-	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion,
-			String codeType) {
+	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion, String codeType,
+			String fileType) {
 		// TODO Auto-generated method stub
 		// if client requests for a version lesser than the current version
+		if (payorRequestedVersion == null) {
+			payorRequestedVersion = fileStatusDao.getFileTypeDetailsForLatestVersion(fileType).getVersion();
+		}
 		if (payorRequestedVersion < currPayorVersion) {
 			return null;
 		}

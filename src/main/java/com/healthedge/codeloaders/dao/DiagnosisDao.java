@@ -50,8 +50,8 @@ public class DiagnosisDao implements BaseDao {
 	}
 
 	@Override
-	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion,
-			String codeType) {
+	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion, String codeType,
+			String fileType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

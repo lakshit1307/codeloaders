@@ -28,7 +28,7 @@ public class ServiceCodeProcessor implements ItemProcessor< BaseEntity, ClientBa
 
 	@Override
 	public ClientBaseEntity process(BaseEntity item) throws Exception {
-		Transformer transformer=implementationFactory.getTransformer(fileType);
+		Transformer transformer=implementationFactory.getTransformer(fileType.toLowerCase());
 		return transformer.clientEntityTransform(item);
 	}
 

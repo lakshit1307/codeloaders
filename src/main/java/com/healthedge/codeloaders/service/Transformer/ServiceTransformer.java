@@ -3,6 +3,7 @@ package com.healthedge.codeloaders.service.Transformer;
 import com.healthedge.codeloaders.common.CodeLoaderConstants;
 import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.ClientBaseEntity;
+import com.healthedge.codeloaders.entity.ClientService;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.util.StringUtil;
 import org.joda.time.DateTime;
@@ -56,10 +57,23 @@ public class ServiceTransformer implements Transformer {
 
 
 	@Override
-	public ClientBaseEntity clientEntityTransform(BaseEntity input) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T extends BaseEntity> ClientBaseEntity clientEntityTransform(T input) {
+		Service service=(Service) input;
+		ClientService clientService=new ClientService();
+		clientService.setEffectiveEndDate(service.getEffectiveEndDate());
+		clientService.setEffectiveStartDate(service.getEffectiveStartDate());
+		clientService.setLastTransactionDate(service.getLastTransactionDate());
+		clientService.setLastTransactionUserText(service.getLastTransactionUserText());
+		clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
+		clientService.setServiceLongDesciption(service.getServiceLongDesciption());
+		clientService.setServiceShortDesciption(service.getServiceShortDesciption());
+		clientService.setServiceTypeCode(service.getServiceTypeCD());
+		clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
+		clientService.setTxCnt(service.getTxCnt());
+		clientService.setWorkFlowCode(service.getWorkFlowCode());
+		return clientService;
 	}
+
 }
 
 

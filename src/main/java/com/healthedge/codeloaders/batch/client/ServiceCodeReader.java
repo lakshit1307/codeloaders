@@ -79,7 +79,7 @@ public class ServiceCodeReader implements ItemReader<BaseEntity> {
 		}
 
 		BaseDao baseDao = implementationFactory.getDao(fileType);
-		List<? extends BaseEntity> baseEntities = baseDao.getDeltaCodes(currentCodeVersion, toVersion, fileTypeCd);
+		List<? extends BaseEntity> baseEntities = baseDao.getDeltaCodes(currentCodeVersion, toVersion, fileTypeCd, fileType);
 		this.entitites = baseEntities.toArray(new BaseEntity[baseEntities.size()]);
 
 	}

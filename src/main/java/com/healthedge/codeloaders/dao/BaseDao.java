@@ -15,5 +15,6 @@ public interface BaseDao {
 
 	void updateLatestVersionForProcessedFile (Long currentVersion, Long previousVersion, List<String> codes);
 		
-	List<? extends BaseEntity> getDeltaCodes (Long currPayorVersion, Long payorRequestedVersion, String codeType);
+	List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion, String codeType,
+			String fileType);
 }
