@@ -9,7 +9,7 @@ import java.util.Date;
 @MappedSuperclass
 public class ClientBaseEntity implements Serializable {
 
-    private Date lastTransactionDate;
+    private Long lastTransactionDate;
     private String lastTransactionUserText;
     private Long txCnt;
     private Date effectiveStartDate;
@@ -19,11 +19,11 @@ public class ClientBaseEntity implements Serializable {
     @NotNull
     private String code;
 
-    public Date getLastTransactionDate() {
+    public Long getLastTransactionDate() {
         return lastTransactionDate;
     }
 
-    public void setLastTransactionDate(Date lastTransactionDate) {
+    public void setLastTransactionDate(Long lastTransactionDate) {
         this.lastTransactionDate = lastTransactionDate;
     }
 
