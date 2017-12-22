@@ -34,13 +34,13 @@ public class ImplementationFactory {
     }
 
     public BaseDao getDao (String fileType) throws Exception {
-        String propertyName = fileType + CodeLoaderProperty.DAO_CLASS_SUFFIX;
+        String propertyName = fileType.toLowerCase() + CodeLoaderProperty.DAO_CLASS_SUFFIX;
         Class clazz = Class.forName(getPropertyValue(propertyName));
         return (BaseDao) applicationContext.getBean(clazz);
     }
 
     public ClientBaseDao getClientDao (String fileType) throws Exception {
-        String propertyName = fileType + CodeLoaderProperty.CLIENT_DAO_CLASS_SUFFIX;
+        String propertyName = fileType.toLowerCase() + CodeLoaderProperty.CLIENT_DAO_CLASS_SUFFIX;
         Class clazz = Class.forName(getPropertyValue(propertyName));
         return (ClientBaseDao) applicationContext.getBean(clazz);
     }

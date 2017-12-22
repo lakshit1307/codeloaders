@@ -70,7 +70,8 @@ public class ServiceDao implements BaseDao {
 	}
 
 	@Override
-	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData, Long prevVersion) {
+	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData,
+			Long prevVersion) {
 		Map<String, Service> map = new HashMap<String, Service>();
 		for (Service service : serviceRepository.getServiceCodesByCodeTypeForVersionWithoutAction(
 				fileMetaData.getFileTypeCd(), prevVersion, CodeLoaderConstants.TERMINATE_ACTION)) {
@@ -101,11 +102,10 @@ public class ServiceDao implements BaseDao {
 	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion,
 			String codeType) {
 		// TODO Auto-generated method stub
-		//if client requests for a version lesser than the current version
-		if(payorRequestedVersion<currPayorVersion) {
+		// if client requests for a version lesser than the current version
+		if (payorRequestedVersion < currPayorVersion) {
 			return null;
 		}
-		//return serviceRepository.getDeltaCodes(currPayorVersion, payorRequestedVersion, codeType);
-		return null;
+		return serviceRepository.getDeltaCodes(codeType, currPayorVersion, payorRequestedVersion);
 	}
 }
