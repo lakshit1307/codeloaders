@@ -1,5 +1,7 @@
 package com.healthedge.codeloaders.entity;
 
+import java.util.Date;
+
 public class ClientZipToCarrLocEntity extends ClientBaseEntity {
 
     private Long zipToCarrLocalityId;
@@ -16,13 +18,13 @@ public class ClientZipToCarrLocEntity extends ClientBaseEntity {
 
     private String conceptFulfilledCd;
 
-    private Long versionEffectiveDate;
+    private Date versionEffectiveDate;
 
-    private Long versionExpiryDate;
+    private Date versionExpiryDate;
 
-    private Long endorEffectiveDate;
+    private Date endorEffectiveDate;
 
-    private Long endorExpiryDate;
+    private Date endorExpiryDate;
 
     private Long scheduleId;
 
@@ -84,35 +86,35 @@ public class ClientZipToCarrLocEntity extends ClientBaseEntity {
         this.conceptFulfilledCd = conceptFulfilledCd;
     }
 
-    public Long getVersionEffectiveDate() {
+    public Date getVersionEffectiveDate() {
         return versionEffectiveDate;
     }
 
-    public void setVersionEffectiveDate(Long versionEffectiveDate) {
+    public void setVersionEffectiveDate(Date versionEffectiveDate) {
         this.versionEffectiveDate = versionEffectiveDate;
     }
 
-    public Long getVersionExpiryDate() {
+    public Date getVersionExpiryDate() {
         return versionExpiryDate;
     }
 
-    public void setVersionExpiryDate(Long versionExpiryDate) {
+    public void setVersionExpiryDate(Date versionExpiryDate) {
         this.versionExpiryDate = versionExpiryDate;
     }
 
-    public Long getEndorEffectiveDate() {
+    public Date getEndorEffectiveDate() {
         return endorEffectiveDate;
     }
 
-    public void setEndorEffectiveDate(Long endorEffectiveDate) {
+    public void setEndorEffectiveDate(Date endorEffectiveDate) {
         this.endorEffectiveDate = endorEffectiveDate;
     }
 
-    public Long getEndorExpiryDate() {
+    public Date getEndorExpiryDate() {
         return endorExpiryDate;
     }
 
-    public void setEndorExpiryDate(Long endorExpiryDate) {
+    public void setEndorExpiryDate(Date endorExpiryDate) {
         this.endorExpiryDate = endorExpiryDate;
     }
 
