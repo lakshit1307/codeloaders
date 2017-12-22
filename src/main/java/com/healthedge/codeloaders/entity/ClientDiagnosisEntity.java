@@ -106,16 +106,10 @@ public class ClientDiagnosisEntity extends ClientBaseEntity{
         this.level2DiagCatCatNM = level2DiagCatCatNM;
     }
 
-    public String getLevel3DiagCatCatNM() {
-        return level3DiagCatCatNM;
-    }
+
 
     public void setLevel3DiagCatCatNM(String level3DiagCatCatNM) {
         this.level3DiagCatCatNM = level3DiagCatCatNM;
-    }
-
-    public String getLevel4DiagCatCatNM() {
-        return level4DiagCatCatNM;
     }
 
     public void setLevel4DiagCatCatNM(String level4DiagCatCatNM) {

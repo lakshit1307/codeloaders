@@ -39,13 +39,8 @@ public class ServiceCodeReader implements ItemReader<BaseEntity> {
 
 	private int offset;
 
-	private BaseDao baseDao;
-
 	@Autowired
 	private ImplementationFactory implementationFactory;
-	
-	
-	private ClientBaseDao clientBaseDao;
 
 	@Autowired
 	private ClientConnectionService clientConnectionService;

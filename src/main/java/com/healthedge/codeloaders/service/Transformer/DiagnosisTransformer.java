@@ -61,31 +61,25 @@ public class DiagnosisTransformer implements Transformer {
 	@Override
 	public List<ClientBaseEntity> clientEntityTransform(List<BaseEntity> input) {
 		// TODO Auto-generated method stub
-        List<ClientBaseEntity> output = new ArrayList<>();
-        List<Diagnosis> diagnosisList = (List<Diagnosis>)(List<?>) input;
-        diagnosisList.forEach(item -> {
-            ClientDiagnosisEntity clientDiagnosisEntity = new ClientDiagnosisEntity();
-            clientDiagnosisEntity.setDiagnosisCode(item.getCode());
-            clientDiagnosisEntity.setDiagnosisLongDescription(item.getDiagnosisLongDescription());
-            clientDiagnosisEntity.setDiagnosisShortDescription(item.getDiagnosisShortDescription());
-            clientDiagnosisEntity.setAlternateDescription(item.getAlternateDescription());
-            clientDiagnosisEntity.setDiagnosisTypeCode(item.getDiagnosisTypeCode());
-            clientDiagnosisEntity.setStandardizedDiagnosisCode(item.getStandardizedDiagnosisCode());
-            clientDiagnosisEntity.setWorkFlowCode(item.getWorkFlowCode());
-            clientDiagnosisEntity.setEffectiveStartDate(item.getEffectiveStartDate());
-            clientDiagnosisEntity.setEffectiveEndDate(item.getEffectiveEndDate());
-            clientDiagnosisEntity.setLastTransactionDate(item.getLastTransactionDate());
-            clientDiagnosisEntity.setLastTransactionUserText(item.getLastTransactionUserText());
-            clientDiagnosisEntity.setTxCnt(item.getTxCnt());
-            output.add(clientDiagnosisEntity);
-        });
-
-		return output;
+        return null;
 	}
 
 	@Override
 	public ClientBaseEntity clientEntityTransform(BaseEntity input) {
-		// TODO Auto-generated method stub
-		return null;
+        Diagnosis item = (Diagnosis) input;
+        ClientDiagnosisEntity clientDiagnosisEntity = new ClientDiagnosisEntity();
+        clientDiagnosisEntity.setDiagnosisCode(item.getCode());
+        clientDiagnosisEntity.setDiagnosisLongDescription(item.getDiagnosisLongDescription());
+        clientDiagnosisEntity.setDiagnosisShortDescription(item.getDiagnosisShortDescription());
+        clientDiagnosisEntity.setAlternateDescription(item.getAlternateDescription());
+        clientDiagnosisEntity.setDiagnosisTypeCode(item.getDiagnosisTypeCode());
+        clientDiagnosisEntity.setStandardizedDiagnosisCode(item.getStandardizedDiagnosisCode());
+        clientDiagnosisEntity.setWorkFlowCode(item.getWorkFlowCode());
+        clientDiagnosisEntity.setEffectiveStartDate(item.getEffectiveStartDate());
+        clientDiagnosisEntity.setEffectiveEndDate(item.getEffectiveEndDate());
+        clientDiagnosisEntity.setLastTransactionDate(item.getLastTransactionDate());
+        clientDiagnosisEntity.setLastTransactionUserText(item.getLastTransactionUserText());
+        clientDiagnosisEntity.setTxCnt(item.getTxCnt());
+        return clientDiagnosisEntity;
 	}
 }

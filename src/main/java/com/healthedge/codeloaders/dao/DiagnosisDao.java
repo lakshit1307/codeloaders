@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,9 @@ public class DiagnosisDao implements BaseDao {
 
 	@Autowired
 	private DiagnosisRepository diagnosisRepository;
+
+    @Autowired
+    private FileStatusDao fileStatusDao;
 
 	@Override
 	public Map<String, ? extends BaseEntity> getLatestVersionWithoutTerminate(MyFileMetaData fileMetaData,
@@ -53,6 +57,13 @@ public class DiagnosisDao implements BaseDao {
 	public List<? extends BaseEntity> getDeltaCodes(Long currPayorVersion, Long payorRequestedVersion, String codeType,
 			String fileType) {
 		// TODO Auto-generated method stub
-		return null;
+        if (payorRequestedVersion == null) {
+            payorRequestedVersion = fileStatusDao.getFileTypeDetailsForLatestVersion(fileType).getVersion();
+        }
+        if (payorRequestedVersion < currPayorVersion) {
+            return null;
+        }
+        List<Diagnosis> diagnoses = diagnosisRepository.getDeltaCodes(codeType, currPayorVersion, payorRequestedVersion);
+        return diagnoses;
 	}
 }
