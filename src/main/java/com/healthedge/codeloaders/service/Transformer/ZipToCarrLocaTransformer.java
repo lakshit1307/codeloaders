@@ -50,10 +50,10 @@ public class ZipToCarrLocaTransformer implements Transformer{
             clientZipToCarrLocEntity.setConceptFulfilledCd(item.getConceptFulfilledCd());
             clientZipToCarrLocEntity.setCvcTypeCd(item.getCvcTypeCd());
             clientZipToCarrLocEntity.setInstActiveCd(item.getInstActiveCd());
-            clientZipToCarrLocEntity.setEndorEffectiveDate(current.toDate().getTime());  //TODO
-            clientZipToCarrLocEntity.setEndorExpiryDate(current.toDate().getTime());          //TODO
-            clientZipToCarrLocEntity.setVersionEffectiveDate(current.toDate().getTime());     //TODO
-            clientZipToCarrLocEntity.setVersionExpiryDate(current.toDate().getTime());        //TODO
+            clientZipToCarrLocEntity.setEndorEffectiveDate(current.toDate());  //TODO
+            clientZipToCarrLocEntity.setEndorExpiryDate(current.toDate());          //TODO
+            clientZipToCarrLocEntity.setVersionEffectiveDate(current.toDate());     //TODO
+            clientZipToCarrLocEntity.setVersionExpiryDate(current.toDate());        //TODO
             clientZipToCarrLocEntity.setScheduleId((long) 1); // TODO to read scheduled Id Medicare
             clientZipToCarrLocEntity.setCode(item.getCode());
             clientZipToCarrLocEntity.setZipCode(item.getZipCode());
