@@ -23,6 +23,7 @@ public class MyFileMetaData {
     private Date effectiveStartDate;
     private Date effectiveEndDate;
     private String refFileTypeForStartVersion;
+    private boolean terminateRequired = true;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -32,6 +33,7 @@ public class MyFileMetaData {
         this.baseFileName = FilenameUtils.getBaseName(filePath);
         identifyVersion();
         identifyFileTypeCd();
+        identifyIsTerminateRequired();
     }
 
     public MyFileMetaData (String fileType) {
@@ -72,6 +74,10 @@ public class MyFileMetaData {
         return effectiveEndDate;
     }
 
+    public boolean isTerminateRequired() {
+        return terminateRequired;
+    }
+
     public String getRefFileTypeForStartVersion() {
         return refFileTypeForStartVersion;
     }
@@ -108,6 +114,15 @@ public class MyFileMetaData {
         String property = properties.getProperty(propertyName);
         if (StringUtils.isNotEmpty(property) && StringUtils.isNotBlank(property)) {
             this.refFileTypeForStartVersion = property.trim();
+        }
+    }
+
+    private void identifyIsTerminateRequired () {
+        Properties properties = CodeLoaderProperty.getInstance().getPropertiesByFileType(this.fileType);
+        String propertyName = this.fileType + CodeLoaderProperty.TERMINATE_REQUIRED_SUFFIX;
+        String property = properties.getProperty(propertyName);
+        if (StringUtils.isNotEmpty(property) && StringUtils.isNotBlank(property)) {
+            this.terminateRequired = Boolean.parseBoolean(property.trim());
         }
     }
 }

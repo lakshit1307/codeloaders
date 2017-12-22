@@ -62,7 +62,7 @@ public class NewDiffCreator {
 	}
 
 	public <T extends BaseEntity, D extends BaseDao> Map<String, List<T>> configureDiff(Map<String, T> currentFileCodes,
-																						MyFileMetaData fileMetaData) throws Exception {
+																						MyFileMetaData fileMetaData, boolean isTerminateRequired) throws Exception {
 		if (CollectionUtils.isEmpty(previous)) {
 			FileStatus fileStatus = fileStatusDao.getFileTypeDetailsForLatestVersion(fileMetaData.getFileType());
 			if (fileStatus != null) {
@@ -75,12 +75,12 @@ public class NewDiffCreator {
 		}
 
 		currVersion = fileMetaData.getFileVersion();
-		return createDiff(previous, currentFileCodes, fileMetaData);
+		return createDiff(previous, currentFileCodes, fileMetaData, isTerminateRequired);
 
 	}
 
 	public <T extends BaseEntity> Map<String, List<T>> createDiff(Map<String, T> previousFileCodes,
-			Map<String, T> currentFileCodes, MyFileMetaData fileMetaData) {
+			Map<String, T> currentFileCodes, MyFileMetaData fileMetaData, boolean isTerminateRequired) {
 		final List<T> create = new ArrayList<T>();
 		final List<T> append = new ArrayList<T>();
 		final List<T> terminate = new ArrayList<T>();
@@ -124,13 +124,15 @@ public class NewDiffCreator {
 					create.add(pojo);
 				}
 			}
-			for (final String key : previousFileCodes.keySet()) {
-				final T pojo = previousFileCodes.get(key);
-				pojo.setAction(CodeLoaderConstants.TERMINATE_ACTION);
-				pojo.setEffectiveEndDate(fileMetaData.getEffectiveEndDate());
-				pojo.setVersionEnd(fileMetaData.getFileVersion());
-				terminate.add(pojo);
-				codes.add(pojo.getCode());
+			if (isTerminateRequired) {
+				for (final String key : previousFileCodes.keySet()) {
+					final T pojo = previousFileCodes.get(key);
+					pojo.setAction(CodeLoaderConstants.TERMINATE_ACTION);
+					pojo.setEffectiveEndDate(fileMetaData.getEffectiveEndDate());
+					pojo.setVersionEnd(fileMetaData.getFileVersion());
+					terminate.add(pojo);
+					codes.add(pojo.getCode());
+				}
 			}
 			previousFileCodes.clear();
 			previousFileCodes.putAll(currentFileCodes);
