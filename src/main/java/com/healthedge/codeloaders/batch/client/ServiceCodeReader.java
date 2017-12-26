@@ -80,7 +80,7 @@ public class ServiceCodeReader implements ItemReader<BaseEntity> {
 	}
 
 	@Override
-	public BaseEntity read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+	public BaseEntity read() throws Exception {
 		BaseEntity baseEntity = null;
 		if (offset < entitites.length) {
 			baseEntity = entitites[offset];

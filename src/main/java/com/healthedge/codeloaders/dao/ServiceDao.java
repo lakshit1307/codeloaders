@@ -5,10 +5,8 @@ import com.healthedge.codeloaders.entity.BaseEntity;
 import com.healthedge.codeloaders.entity.Service;
 import com.healthedge.codeloaders.myparser.MyFileMetaData;
 import com.healthedge.codeloaders.repository.ServiceRepository;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,9 +108,8 @@ public class ServiceDao implements BaseDao {
 			payorRequestedVersion = fileStatusDao.getFileTypeDetailsForLatestVersion(fileType).getVersion();
 		}
 		if (payorRequestedVersion < currPayorVersion) {
-			return null;
+			return new ArrayList<Service>();
 		}
-		List<Service> services = serviceRepository.getServiceCodesByCodeType(codeType);
 		return serviceRepository.getDeltaCodes(codeType, currPayorVersion, payorRequestedVersion);
 	}
 }
