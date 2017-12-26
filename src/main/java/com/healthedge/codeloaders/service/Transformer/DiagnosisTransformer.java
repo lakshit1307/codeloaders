@@ -26,12 +26,12 @@ public class DiagnosisTransformer implements Transformer {
 
             String code=item.get("code");
             if (code.contains(".")) {
-                diagnosis.setDiagnosisCode(code);
+                diagnosis.setCode(code);
             } else {
-                diagnosis.setDiagnosisCode(insertDot(code, 3));
+                diagnosis.setCode(insertDot(code, 3));
             }
 
-            diagnosis.setStandardizedDiagnosisCode(diagnosis.getDiagnosisCode().replace(".",""));
+            diagnosis.setStandardizedDiagnosisCode(diagnosis.getCode().replace(".",""));
             diagnosis.setTxCnt(current.toDate().getTime());
             diagnosis.setLastTransactionDate(current.toDate());
             diagnosis.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);
@@ -39,7 +39,7 @@ public class DiagnosisTransformer implements Transformer {
             diagnosis.setDiagnosisLongDescription(modifyInputString(item.get("longdesc"),1000));
             diagnosis.setDiagnosisShortDescription(modifyInputString(item.get("shortdesc"),50));
             diagnosis.setDiagnosisTypeCode(item.get("filetypecd"));
-            result.put(diagnosis.getDiagnosisCode(),diagnosis);
+            result.put(diagnosis.getCode(),diagnosis);
         });
 
         return result;

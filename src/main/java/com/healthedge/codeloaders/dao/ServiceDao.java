@@ -34,14 +34,14 @@ public class ServiceDao implements BaseDao {
 	public Boolean update(final Service service) {
 		serviceRepository.update(service.getServiceShortDesciption(), service.getServiceLongDesciption(),
 				service.getServiceAlternateDesciption(), service.getAction(), service.getVersionStart(),
-				service.getServiceCode());
+				service.getCode());
 		return true;
 	}
 
 	@Transactional
 	public Boolean terminate(final Service service) {
 		serviceRepository.terminate(service.getEffectiveEndDate(), service.getAction(), service.getVersionStart(),
-				service.getServiceCode());
+				service.getCode());
 		return true;
 	}
 
@@ -78,7 +78,7 @@ public class ServiceDao implements BaseDao {
 		Map<String, Service> map = new HashMap<String, Service>();
 		for (Service service : serviceRepository.getServiceCodesByCodeTypeForVersionWithoutAction(
 				fileMetaData.getFileTypeCd(), prevVersion, CodeLoaderConstants.TERMINATE_ACTION)) {
-			map.put(service.getServiceCode(), service);
+			map.put(service.getCode(), service);
 		}
 		return map;
 	}
@@ -112,6 +112,7 @@ public class ServiceDao implements BaseDao {
 		if (payorRequestedVersion < currPayorVersion) {
 			return null;
 		}
+		List<Service> services = serviceRepository.getServiceCodesByCodeType(codeType);
 		return serviceRepository.getDeltaCodes(codeType, currPayorVersion, payorRequestedVersion);
 	}
 }

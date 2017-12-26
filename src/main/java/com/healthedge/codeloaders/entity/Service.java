@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_SERVICE")
-@IdClass(BaseEntity.class)
+@IdClass(BaseEntityIdentifier.class)
 @AttributeOverrides({
 		@AttributeOverride(name = "lastTransactionDate", column =
 		@Column(name = "LAST_TX_DT")),
@@ -23,13 +23,10 @@ import javax.validation.constraints.NotNull;
 		@AttributeOverride(name = "action", column =
 		@Column(name = "ACTION")),
 		@AttributeOverride(name = "versionEnd", column =
-		@Column(name = "VERSION_END"))})
+		@Column(name = "VERSION_END")),
+		@AttributeOverride(name = "code", column =
+		@Column(name = "SERV_CD"))})
 public class Service extends BaseEntity {
-
-	@Id
-	@NotNull
-	@Column(name = "SERV_CD")
-	private String serviceCode;
 
 	@Column(name = "SERV_SHORT_DSC")
 	private String serviceShortDesciption;
@@ -51,15 +48,6 @@ public class Service extends BaseEntity {
 
 	@Column(name = "CODE_PROCESSING_HISTORY_ID")
 	private Integer codeProcessingHistoryId;
-
-	public String getServiceCode() {
-		return serviceCode;
-	}
-
-	public void setServiceCode(String serviceCode) {
-		super.setCode(serviceCode);
-		this.serviceCode = serviceCode;
-	}
 
 	public String getServiceTypeCD() {
 		return serviceTypeCD;
@@ -132,7 +120,7 @@ public class Service extends BaseEntity {
 
 		Service service = (Service) o;
 
-		if (serviceCode != null ? !serviceCode.equals(service.serviceCode) : service.serviceCode != null) return false;
+		if (super.getCode() != null ? !super.getCode().equals(service.getCode()) : service.getCode() != null) return false;
 		if (serviceLongDesciption != null ? !serviceLongDesciption.equals(service.serviceLongDesciption) : service.serviceLongDesciption != null) return false;
 		if (serviceShortDesciption != null ? !serviceShortDesciption.equals(service.serviceShortDesciption) : service.serviceShortDesciption != null) return false;
 		return serviceAlternateDesciption != null ? serviceAlternateDesciption.equals(service.serviceAlternateDesciption) : service.serviceAlternateDesciption == null;
@@ -140,7 +128,7 @@ public class Service extends BaseEntity {
 
 	@Override
 	public int hashCode() {
-		int result = serviceCode != null ? serviceCode.hashCode() : 0;
+		int result = super.getCode() != null ? super.getCode().hashCode() : 0;
 		result = 31 * result + (serviceLongDesciption != null ? serviceLongDesciption.hashCode() : 0);
 		result = 31 * result + (serviceShortDesciption != null ? serviceShortDesciption.hashCode() : 0);
 		result = 31 * result + (serviceAlternateDesciption != null ? serviceAlternateDesciption.hashCode() : 0);

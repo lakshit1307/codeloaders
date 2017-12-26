@@ -21,13 +21,13 @@ public class ZipToCarrLocaTransformer implements Transformer{
         DateTime current = new DateTime();
         input.forEach(item -> {
             ZipToCarrierLocality zipToCarrierLocality = new ZipToCarrierLocality();
-            zipToCarrierLocality.setZipCode(item.get("code"));
+            zipToCarrierLocality.setCode(item.get("code"));
             zipToCarrierLocality.setCarrierNbr(item.get("carriernbr"));
             zipToCarrierLocality.setLocalityNbr(item.get("localitynbr"));
             zipToCarrierLocality.setTxCnt(current.toDate().getTime());
             zipToCarrierLocality.setLastTransactionDate(current.toDate());
             zipToCarrierLocality.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);
-            result.put(zipToCarrierLocality.getZipCode(),zipToCarrierLocality);
+            result.put(zipToCarrierLocality.getCode(),zipToCarrierLocality);
         });
 
         return result;
@@ -56,7 +56,7 @@ public class ZipToCarrLocaTransformer implements Transformer{
             clientZipToCarrLocEntity.setVersionExpiryDate(current.toDate());        //TODO
             clientZipToCarrLocEntity.setScheduleId((long) 1); // TODO to read scheduled Id Medicare
             clientZipToCarrLocEntity.setCode(item.getCode());
-            clientZipToCarrLocEntity.setZipCode(item.getZipCode());
+            clientZipToCarrLocEntity.setZipCode(item.getCode());
             clientZipToCarrLocEntity.setLastTransactionDate(current.toDate());
             clientZipToCarrLocEntity.setTxCnt(current.toDate().getTime());
             clientZipToCarrLocEntity.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);

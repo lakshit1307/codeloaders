@@ -24,7 +24,7 @@ public class ProcedureDaoTest {
         procedure.setProcedureDesc("short ");
         procedure.setProcedureType("a2");
         procedure.setProcedureWorkFlow("sd");
-        procedure.setProcedureCode("2");
+        procedure.setCode("2");
         procedure.setLastTransactionUserText("user text");
         proceduredao.save(procedure);
         procedures=proceduredao.getAll();

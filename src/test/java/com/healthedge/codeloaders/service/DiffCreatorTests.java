@@ -69,7 +69,7 @@ public class DiffCreatorTests {
         Map<String,Service> serviceRecords=new HashMap<>();
         for(int i=0;i<10;++i) {
             service = returnServiceObject();
-            code = service.getServiceCode();
+            code = service.getCode();
             serviceRecords.put(code,service);
         }
         return serviceRecords;
@@ -78,7 +78,7 @@ public class DiffCreatorTests {
 
         //SERVICE CLASS OBJECT
         Service service=new Service();
-        service.setServiceCode(getRandomServiceCode());
+        service.setCode(getRandomServiceCode());
         service.setServiceLongDesciption("Scoliosis, DNA analysis of 53 single nucleotide polymorphisms");
         service.setServiceShortDesciption("SALIVA PROGNOSTIC RISK SCORE");
         service.setServiceAlternateDesciption("DNA analysis of 53 single nucleotide polymorphisms");

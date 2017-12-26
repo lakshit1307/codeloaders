@@ -40,7 +40,7 @@ public class ServiceDaoTest {
 		service.setServiceShortDesciption("short ");
 		service.setStandardizedServiceCode("a2");
 		service.setworkFlowCode("sd");
-		service.setServiceCode("d");
+		service.setCode("d");
 		service.setLastTransactionUserText("user text");
 		serviceDao.save(service);
 		services=serviceDao.getAll();
@@ -62,7 +62,7 @@ public class ServiceDaoTest {
 		service.setServiceShortDesciption("short ");
 		service.setStandardizedServiceCode("d");
 		service.setworkFlowCode("sd");
-		service.setServiceCode("d");
+		service.setCode("d");
 		service.setLastTransactionUserText("user text");
 		serviceDao.save(service);
 		services=serviceDao.getAll();
@@ -77,7 +77,7 @@ public class ServiceDaoTest {
 		service.setServiceShortDesciption("new short ");
 		service.setStandardizedServiceCode("d");
 		service.setworkFlowCode("sd");
-		service.setServiceCode("d");
+		service.setCode("d");
 		service.setLastTransactionUserText("user text");
 		service.setVersionStart(new Date().getTime());
 		serviceDao.update(service);
@@ -99,7 +99,7 @@ public class ServiceDaoTest {
 		service.setServiceShortDesciption("short ");
 		service.setStandardizedServiceCode("d");
 		service.setworkFlowCode("sd");
-		service.setServiceCode("d");
+		service.setCode("d");
 		service.setLastTransactionUserText("user text");
 		serviceDao.save(service);
 		services=serviceDao.getAll();

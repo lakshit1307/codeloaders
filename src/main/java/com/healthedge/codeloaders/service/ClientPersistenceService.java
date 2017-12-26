@@ -68,7 +68,7 @@ public class ClientPersistenceService {
 				clientService.setLastTransactionDate(service.getLastTransactionDate());
 				clientService.setLastTransactionUserText(service.getLastTransactionUserText());
 				clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
-				clientService.setCode(service.getServiceCode());
+				clientService.setCode(service.getCode());
 				clientService.setServiceLongDesciption(service.getServiceLongDesciption());
 				clientService.setServiceShortDesciption(service.getServiceShortDesciption());
 				clientService.setServiceTypeCode(service.getServiceTypeCD());
@@ -92,7 +92,7 @@ public class ClientPersistenceService {
 		clientService.setLastTransactionDate(service.getLastTransactionDate());
 		clientService.setLastTransactionUserText(service.getLastTransactionUserText());
 		clientService.setServiceAlternateDesciption(service.getServiceAlternateDesciption());
-		clientService.setCode(service.getServiceCode());
+		clientService.setCode(service.getCode());
 		clientService.setServiceLongDesciption(service.getServiceLongDesciption());
 		clientService.setServiceShortDesciption(service.getServiceShortDesciption());
 		clientService.setServiceTypeCode(service.getServiceTypeCD());

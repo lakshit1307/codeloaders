@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_ZIP_TO_CARRIER_LOCALITY")
-@IdClass(BaseEntity.class)
+@IdClass(BaseEntityIdentifier.class)
 @AttributeOverrides({
         @AttributeOverride(name = "lastTransactionDate", column =
         @Column(name = "LAST_TX_DT")),
@@ -24,7 +24,9 @@ import javax.validation.constraints.NotNull;
         @AttributeOverride(name = "action", column =
         @Column(name = "ACTION")),
         @AttributeOverride(name = "versionEnd", column =
-        @Column(name = "VERSION_END"))})
+        @Column(name = "VERSION_END")),
+        @AttributeOverride(name = "code", column =
+        @Column(name = "ZIP_CD"))})
 public class ZipToCarrierLocality extends BaseEntity{
 
 
@@ -47,11 +49,6 @@ public class ZipToCarrierLocality extends BaseEntity{
     @NotNull
     @Column(name = "CONCEPT_FULFILLED_CD")
     private String conceptFulfilledCd="t";
-
-    @Id
-    @NotNull
-    @Column(name = "ZIP_CD")
-    private String zipCode;
 
     public String getCarrierNbr() {
         return carrierNbr;
@@ -93,15 +90,6 @@ public class ZipToCarrierLocality extends BaseEntity{
         this.conceptFulfilledCd = conceptFulfilledCd;
     }
 
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        super.setCode(zipCode);
-        this.zipCode = zipCode;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -115,7 +103,7 @@ public class ZipToCarrierLocality extends BaseEntity{
         if (instActiveCd != null ? !instActiveCd.equals(that.instActiveCd) : that.instActiveCd != null) return false;
         if (conceptFulfilledCd != null ? !conceptFulfilledCd.equals(that.conceptFulfilledCd) : that.conceptFulfilledCd != null)
             return false;
-        return zipCode != null ? zipCode.equals(that.zipCode) : that.zipCode == null;
+        return super.getCode() != null ? super.getCode().equals(that.getCode()) : that.getCode() == null;
     }
 
     @Override
@@ -125,7 +113,7 @@ public class ZipToCarrierLocality extends BaseEntity{
         result = 31 * result + (cvcTypeCd != null ? cvcTypeCd.hashCode() : 0);
         result = 31 * result + (instActiveCd != null ? instActiveCd.hashCode() : 0);
         result = 31 * result + (conceptFulfilledCd != null ? conceptFulfilledCd.hashCode() : 0);
-        result = 31 * result + (zipCode != null ? zipCode.hashCode() : 0);
+        result = 31 * result + (super.getCode() != null ? super.getCode().hashCode() : 0);
         return result;
     }
 }

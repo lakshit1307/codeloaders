@@ -23,8 +23,8 @@ public class ServiceTransformer implements Transformer {
         DateTime current = new DateTime();
         input.forEach(item -> {
             Service service=new Service();
-            service.setServiceCode(item.get("code"));
-            service.setServiceTypeCD(service.getServiceCode());
+            service.setCode(item.get("code"));
+            service.setServiceTypeCD(service.getCode());
             service.setTxCnt(current.toDate().getTime());
             service.setLastTransactionDate(current.toDate());
             service.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);
@@ -33,8 +33,8 @@ public class ServiceTransformer implements Transformer {
             service.setServiceLongDesciption(modifyInputString(item.get("longdesc"),1000));
             service.setServiceShortDesciption(modifyInputString(item.get("shortdesc"),50));
             service.setServiceTypeCD(item.get("filetypecd"));
-            service.setStandardizedServiceCode(service.getServiceCode());
-            result.put(service.getServiceCode(),service);
+            service.setStandardizedServiceCode(service.getCode());
+            result.put(service.getCode(),service);
         });
 
         return result;
@@ -71,7 +71,7 @@ public class ServiceTransformer implements Transformer {
 		clientService.setStandardizedServiceCode(service.getStandardizedServiceCode());
 		clientService.setTxCnt(service.getTxCnt());
 		clientService.setWorkFlowCode(service.getWorkFlowCode());
-		clientService.setCode(service.getServiceCode());
+		clientService.setCode(service.getCode());
 		return clientService;
 	}
 

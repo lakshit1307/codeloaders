@@ -7,54 +7,25 @@ import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+public class BaseEntity extends BaseEntityIdentifier {
 
 	private Date lastTransactionDate;
-
 	private String lastTransactionUserText;
-
 	private Long txCnt;
-
-	@Id
-	private Long versionStart;
-
 	private String action;
-
-	@Id
-	private Long versionEnd;
-
 	private Date effectiveStartDate;
-
 	private Date effectiveEndDate;
 
-	@Transient
-	private String code;
-
-	@Transient
-	public String getCode() {
-		return code;
-	}
-
-	@Transient
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public Long getVersionEnd() {
-		return versionEnd;
-	}
-
-	public void setVersionEnd(Long versionEnd) {
-		this.versionEnd = versionEnd;
-	}
-
-	public Long getVersionStart() {
-		return versionStart;
-	}
-
-	public void setVersionStart(Long version) {
-		this.versionStart = version;
-	}
+//	@Transient
+//	private String code;
+//
+//	public String getCode() {
+//		return code;
+//	}
+//
+//	public void setCode(String code) {
+//		this.code = code;
+//	}
 
 	public String getAction() {
 		return action;

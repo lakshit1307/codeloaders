@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name="T_DIAGNOSIS")
-@IdClass(BaseEntity.class)
+@IdClass(BaseEntityIdentifier.class)
 @AttributeOverrides({
         @AttributeOverride(name = "lastTransactionDate", column =
         @Column(name = "LAST_TX_DT")),
@@ -24,13 +24,10 @@ import javax.validation.constraints.NotNull;
         @AttributeOverride(name = "action", column =
         @Column(name = "ACTION")),
         @AttributeOverride(name = "versionEnd", column =
-        @Column(name = "VERSION_END"))})
+        @Column(name = "VERSION_END")),
+        @AttributeOverride(name = "code", column =
+        @Column(name = "DIAG_CD"))})
 public class Diagnosis extends BaseEntity{
-
-    @Id
-    @NotNull
-    @Column(name = "DIAG_CD")
-    private String diagnosisCode;
 
     @Column(name = "DIAG_TYPE_CD")
     private String diagnosisTypeCode;
@@ -64,15 +61,6 @@ public class Diagnosis extends BaseEntity{
 
     @Column(name = "LEVEL4_DIAG_CAT_CAT_NM")
     private String level4DiagCatCatNM;
-
-    public String getDiagnosisCode() {
-        return diagnosisCode;
-    }
-
-    public void setDiagnosisCode(String diagnosisCode) {
-        super.setCode(diagnosisCode);
-        this.diagnosisCode = diagnosisCode;
-    }
 
     public String getDiagnosisTypeCode() {
         return diagnosisTypeCode;

@@ -60,7 +60,7 @@ public class FileParser {
                 fields = line.split(String.valueOf(delimiter),-1);
                 Service pojo = getService(fileMetadata, fileType, fields);
 
-                result.put(pojo.getServiceCode(), pojo);
+                result.put(pojo.getCode(), pojo);
             }
         }
 
@@ -87,7 +87,7 @@ public class FileParser {
 
         //serv_cd
         if (Integer.parseInt(properties.getProperty(fileType + CODE)) < fields.length){
-            pojo.setServiceCode(fields[Integer.parseInt(properties.getProperty(fileType + CODE))]);
+            pojo.setCode(fields[Integer.parseInt(properties.getProperty(fileType + CODE))]);
 
         }
         //alt_dsc
@@ -112,7 +112,7 @@ public class FileParser {
 
         }
         pojo.setServiceTypeCD(properties.getProperty(fileType + SERV_TYPE_CODE));
-        pojo.setStandardizedServiceCode(pojo.getServiceCode());
+        pojo.setStandardizedServiceCode(pojo.getCode());
         return pojo;
     }
 

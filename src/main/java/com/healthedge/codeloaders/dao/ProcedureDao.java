@@ -28,7 +28,7 @@ public class ProcedureDao implements BaseDao {
 		Map<String, Procedure> map = new HashMap<>();
 		for (Procedure procedure : procedureRepository.getServiceCodesByCodeTypeForVersionWithoutAction(
 				fileMetaData.getFileTypeCd(), prevVersion, CodeLoaderConstants.TERMINATE_ACTION)) {
-			map.put(procedure.getProcedureCode(), procedure);
+			map.put(procedure.getCode(), procedure);
 		}
 		return map;
 	}

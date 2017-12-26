@@ -27,17 +27,17 @@ public class ProcedureTransformer implements Transformer
             if(!codeString.contains(".")) {
                 codeString = insertDot(codeString, 3);
             }
-            procedure.setProcedureCode(codeString);
+            procedure.setCode(codeString);
             procedure.setProcedureType("1"); //TODO
             procedure.setProcedureDesc(modifyInputString(item.get("shortdesc"), 50));
             procedure.setProcedureDescLng(modifyInputString(item.get("longdesc"), 1000));
             procedure.setProcedureAltDsc(modifyInputString(item.get("fulldesc"), 1000));
-            procedure.setProcedureStd(procedure.getProcedureCode().replace(".",""));
+            procedure.setProcedureStd(procedure.getCode().replace(".",""));
             procedure.setProcedureWorkFlow(procedure.getProcedureWorkFlow());
             procedure.setTxCnt(current.toDate().getTime());
             procedure.setLastTransactionDate(current.toDate());
             procedure.setLastTransactionUserText(CodeLoaderConstants.TRANSACTION_USER);
-            result.put(procedure.getProcedureCode(),procedure);
+            result.put(procedure.getCode(),procedure);
         });
         return result;
     }

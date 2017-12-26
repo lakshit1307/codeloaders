@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("PMD")
 @Entity
 @Table(name = "T_PROCEDURE")
-@IdClass(BaseEntity.class)
+@IdClass(BaseEntityIdentifier.class)
 @AttributeOverrides({
         @AttributeOverride(name = "lastTransactionDate", column =
         @Column(name = "LAST_TX_DT")),
@@ -23,13 +23,10 @@ import javax.validation.constraints.NotNull;
         @AttributeOverride(name = "action", column =
         @Column(name = "ACTION")),
         @AttributeOverride(name = "versionEnd", column =
-        @Column(name = "VERSION_END"))})
+        @Column(name = "VERSION_END")),
+        @AttributeOverride(name = "code", column =
+        @Column(name = "PROC_CD"))})
 public class Procedure extends BaseEntity{
-
-    @Id
-    @NotNull
-    @Column(name = "PROC_CD")
-    private String procedureCode;
 
     @Column(name = "PROC_TYPE_CD")
     private String procedureType;
@@ -48,10 +45,6 @@ public class Procedure extends BaseEntity{
 
     @Column(name = "WRK_FLOW_CD")
     private String procedureWorkFlow;
-
-    public String getProcedureCode() {
-        return procedureCode;
-    }
 
     public String getProcedureType() {
         return procedureType;
@@ -75,11 +68,6 @@ public class Procedure extends BaseEntity{
 
     public String getProcedureWorkFlow() {
         return procedureWorkFlow;
-    }
-
-    public void setProcedureCode(String procedureCode) {
-        super.setCode(procedureCode);
-        this.procedureCode = procedureCode;
     }
 
     public void setProcedureType(String procedureType) {

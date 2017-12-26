@@ -12,7 +12,7 @@ public class ServiceRowMapper implements RowMapper<Service> {
 	@Override
 	public Service mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Service service=new Service();
-		service.setServiceCode(rs.getString("SERV_CD"));
+		service.setCode(rs.getString("SERV_CD"));
 		service.setServiceTypeCD(rs.getString("SERV_TYPE_CD"));
 		service.setServiceShortDesciption(rs.getString("SERV_SHORT_DSC"));
 		service.setServiceLongDesciption(rs.getString("SERV_LONG_DSC"));

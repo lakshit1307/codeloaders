@@ -29,7 +29,7 @@ public class ZipToCarrierLocalityDao implements BaseDao {
 		for (ZipToCarrierLocality zipToCarrierLocality : zipToCarrierLocalityRepository
 				.getZipToCarrierLocalityCodesForVersionWithoutAction(fileMetaData.getFileType(), prevVersion,
 						CodeLoaderConstants.TERMINATE_ACTION)) {
-			map.put(zipToCarrierLocality.getZipCode(), zipToCarrierLocality);
+			map.put(zipToCarrierLocality.getCode(), zipToCarrierLocality);
 		}
 		return map;
 	}

@@ -26,7 +26,7 @@ public class DiagnosisDaoTest {
     @Test
     public void diagnosisPersistTest() throws Exception{
         Diagnosis diagnosis=new Diagnosis();
-        diagnosis.setDiagnosisCode("A00.1");
+        diagnosis.setCode("A00.1");
         diagnosis.setAction("CREATE");
         diagnosis.setEffectiveStartDate(new Date());
         diagnosis.setLastTransactionDate(new Date());
